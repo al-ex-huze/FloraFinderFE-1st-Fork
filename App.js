@@ -6,12 +6,14 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import UserProvider from "./contexts/Contexts"
 
 const Stack = createNativeStackNavigator();
 
 
 export default function App() {
   return (
+    <UserProvider>
     <NavigationContainer>
             <Stack.Navigator initialRouteName="LoginRegister">
                 <Stack.Screen name="LoginRegister" component={LoginRegister} />
@@ -19,6 +21,7 @@ export default function App() {
                 <Stack.Screen name="Register" component={Register} />
             </ Stack.Navigator>
     </ NavigationContainer>
+    </UserProvider>
   );
 }
 

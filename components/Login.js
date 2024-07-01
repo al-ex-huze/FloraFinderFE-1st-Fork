@@ -1,10 +1,12 @@
 import * as React from 'react'
 import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button} from "react-native";
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useForm, Controller } from 'react-hook-form';
+import { UserContext } from '../contexts/Contexts';
 
 
 export default function Login() {
+    const {user, setUser} = useContext(UserContext)
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
           emailAddress: '',
@@ -51,8 +53,7 @@ export default function Login() {
           />
           {errors.password && <Text>This is required.</Text>}
 
-    
-          <Button title="Log In" onPress={handleSubmit(onSubmit)} />
+        <Button title="Log In" onPress={handleSubmit(onSubmit)} />
         </View>
       );
 }
