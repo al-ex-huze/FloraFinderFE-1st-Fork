@@ -33,7 +33,7 @@ return (
 const styles = StyleSheet.create({
     container: {
         flex: 1, // makes sure the colour takes up the whole screen
-        backgroundColor: "#FF00FF", // Kate colour change
+        backgroundColor: "#CCFFCC", // Kate colour change
         alignItems: "center", // horizontal alex
         justifyContent: "center", // vertical alex
     },
