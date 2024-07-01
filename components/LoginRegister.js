@@ -4,8 +4,7 @@ const favicon = require("../assets/favicon.png")
 
 
 
-
-export default function LoginRegister() {
+export default function LoginRegister({ navigation }) {
 return (
     <View style={styles.container}>
         <Image source={favicon}  />
@@ -13,7 +12,7 @@ return (
                 style={styles.button}
                 title="Login"
                 onPress={() => {
-                    navigation.navigate("CameraViewer");
+                    navigation.navigate("Login");
                 }}
             >
                 <Text style={styles.text}>Login</Text>
@@ -22,7 +21,7 @@ return (
                 style={styles.button}
                 title="Register"
                 onPress={() => {
-                    navigation.navigate("CameraViewer");
+                    navigation.navigate("Register");
                 }}
             >
                 <Text style={styles.text}>Register</Text>
