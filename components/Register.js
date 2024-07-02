@@ -109,45 +109,6 @@ export default function Register() {
           <Button title="Submit" onPress={handleSubmit(onSubmit)} />
         </View>
       );
-
-
-
-//     const  [email, setEmail] = useState("");
-//     const  [password, setPassword] = useState("");
-//     const [username, setUsername] = useState("");
-//     const [firstName, setFirstName] = useState("");
-//     const [lastName, setLastname] = useState("");
-
-    
-
-// //     function handleRegister() {
-// // console.log(email)
-// //     }
-
-//     return (
-//         <SafeAreaView>
-    
-//             <TextInput style={styles.input} onChangeText={setEmail} value={email} placeholder="Insert Email" rules={{ required: 'You must enter your email address' }}>
-//             </TextInput>
-            
-//             <TextInput style={styles.input} onChangeText={setPassword} value={password} secureTextEntry={true} placeholder="Set Password">
-//             </TextInput>
-
-//             <TextInput style={styles.input} onChangeText={setUsername} value={username} placeholder="Set Username">
-//             </TextInput>
-
-//             <TextInput style={styles.input} onChangeText={setLastname} value={lastName} placeholder="Your Last Name">
-//             </TextInput>
-
-//             <TextInput style={styles.input} onChangeText={setFirstName} value={firstName} placeholder="Your First Name">
-//             </TextInput>
-
-//         <Pressable style={styles.button} title="Register Now" onPress={handleRegister}> 
-//             <Text style={styles.text}> Register Me </Text>
-//         </Pressable>
-
-//         </SafeAreaView>
-//     )
 }
 
 const styles = StyleSheet.create({

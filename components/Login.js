@@ -5,7 +5,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { UserContext } from '../contexts/Contexts';
 
 
-export default function Login() {
+export default function Login({ navigation }) {
     const {user, setUser} = useContext(UserContext)
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -54,6 +54,7 @@ export default function Login() {
           {errors.password && <Text>This is required.</Text>}
 
         <Button title="Log In" onPress={handleSubmit(onSubmit)} />
+        <Button title="Temp Login" onPress={navigation.navigate("ProfileScreen")} />
         </View>
       );
 }
