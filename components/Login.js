@@ -54,7 +54,6 @@ export default function Login({ navigation }) {
           {errors.password && <Text>This is required.</Text>}
 
         <Button title="Log In" onPress={handleSubmit(onSubmit)} />
-        <Button title="Temp Login" onPress={navigation.navigate("ProfileScreen")} />
         </View>
       );
 }
