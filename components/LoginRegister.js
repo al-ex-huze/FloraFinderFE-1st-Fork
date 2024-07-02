@@ -26,6 +26,7 @@ return (
             >
                 <Text style={styles.text}>Register</Text>
             </Pressable>
+            <Pressable style={styles.button} title="TempLogin" onPress={() => {navigation.navigate("ProfileScreen");}}><Text style={styles.text}>TempLogin</Text></Pressable>
     </View>
 )
 }
