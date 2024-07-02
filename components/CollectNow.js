@@ -6,7 +6,8 @@ import { postPhotoToPlantNet } from "../api";
 const ref = React.createRef();
 import * as ImagePicker from "expo-image-picker";
 
-export default function CollectNow() {
+export default function CollectNow({ navigation }) {
+
     const [facing, setFacing] = useState("back");
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
@@ -17,6 +18,8 @@ export default function CollectNow() {
     const [iddPlantScientificName, setIddPlantScientificName] = useState("");
     const [iddPlantFamily, setIddPlantFamily] = useState("");
     const [iddPlantGenus, setIddPlantGenus] = useState("");
+    
+
     const cameraRef = useRef("")
     
     if (!permission) {
@@ -62,18 +65,19 @@ export default function CollectNow() {
         postPhotoToPlantNet(imageUri) // passes the uri to the api alex
         .then((firstMatch) => { // best matched object returned and details set in state alex
             setIdentifiedPlant(firstMatch);
-            setIddPlantUid(firstMatch.gbif.id);
-            setIddPlantCommonName(firstMatch.species.commonNames[0]);
-            setIddPlantScientificName(
-                firstMatch.species.scientificNameWithoutAuthor
-            );
-            setIddPlantMatchScore(firstMatch.score);
-            setIddPlantFamily(
-                firstMatch.species.family.scientificNameWithoutAuthor
-            );
-            setIddPlantGenus(
-                firstMatch.species.genus.scientificNameWithoutAuthor
-            );
+        // console.log(identifiedPlant)
+            // setIddPlantUid(firstMatch.gbif.id);
+            // setIddPlantCommonName(firstMatch.species.commonNames[0]);
+            // setIddPlantScientificName(
+            //     firstMatch.species.scientificNameWithoutAuthor
+            // );
+            // setIddPlantMatchScore(firstMatch.score);
+            // setIddPlantFamily(
+            //     firstMatch.species.family.scientificNameWithoutAuthor
+            // );
+            // setIddPlantGenus(
+            //     firstMatch.species.genus.scientificNameWithoutAuthor
+            // );
         });
     };
     return (
@@ -101,7 +105,9 @@ export default function CollectNow() {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={handlePostPicture}
+                    
+                    onPressIn={handlePostPicture}
+                    onPress={() => { navigation.navigate('PlantResult', {plant: identifiedPlant})}}
                 >
                     <Text style={styles.text}> POST PICTURE </Text>
                 </TouchableOpacity>
@@ -148,6 +154,5 @@ const styles = StyleSheet.create({
     idText: {
         fontSize: 32,
         fontWeight: "bold",
-        color: "green",
     },
 });
