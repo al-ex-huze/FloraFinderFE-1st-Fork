@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         color: "white",
     },
     image: {
-        width: '80%', // Adjust width to your preference
-        resizeMode: 'contain', // Ensure the image maintains its aspect ratio
+        width: '80%', 
+        resizeMode: 'contain',
     },
 });
