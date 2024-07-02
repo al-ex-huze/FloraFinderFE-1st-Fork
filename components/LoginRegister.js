@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: "black",
+        backgroundColor: "#006400",
         width: "50%", // percentages need to be in in quotes alex
         margin: 12,
     },
