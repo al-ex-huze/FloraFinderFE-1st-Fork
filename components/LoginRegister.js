@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { StyleSheet, Pressable, View, Text, Image } from "react-native";
-const favicon = require("../assets/favicon.png")
+const favicon = require("../assets/FloraFinderCropped.png")
 
 
 
 export default function LoginRegister({ navigation }) {
 return (
     <View style={styles.container}>
-        <Image source={favicon}  />
+        <Image source={favicon} style={styles.image}  />
             <Pressable
                 style={styles.button}
                 title="Login"
@@ -54,5 +54,9 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         letterSpacing: 0.25,
         color: "white",
+    },
+    image: {
+        width: '80%', // Adjust width to your preference
+        resizeMode: 'contain', // Ensure the image maintains its aspect ratio
     },
 });
