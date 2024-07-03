@@ -2,12 +2,14 @@ import React from "react";
 import { StyleSheet, Pressable, Button, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faHome, faLeaf, faBars, faMapMarker, faCamera } from '@fortawesome/free-solid-svg-icons';
 
 
-export default function ProfileScreen({ navigation }) {
+export default function HomePage({ navigation }) {
 return (
     <View style={styles.container}>
-            <Text style={styles.titleText}>Profile Page</Text>
+            <Text style={styles.heading}>Home <FontAwesomeIcon icon={faHome} color={"#006400"}/></Text>
             <Pressable
                 style={styles.button}
                 title="LeagueTable"
@@ -15,7 +17,7 @@ return (
                     navigation.navigate("LeagueTable");
                 }}
             >
-                <Text style={styles.text}>League Table</Text>
+                <Text style={styles.buttonText}>League Table   <FontAwesomeIcon icon={faBars} color={"white"}/> </Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -24,7 +26,7 @@ return (
                     navigation.navigate("CollectedList");
                 }}
             >
-                <Text style={styles.text}>Collected List</Text>
+                <Text style={styles.buttonText}>Collected List   <FontAwesomeIcon icon={faLeaf} color={"white"}/></Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -33,7 +35,7 @@ return (
                     navigation.navigate("CollectedMap");
                 }}
             >
-                <Text style={styles.text}>Collected Map</Text>
+                <Text style={styles.buttonText}>Collected Map   <FontAwesomeIcon icon={faMapMarker} color={"white"}/></Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -42,7 +44,7 @@ return (
                     navigation.navigate("CollectNow");
                 }}
             >
-                <Text style={styles.text}>Collect Now</Text>
+                <Text style={styles.buttonText}>Collect Now   <FontAwesomeIcon icon={faCamera} color={"white"}/></Text>
             </Pressable>
     </View>
 )
@@ -75,5 +77,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: "006400"
-    }
+    },
+    buttonText : {
+        color: "white",
+    },
+    heading: {
+        fontSize: 25,
+        fontWeight: "bold",
+        color: "#006400",
+     },
 });

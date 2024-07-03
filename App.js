@@ -11,7 +11,8 @@ import CollectedList from './components/CollectedList';
 import CollectedMap from './components/CollectedMap';
 import CollectNow from './components/CollectNow';
 import LeagueTable from './components/LeagueTable';
-import ProfileScreen from './components/ProfileScreen';
+import HomePage from './components/HomePage';
+import PlantResult from './components/PlantResult';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,7 +29,8 @@ export default function App() {
                 <Stack.Screen name="CollectedMap" component={CollectedMap} />
                 <Stack.Screen name="CollectNow" component={CollectNow} />
                 <Stack.Screen name="LeagueTable" component={LeagueTable} />
-                <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+                <Stack.Screen name="HomePage" component={HomePage} />
+                <Stack.Screen name="PlantResult" component={PlantResult} />
                 
             </ Stack.Navigator>
     </ NavigationContainer>

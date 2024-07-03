@@ -13,11 +13,13 @@ export const postPhotoToPlantNet = (imageUri) => {
     };
     form.append("images", imageToAppend);
     return plantNetApi
-        .post(`/v2/identify/all?api-key=${API_KEY}`, form, {
+        .post(`/v2/identify/all?api-key=${API_KEY}&include-related-images=true`, form, {
             headers: { "Content-Type": "multipart/form-data" }, // also don't know why headers had to be declared like this but seems generic alex
         })
         .then((response) => {
-            return response.data.results[0]; // only return the first ie best result out of several possibilities returned so the game will feel snappy alex
+    
+            return response.data.results[0];
+             // only return the first ie best result out of several possibilities returned so the game will feel snappy alex
         })
         .catch((error) => {
             console.log(error.response); // this may return a rejected promise if image isnt identified - not for future debugging alex

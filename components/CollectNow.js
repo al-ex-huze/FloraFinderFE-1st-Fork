@@ -1,12 +1,17 @@
-import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import React, { useRef, useState } from "react";
+import * as React from 'react'
+import {Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
+import  { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
 import * as MediaLibrary from "expo-media-library"; // needed to save picture alex
 import { postPhotoToPlantNet } from "../api";
 const ref = React.createRef();
 import * as ImagePicker from "expo-image-picker";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faRefresh, faCamera, faPlusCircle, faTh } from '@fortawesome/free-solid-svg-icons';
 
-export default function CollectNow() {
+
+export default function CollectNow({ navigation }) {
+
     const [facing, setFacing] = useState("back");
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
@@ -17,6 +22,9 @@ export default function CollectNow() {
     const [iddPlantScientificName, setIddPlantScientificName] = useState("");
     const [iddPlantFamily, setIddPlantFamily] = useState("");
     const [iddPlantGenus, setIddPlantGenus] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
+    
+
     const cameraRef = useRef("")
     
     if (!permission) {
@@ -58,58 +66,54 @@ export default function CollectNow() {
     } 
     
 
-   const handlePostPicture = () => {
-        postPhotoToPlantNet(imageUri) // passes the uri to the api alex
+   const handlePostPicture = async () => {
+        setIsLoading(true)
+        const firstMatch = await postPhotoToPlantNet(imageUri) // passes the uri to the api alex
         .then((firstMatch) => { // best matched object returned and details set in state alex
             setIdentifiedPlant(firstMatch);
-            setIddPlantUid(firstMatch.gbif.id);
-            setIddPlantCommonName(firstMatch.species.commonNames[0]);
-            setIddPlantScientificName(
-                firstMatch.species.scientificNameWithoutAuthor
-            );
-            setIddPlantMatchScore(firstMatch.score);
-            setIddPlantFamily(
-                firstMatch.species.family.scientificNameWithoutAuthor
-            );
-            setIddPlantGenus(
-                firstMatch.species.genus.scientificNameWithoutAuthor
-            );
-        });
+            navigation.navigate('PlantResult', { plant: firstMatch })
+        setIsLoading(false)
+        }); // Yusha- turned this to async function, declared variable for async process, copied in line 68, was empty before
     };
+
+    if(isLoading) {
+        return ( <View style={styles.activityIndicatorBackground}><ActivityIndicator style={styles.loadPage} size="large" color="#006400" /><Text>Fetching plant data...</Text></View>)
+    }
+
     return (
         <CameraView ref={ref} style={styles.camera} facing={facing}>
+    
             <View style={styles.idContainer}>
                 <Text style={styles.idText}>{iddPlantCommonName}</Text>
-                <Text style={styles.idText}>{iddPlantUid}</Text>
                 <Text style={styles.idText}>{iddPlantMatchScore}</Text>
                 <Text style={styles.idText}>{iddPlantScientificName}</Text>
-                <Text style={styles.idText}>{iddPlantFamily}</Text>
-                <Text style={styles.idText}>{iddPlantGenus}</Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={toggleCameraFacing}
                 >
-                    <Text style={styles.text}> FLIP CAMERA </Text>
+                    <Text style={styles.buttonText}> Flip Camera  <FontAwesomeIcon icon={faRefresh} color={"white"}/></Text>
+                    
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleTakePicture}
                 >
-                    <Text style={styles.text}> TAKE PICTURE </Text>
+                    <Text style={styles.buttonText}> Capture   <FontAwesomeIcon icon={faCamera} color={"white"}/> </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
-                    onPress={handlePostPicture}
+                    onPress={handlePostPicture} 
+                    
                 >
-                    <Text style={styles.text}> POST PICTURE </Text>
+                    <Text style={styles.buttonText}> Post photo   <FontAwesomeIcon icon={faPlusCircle} color={"white"} /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={pickImageAsync}
                 >
-                    <Text style={styles.text}> PICK IMAGE </Text>
+                    <Text style={styles.buttonText}> Gallery   <FontAwesomeIcon icon={faTh} color={"white"} /></Text>
                 </TouchableOpacity>
             </View>
         </CameraView>
@@ -133,7 +137,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: "black",
+        backgroundColor: "#006400",
         margin: 2,
     },
     text: {
@@ -148,6 +152,18 @@ const styles = StyleSheet.create({
     idText: {
         fontSize: 32,
         fontWeight: "bold",
-        color: "green",
     },
+    buttonText : {
+        color: "white",
+ },
+ loadPage: {
+    backgroundColor: "#CCFFCC",
+ },
+ activityIndicatorBackground: {
+    backgroundColor: "#CCFFCC",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+},
+ 
 });
