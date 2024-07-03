@@ -10,7 +10,7 @@ const flowerIcon5 = require("../assets/flowericons/flowerIcon5.png")
 const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png")
 const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png")
 
-export default function CollectedMap() {
+export default function CollectedMap({navigation}) {
         const [markersArr, setMarkersArr] = useState([]);
         const [heatMapPoints, setHeatMapPoints] = useState([]);
         const [flowerIcons, setFlowerIcons] = useState([
@@ -71,14 +71,17 @@ export default function CollectedMap() {
                             points={heatMapPoints}
                         ></Heatmap>
                     ) : null} */}
+                
                 </MapView>
-                <TouchableOpacity style={styles.button} onPress={handleReset}>
+                <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
                     {markersArr.length === 0 ? (
                         <Text style={styles.text}>Press map to pin markers</Text>
+                        
                     ) : (
                         <Text style={styles.text}>RESET</Text>
                     )}
                 </TouchableOpacity>
+            
             </View>
         );
     } 
@@ -95,7 +98,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    button: {
+    pinDrop: {
         position: "absolute", // overlay on map
         width: "100%",
         alignItems: "center",
@@ -112,5 +115,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "white",
     },
-    
+    button: {
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: "#006400",
+        margin: 10,
+        
+    },
 });

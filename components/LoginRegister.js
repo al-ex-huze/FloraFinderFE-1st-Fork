@@ -15,7 +15,7 @@ return (
                     navigation.navigate("Login");
                 }}
             >
-                <Text style={styles.text}>Login</Text>
+                <Text style={styles.buttonText}>Login</Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -24,9 +24,9 @@ return (
                     navigation.navigate("Register");
                 }}
             >
-                <Text style={styles.text}>Register</Text>
+                <Text style={styles.buttonText}>Register</Text>
             </Pressable>
-            <Pressable style={styles.button} title="TempLogin" onPress={() => {navigation.navigate("ProfileScreen");}}><Text style={styles.text}>TempLogin</Text></Pressable>
+            <Pressable style={styles.button} title="TempLogin" onPress={() => {navigation.navigate("HomePage");}}><Text style={styles.buttonText}>TempLogin</Text></Pressable>
     </View>
 )
 }
@@ -60,4 +60,12 @@ const styles = StyleSheet.create({
         width: '80%', 
         resizeMode: 'contain',
     },
+    buttonText: {
+        color: "white",
+    },
+    heading: {
+        fontSize: 25,
+        fontWeight: "bold",
+        color: "#006400",
+     },
 });

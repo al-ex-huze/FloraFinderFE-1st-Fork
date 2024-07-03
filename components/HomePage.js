@@ -4,10 +4,10 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 
-export default function ProfileScreen({ navigation }) {
+export default function HomePage({ navigation }) {
 return (
     <View style={styles.container}>
-            <Text style={styles.titleText}>Profile Page</Text>
+            <Text style={styles.heading}>Home</Text>
             <Pressable
                 style={styles.button}
                 title="LeagueTable"
@@ -15,7 +15,7 @@ return (
                     navigation.navigate("LeagueTable");
                 }}
             >
-                <Text style={styles.text}>League Table</Text>
+                <Text style={styles.buttonText}>League Table</Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -24,7 +24,7 @@ return (
                     navigation.navigate("CollectedList");
                 }}
             >
-                <Text style={styles.text}>Collected List</Text>
+                <Text style={styles.buttonText}>Collected List</Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -33,7 +33,7 @@ return (
                     navigation.navigate("CollectedMap");
                 }}
             >
-                <Text style={styles.text}>Collected Map</Text>
+                <Text style={styles.buttonText}>Collected Map</Text>
             </Pressable>
             <Pressable
                 style={styles.button}
@@ -42,7 +42,7 @@ return (
                     navigation.navigate("CollectNow");
                 }}
             >
-                <Text style={styles.text}>Collect Now</Text>
+                <Text style={styles.buttonText}>Collect Now</Text>
             </Pressable>
     </View>
 )
@@ -75,5 +75,13 @@ const styles = StyleSheet.create({
     },
     titleText: {
         color: "006400"
-    }
+    },
+    buttonText : {
+        color: "white",
+    },
+    heading: {
+        fontSize: 25,
+        fontWeight: "bold",
+        color: "#006400",
+     },
 });

@@ -73,7 +73,7 @@ export default function CollectNow({ navigation }) {
     };
 
     if(isLoading) {
-        return ( <View><ActivityIndicator size="large" color="#0000ff" /></View>)
+        return ( <View style={styles.activityIndicatorBackground}><ActivityIndicator style={styles.loadPage} size="large" color="#006400" /></View>)
     }
 
     return (
@@ -88,27 +88,26 @@ export default function CollectNow({ navigation }) {
                     style={styles.button}
                     onPress={toggleCameraFacing}
                 >
-                    <Text style={styles.text}> FLIP CAMERA </Text>
+                    <Text style={styles.buttonText}> FLIP CAMERA </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleTakePicture}
                 >
-                    <Text style={styles.text}> TAKE PICTURE </Text>
+                    <Text style={styles.buttonText}> TAKE PICTURE </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handlePostPicture} 
                     
                 >
-                     {/* <ActivityIndicator size="large" color="#0000ff" /> */}
-                    <Text style={styles.text}> POST PICTURE </Text>
+                    <Text style={styles.buttonText}> POST PICTURE </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={pickImageAsync}
                 >
-                    <Text style={styles.text}> PICK IMAGE </Text>
+                    <Text style={styles.buttonText}> PICK IMAGE </Text>
                 </TouchableOpacity>
             </View>
         </CameraView>
@@ -132,7 +131,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: "black",
+        backgroundColor: "#006400",
         margin: 2,
     },
     text: {
@@ -148,4 +147,17 @@ const styles = StyleSheet.create({
         fontSize: 32,
         fontWeight: "bold",
     },
+    buttonText : {
+        color: "white",
+ },
+ loadPage: {
+    backgroundColor: "#CCFFCC",
+ },
+ activityIndicatorBackground: {
+    backgroundColor: "#CCFFCC",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+},
+ 
 });

@@ -57,3 +57,34 @@ export default function Login({ navigation }) {
         </View>
       );
 }
+
+const styles = StyleSheet.create({
+  container: {
+      flex: 1, // makes sure the colour takes up the whole screen
+      backgroundColor: "#CCFFCC", // Kate colour change
+      alignItems: "center", // horizontal alex
+      justifyContent: "center", // vertical alex
+  },
+  button: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: "#006400",
+      width: "50%", // percentages need to be in in quotes alex
+      margin: 12,
+  },
+  text: {
+      fontSize: 16,
+      lineHeight: 21,
+      fontWeight: "bold",
+      letterSpacing: 0.25,
+      color: "white",
+  },
+  image: {
+      width: '80%', 
+      resizeMode: 'contain',
+  },
+});
