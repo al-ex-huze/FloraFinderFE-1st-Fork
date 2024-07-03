@@ -1,4 +1,4 @@
-import {Button, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
 import React, { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
 import * as MediaLibrary from "expo-media-library"; // needed to save picture alex
@@ -18,6 +18,7 @@ export default function CollectNow({ navigation }) {
     const [iddPlantScientificName, setIddPlantScientificName] = useState("");
     const [iddPlantFamily, setIddPlantFamily] = useState("");
     const [iddPlantGenus, setIddPlantGenus] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
     
 
     const cameraRef = useRef("")
@@ -61,34 +62,26 @@ export default function CollectNow({ navigation }) {
     } 
     
 
-   const handlePostPicture = () => {
-        postPhotoToPlantNet(imageUri) // passes the uri to the api alex
+   const handlePostPicture = async () => {
+        setIsLoading(true)
+        const firstMatch = await postPhotoToPlantNet(imageUri) // passes the uri to the api alex
         .then((firstMatch) => { // best matched object returned and details set in state alex
             setIdentifiedPlant(firstMatch);
-        // console.log(identifiedPlant)
-            // setIddPlantUid(firstMatch.gbif.id);
-            // setIddPlantCommonName(firstMatch.species.commonNames[0]);
-            // setIddPlantScientificName(
-            //     firstMatch.species.scientificNameWithoutAuthor
-            // );
-            // setIddPlantMatchScore(firstMatch.score);
-            // setIddPlantFamily(
-            //     firstMatch.species.family.scientificNameWithoutAuthor
-            // );
-            // setIddPlantGenus(
-            //     firstMatch.species.genus.scientificNameWithoutAuthor
-            // );
-        });
+            navigation.navigate('PlantResult', { plant: firstMatch })
+        setIsLoading(false)
+        }); // Yusha- turned this to async function, declared variable for async process, copied in line 68, was empty before
     };
+
+    if(isLoading) {
+        return ( <View><ActivityIndicator size="large" color="#0000ff" /></View>)
+    }
+
     return (
         <CameraView ref={ref} style={styles.camera} facing={facing}>
             <View style={styles.idContainer}>
                 <Text style={styles.idText}>{iddPlantCommonName}</Text>
-                <Text style={styles.idText}>{iddPlantUid}</Text>
                 <Text style={styles.idText}>{iddPlantMatchScore}</Text>
                 <Text style={styles.idText}>{iddPlantScientificName}</Text>
-                <Text style={styles.idText}>{iddPlantFamily}</Text>
-                <Text style={styles.idText}>{iddPlantGenus}</Text>
             </View>
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
@@ -105,10 +98,10 @@ export default function CollectNow({ navigation }) {
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
+                    onPress={handlePostPicture} 
                     
-                    onPressIn={handlePostPicture}
-                    onPress={() => { navigation.navigate('PlantResult', {plant: identifiedPlant})}}
                 >
+                     {/* <ActivityIndicator size="large" color="#0000ff" /> */}
                     <Text style={styles.text}> POST PICTURE </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
