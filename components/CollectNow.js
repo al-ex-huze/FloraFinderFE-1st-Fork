@@ -1,10 +1,14 @@
+import * as React from 'react'
 import {Button, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator} from "react-native";
-import React, { useRef, useState } from "react";
+import  { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
 import * as MediaLibrary from "expo-media-library"; // needed to save picture alex
 import { postPhotoToPlantNet } from "../api";
 const ref = React.createRef();
 import * as ImagePicker from "expo-image-picker";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faRefresh, faCamera, faPlusCircle, faTh } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function CollectNow({ navigation }) {
 
@@ -73,11 +77,12 @@ export default function CollectNow({ navigation }) {
     };
 
     if(isLoading) {
-        return ( <View style={styles.activityIndicatorBackground}><ActivityIndicator style={styles.loadPage} size="large" color="#006400" /></View>)
+        return ( <View style={styles.activityIndicatorBackground}><ActivityIndicator style={styles.loadPage} size="large" color="#006400" /><Text>Fetching plant data...</Text></View>)
     }
 
     return (
         <CameraView ref={ref} style={styles.camera} facing={facing}>
+    
             <View style={styles.idContainer}>
                 <Text style={styles.idText}>{iddPlantCommonName}</Text>
                 <Text style={styles.idText}>{iddPlantMatchScore}</Text>
@@ -88,26 +93,27 @@ export default function CollectNow({ navigation }) {
                     style={styles.button}
                     onPress={toggleCameraFacing}
                 >
-                    <Text style={styles.buttonText}> FLIP CAMERA </Text>
+                    <Text style={styles.buttonText}> Flip Camera  <FontAwesomeIcon icon={faRefresh} color={"white"}/></Text>
+                    
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handleTakePicture}
                 >
-                    <Text style={styles.buttonText}> TAKE PICTURE </Text>
+                    <Text style={styles.buttonText}> Capture   <FontAwesomeIcon icon={faCamera} color={"white"}/> </Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={handlePostPicture} 
                     
                 >
-                    <Text style={styles.buttonText}> POST PICTURE </Text>
+                    <Text style={styles.buttonText}> Post photo   <FontAwesomeIcon icon={faPlusCircle} color={"white"} /></Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.button}
                     onPress={pickImageAsync}
                 >
-                    <Text style={styles.buttonText}> PICK IMAGE </Text>
+                    <Text style={styles.buttonText}> Gallery   <FontAwesomeIcon icon={faTh} color={"white"} /></Text>
                 </TouchableOpacity>
             </View>
         </CameraView>

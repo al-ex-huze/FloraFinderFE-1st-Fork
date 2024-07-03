@@ -1,5 +1,7 @@
 import * as React from 'react'
 import { View, Text, StyleSheet, Button, Image, Pressable, TouchableOpacity } from "react-native";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faHome, faCamera, faBookmark } from '@fortawesome/free-solid-svg-icons';
 
 export default function PlantResult({route, navigation}) {
    const {plant}=route.params
@@ -26,14 +28,14 @@ return(
 
             <Image style={styles.image} source={{uri:plant.images[0].url.m}} />
             
-            <Pressable style={styles.button} title="Go Back" onPress={() => navigation.goBack()}><Text style={styles.buttonText}>Find Another Plant</Text></Pressable>
+            <Pressable style={styles.button} title="Go Back" onPress={() => navigation.goBack()}><Text style={styles.buttonText}>Find Another Plant   <FontAwesomeIcon icon={faCamera} color={"white"}/></Text></Pressable>
             <TouchableOpacity
                     style={styles.button}
                     // onPress={savePlantToList} too be added later
                 >
-                    <Text style={styles.buttonText}> Save To Collection </Text>
+                    <Text style={styles.buttonText}> Save To Collection   <FontAwesomeIcon icon={faBookmark} color={"white"}/></Text>
                 </TouchableOpacity>
-                <Pressable style={styles.button} title="Home Page" onPress={() => navigation.navigate("HomePage")}><Text style={styles.buttonText}>Back To Home</Text></Pressable>
+                <Pressable style={styles.button} title="Home Page" onPress={() => navigation.navigate("HomePage")}><Text style={styles.buttonText}>Back To Home   <FontAwesomeIcon icon={faHome} color={"white"}/></Text></Pressable>
             
 </View>
 
