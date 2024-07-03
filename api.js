@@ -13,7 +13,7 @@ export const postPhotoToPlantNet = (imageUri) => {
     };
     form.append("images", imageToAppend);
     return plantNetApi
-        .post(`/v2/identify/all?api-key=${API_KEY}`, form, {
+        .post(`/v2/identify/all?api-key=${API_KEY}&include-related-images=true`, form, {
             headers: { "Content-Type": "multipart/form-data" }, // also don't know why headers had to be declared like this but seems generic alex
         })
         .then((response) => {
