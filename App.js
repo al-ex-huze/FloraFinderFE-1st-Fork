@@ -7,8 +7,8 @@ import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import UserProvider from "./contexts/Contexts"
-import CollectedList from './components/collection-list/CollectedList';
-import CollectedSingleCard from './components/collection-list/CollectedSingleCard';
+import CollectedList from './components/collected-list/CollectedList';
+import CollectedSingleCard from './components/collected-list/CollectedSingleCard';
 import CollectedMap from './components/CollectedMap';
 import CollectNow from './components/CollectNow';
 import LeagueTable from './components/LeagueTable';
