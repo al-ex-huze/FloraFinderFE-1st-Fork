@@ -3,9 +3,10 @@ import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button} fro
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
-
+import { postNewUser } from '../api';
 
 export default function Register() {
+
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
           emailAddress: '',
@@ -15,7 +16,19 @@ export default function Register() {
           lastName: ''
         }
       });
-      const onSubmit = data => console.log(data);
+      const onSubmit = (data) => {
+        console.log(data, "data")
+        const newUser = {username: data.username, name: data.firstName + " " + data.lastName, email: data.emailAddress, password: data.password};
+        console.log(newUser);
+
+        postNewUser(newUser)
+        .then((user) => {
+          console.log(user, "RESPONSE in REGISTER")
+        })
+        .catch((error) => {
+          console.log(error, "ERROR in REGISTER")
+        })
+      };
     
       return (
         <View style={styles.container}>
@@ -67,7 +80,7 @@ export default function Register() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="Username"
+                placeholder="username"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
