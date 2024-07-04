@@ -1,4 +1,10 @@
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import {
+    StyleSheet,
+    View,
+    Text,
+    Image,
+    ScrollView,
+} from "react-native";
 
 import { formatDate } from "../../utils/formatDate";
 
@@ -8,15 +14,31 @@ export default function CollectedSingleCard({ route }) {
     return (
         <View style={styles.container}>
             <ScrollView style={styles.scrollView}>
-                <View style={styles.cardContainer}>
-                    <Text style={styles.nameText}>{plant.speciesName}</Text>
-                    <Image style={styles.image} source={{ uri: plant.image }} />
-                    <Text style={styles.titleText}>Member of the</Text>
-                    <Text style={styles.text}>{plant.speciesFamily}</Text>
-                    <Text style={styles.titleText}>Family</Text>
-                    <Text style={plant.matchScore > 0.5 ? styles.scoreTextGood : styles.scoreTextBad}>{(plant.matchScore * 100).toFixed(2)}%</Text>
-                    <Text style={styles.text}>Collected on {formatDate(plant.dateCollected)}</Text>
-
+                <View style={styles.card_template}>
+                    <Image
+                        style={styles.card_image}
+                        source={{ uri: plant.image }}
+                    />
+                    <View style={styles.text_container_1}>
+                        <Text style={styles.text_1}>{plant.speciesName}</Text>
+                    </View>
+                    <View style={styles.text_container_2}>
+                        <Text
+                            style={
+                                plant.matchScore > 0.5
+                                    ? styles.scoreTextGood
+                                    : styles.scoreTextBad
+                            }
+                        >
+                            {(plant.matchScore * 100).toFixed(2)}%
+                        </Text>
+                        <Text style={styles.text_2}>
+                            Member of the {plant.speciesFamily} Family
+                        </Text>
+                        <Text style={styles.text_2}>
+                            Collected on {formatDate(plant.dateCollected)}
+                        </Text>
+                    </View>
                 </View>
             </ScrollView>
         </View>
@@ -24,13 +46,9 @@ export default function CollectedSingleCard({ route }) {
 }
 
 const styles = StyleSheet.create({
-    image: {
-        borderRadius: 16,
-        width: 256,
-        height: 256,
-    },
     container: {
         flex: 1,
+        flexDirection: "row",
         backgroundColor: "#CCFFCC",
         alignItems: "center",
         justifyContent: "center",
@@ -38,37 +56,57 @@ const styles = StyleSheet.create({
     scrollView: {
         marginHorizontal: 10,
     },
-    cardContainer: {
-        flex: 1,
-        borderRadius: 4,
-        backgroundColor: "#006400",
-        alignItems: "center",
-        justifyContent: "center",
+    card_template: {
+        width: "100%",
+        height: "100%",
+        boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
     },
-    titleText: {
+    card_image: {
+        width: "100%",
+        aspectRatio: 75 / 100,
+        borderRadius: 10,
+    },
+    text_container_1: {
+        position: "absolute",
+        width: "100%",
+        height: "10%",
+        padding: 4,
+        backgroundColor: "rgba(0,0,0, 0.3)",
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+    },
+    text_container_2: {
+        flexDirection: "column",
+        position: "absolute",
+        width: "100%",
+        height: "20%",
+        bottom: 0,
+        padding: 4,
+        backgroundColor: "rgba(0,0,0, 0.3)",
+        borderBottomLeftRadius: 10,
+        borderBottomRightRadius: 10,
+        alignItems: "flex-end",
+    },
+    text_1: {
         fontSize: 32,
         fontWeight: "bold",
-        letterSpacing: 0.25,
         color: "white",
     },
-    nameText: {
-        fontSize: 40,
-        fontWeight: "bold",
+    text_2: {
+        fontSize: 16,
         color: "white",
-    },
-    text: {
-        fontSize: 24,
-        letterSpacing: 0.25,
-        color: "white",
+        flex: 1 / 2,
     },
     scoreTextGood: {
-        fontSize: 40,
+        fontSize: 32,
         fontWeight: "bold",
         color: "green",
+        flex: 1,
     },
     scoreTextBad: {
-        fontSize: 40,
+        fontSize: 32,
         fontWeight: "bold",
         color: "red",
+        flex: 1,
     },
 });

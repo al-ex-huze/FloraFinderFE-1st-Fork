@@ -60,9 +60,6 @@ const styles = StyleSheet.create({
         borderBottomRightRadius: 10,
         alignItems: "flex-end",
     },
-    card_title: {
-        color: "white",
-    },
     text_1: {
         fontSize: 22,
         lineHeight: 24,
