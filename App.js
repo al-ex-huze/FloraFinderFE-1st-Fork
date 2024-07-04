@@ -26,7 +26,7 @@ export default function App() {
                 <Stack.Screen name="LoginRegister" component={LoginRegister} />
                 <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
-                <Stack.Screen name="Collected List" component={CollectedList} />
+                <Stack.Screen name="CollectedList" component={CollectedList} />
                 <Stack.Screen name="CollectedMap" component={CollectedMap} />
                 <Stack.Screen name="CollectNow" component={CollectNow} />
                 <Stack.Screen name="LeagueTable" component={LeagueTable} />
