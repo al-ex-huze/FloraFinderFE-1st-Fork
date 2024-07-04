@@ -7,7 +7,8 @@ import Register from "./components/Register";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import UserProvider from "./contexts/Contexts"
-import CollectedList from './components/CollectedList';
+import CollectedList from './components/collection-list/CollectedList';
+import CollectedSingleCard from './components/collection-list/CollectedSingleCard';
 import CollectedMap from './components/CollectedMap';
 import CollectNow from './components/CollectNow';
 import LeagueTable from './components/LeagueTable';
@@ -31,7 +32,7 @@ export default function App() {
                 <Stack.Screen name="LeagueTable" component={LeagueTable} />
                 <Stack.Screen name="HomePage" component={HomePage} />
                 <Stack.Screen name="PlantResult" component={PlantResult} />
-                
+                <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
             </ Stack.Navigator>
     </ NavigationContainer>
     </UserProvider>
