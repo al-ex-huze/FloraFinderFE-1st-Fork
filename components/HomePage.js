@@ -46,6 +46,16 @@ return (
             >
                 <Text style={styles.buttonText}>Collect Now   <FontAwesomeIcon icon={faCamera} color={"white"}/></Text>
             </Pressable>
+            <Pressable
+                style={styles.button}
+                title="GeoLocator"
+                onPress={() => {
+                    navigation.navigate("GeoLocator");
+                }}
+            >
+                <Text style={styles.buttonText}>Geo Locator   <FontAwesomeIcon icon={faCamera} color={"white"}/>
+                </Text>
+            </Pressable>
     </View>
 )
 }
