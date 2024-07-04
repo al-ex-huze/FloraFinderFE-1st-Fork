@@ -25,3 +25,19 @@ export const postPhotoToPlantNet = (imageUri) => {
             console.log(error.response); // this may return a rejected promise if image isnt identified - not for future debugging alex
         });
 };
+
+const floraFinderApi = axios.create({
+    baseURL: "http://16.170.228.135:3000/api",
+})
+
+export const postNewUser = (newUser) => {
+
+    return floraFinderApi
+    .post(`/users`, newUser)
+    .then((response) => {
+        return response.data.user;
+    })
+    .catch((error) => {
+        console.log(error, "ERROR in API")
+    })
+}
