@@ -17,7 +17,7 @@ export default function CollectedList({ navigation }) {
     const [plantsArr, setPlantsArr] = useState([]);
 
     useEffect(() => {
-        console.log("CONSOLE LOG USE EFFECT");
+        console.log("USE EFFECT in COLLECTED LIST");
         setIsLoading(true);
         getPlants().then((usersPlants) => {
             setPlantsArr(usersPlants);
