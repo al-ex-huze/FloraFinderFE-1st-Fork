@@ -7,19 +7,25 @@ import {
     ActivityIndicator,
 } from "react-native";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../../contexts/Contexts";
 
-import CollectedListCard from "./CollectedListCard";
-import getPlants from "../../test-data/getPlants";
+import CollectedListCard from "./CollectedListCard"
+
+import { getCollectedPlantsList } from "../../api";
 
 export default function CollectedList({ navigation }) {
+    const { user, setUser } = useContext(UserContext);
+
     const [isLoading, setIsLoading] = useState(true);
     const [plantsArr, setPlantsArr] = useState([]);
+
+    const username = user.username;
 
     useEffect(() => {
         console.log("USE EFFECT in COLLECTED LIST");
         setIsLoading(true);
-        getPlants().then((usersPlants) => {
+        getCollectedPlantsList(username).then((usersPlants) => {
             setPlantsArr(usersPlants);
             setIsLoading(false);
         });
@@ -41,6 +47,7 @@ export default function CollectedList({ navigation }) {
         <View style={styles.container}>
             <ScrollView>
                 <ScrollView style={styles.scrollView}>
+                    
                     {plantsArr.map((plant, index) => (
                         <Pressable
                             key={index}
@@ -55,6 +62,7 @@ export default function CollectedList({ navigation }) {
                             <CollectedListCard plant={plant} />
                         </Pressable>
                     ))}
+                    
                 </ScrollView>
                 <Pressable
                     style={styles.button}
