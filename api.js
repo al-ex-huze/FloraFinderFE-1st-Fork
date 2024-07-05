@@ -22,7 +22,7 @@ export const postPhotoToPlantNet = (imageUri) => {
              // only return the first ie best result out of several possibilities returned so the game will feel snappy alex
         })
         .catch((error) => {
-            console.log(error.response); // this may return a rejected promise if image isnt identified - not for future debugging alex
+            console.log(error.response); // this may return a rejected promise if image isnt identified - FOR future debugging alex
         });
 };
 
@@ -42,6 +42,18 @@ export const postNewUser = (newUser) => {
     })
 }
 
+export const postNewPlantToCollection = (username, newCollection) => {
+    return floraFinderApi
+    .post(`/users/${username}/collections`, newCollection)
+    .then((response) => {
+        console.log(response.data.collection, "NEW COLLECTION RETURNED in API");
+        return response.data.collection;
+    })
+    .catch((error) => {
+        console.log(error, "ERROR in API")
+    })
+}
+
 export const getUserByUsername = (username) => {
 return floraFinderApi
 .get(`/users/${username}`)
@@ -49,3 +61,4 @@ return floraFinderApi
     return response.data.user
 })
 }
+

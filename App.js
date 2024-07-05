@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import * as React from 'react'
 import LoginRegister from './components/LoginRegister';
@@ -17,7 +16,6 @@ import PlantResult from './components/PlantResult';
 import GeoLocater from './components/GeoLocater';
 
 const Stack = createNativeStackNavigator();
-
 
 export default function App() {
   return (
