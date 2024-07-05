@@ -30,7 +30,6 @@ return (
             >
                 <Text style={styles.buttonText}>Register</Text>
             </Pressable>
-            <Pressable style={styles.button} title="TempLogin" onPress={() => {navigation.navigate("HomePage");}}><Text style={styles.buttonText}>TempLogin</Text></Pressable>
     </View>
     </ImageBackground>
 )
