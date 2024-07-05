@@ -9,7 +9,7 @@
     "splash": {
       "image": "./assets/FloraFinderLogo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#CCFFCC"
+      "backgroundColor": "#C6BEC1"
     },
     "ios": {
       "supportsTablet": true
@@ -17,7 +17,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/FloraFinderLogo.png",
-        "backgroundColor": "#CCFFCC"
+        "backgroundColor": "#C6BEC1"
       }
     },
     "web": {
