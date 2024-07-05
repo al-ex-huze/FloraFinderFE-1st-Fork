@@ -41,3 +41,12 @@ export const postNewUser = (newUser) => {
         console.log(error, "ERROR in API")
     })
 }
+
+export const getUserByUsername = (username) => {
+return floraFinderApi
+.get(`/users/${username}`)
+.then((response) => {
+
+    return response.data.username
+})
+}
