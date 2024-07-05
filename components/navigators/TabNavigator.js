@@ -34,7 +34,6 @@ export function TabNavigator() {
     if (user.username) { // if user is logged in show the tab navigator 
         return (
             <Tab.Navigator
-                initialRouteName="LoginRegister"
                 screenOptions={{ headerShown: false }}
             >
                 <Tab.Screen
