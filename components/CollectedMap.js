@@ -1,7 +1,11 @@
 import React from "react";
 import { StyleSheet, Pressable, Button, Text, View, TouchableOpacity } from "react-native";
 import MapView, { Marker, Heatmap, PROVIDER_GOOGLE  } from "react-native-maps";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
+import { UserContext } from "../contexts/Contexts";
+import { getCollectedPlantsList } from "../api";
+
 const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png")
 const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png")
 const flowerIcon3 = require("../assets/flowericons/flowerIcon3.png")
@@ -22,6 +26,23 @@ export default function CollectedMap({navigation}) {
             flowerIcon6,
             flowerIcon7,
         ]);
+
+        const { user, setUser } = useContext(UserContext);
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [plantsArr, setPlantsArr] = useState([]);
+
+    const username = user.username;
+
+    useEffect(() => {
+        console.log("USE EFFECT in COLLECTED MAP");
+        setIsLoading(true);
+        getCollectedPlantsList(username).then((usersPlants) => {
+            setPlantsArr(usersPlants);
+            setIsLoading(false);
+        });
+    }, []);
+
         const handleMapPress = (mapPressEvent) => {
             let newMarker = {
                 coordinate: mapPressEvent.coordinate,
@@ -54,7 +75,17 @@ export default function CollectedMap({navigation}) {
                     }}
                     onPress={(e) => handleMapPress(e.nativeEvent)}
                 >
-                    {markersArr.map((marker, index) => (
+                     {plantsArr.map((plant, index) => (
+                        <Marker
+                            key={index}
+                            coordinate={{
+                                longitude: plant.geoTag.longitude,
+                                latitude: plant.geoTag.latitude,
+                            }}
+                            image={plant.image}
+                        />
+                    ))}
+                    {/* {markersArr.map((marker, index) => (
                         <Marker
                             key={index}
                             coordinate={{
@@ -63,7 +94,7 @@ export default function CollectedMap({navigation}) {
                             }}
                             image={marker.icon}
                         />
-                    ))}
+                    ))} */}
                     {/* {heatMapPoints[0] ? (
                         <Heatmap
                             opacity={0.5}
