@@ -1,11 +1,14 @@
 import * as React from 'react'
-import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button} from "react-native";
+import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button, Alert} from "react-native";
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-
 import { postNewUser } from '../api';
 
-export default function Register() {
+
+
+
+
+export default function Register({ navigation }) {
 
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -16,21 +19,30 @@ export default function Register() {
           lastName: ''
         }
       });
+      
       const onSubmit = (data) => {
         console.log(data, "data")
         const newUser = {username: data.username, name: data.firstName + " " + data.lastName, email: data.emailAddress, password: data.password};
         console.log(newUser);
-
         postNewUser(newUser)
         .then((user) => {
-          console.log(user, "RESPONSE in REGISTER")
+          Alert.alert('Registration complete!', 'Please login to your account.', [
+            {
+              text: 'Login',
+              onPress: () => navigation.navigate('Login'),
+              style: 'default',
+            },
+          ]);
         })
         .catch((error) => {
-          console.log(error, "ERROR in REGISTER")
+          console.log(error, "Registration Failed")
         })
       };
-    
-      return (
+
+     
+   
+
+return (
         <View style={styles.container}>
           <Text style={styles.heading}>Create An Account</Text>
           <Text>Enter your email address:</Text>
@@ -38,6 +50,8 @@ export default function Register() {
             control={control}
             rules={{
              required: true,
+             pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+             
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -50,13 +64,15 @@ export default function Register() {
             )}
             name="emailAddress"
           />
-          {errors.emailAddress && <Text>This is required.</Text>}
+          {errors.emailAddress && <Text style={styles.errorText}>Invalid Email Address.</Text>}
           <Text>Create a password:</Text>
           <Controller
             control={control}
             rules={{
-             maxLength: 100,
-             required: true
+             maxLength: 20,
+             minLength: 5,
+             required: true,
+             pattern: /\w/
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -70,7 +86,7 @@ export default function Register() {
             )}
             name="password"
           />
-          {errors.password && <Text>This is required.</Text>}
+          {errors.password && <Text style={styles.errorText}>Password must be 5-20 characters long and only contain numbers, letters and underscores. </Text>}
           <Text>Enter a username:</Text>
           <Controller
             control={control}
@@ -80,7 +96,7 @@ export default function Register() {
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="username"
+                placeholder="Username"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -186,4 +202,7 @@ borderColor: "#006400",
 buttonText : {
   color: "white",
 },
+errorText: {
+  color: "red"
+}
 });

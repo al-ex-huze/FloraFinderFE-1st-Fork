@@ -13,6 +13,7 @@ import CollectNow from './components/CollectNow';
 import LeagueTable from './components/LeagueTable';
 import HomePage from './components/HomePage';
 import PlantResult from './components/PlantResult';
+import GeoLocater from './components/GeoLocater';
 
 const Stack = createNativeStackNavigator();
 
@@ -31,6 +32,7 @@ export default function App() {
                 <Stack.Screen name="HomePage" component={HomePage} />
                 <Stack.Screen name="PlantResult" component={PlantResult} />
                 <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
+                {/* <Stack.Screen name="GeoLocater" component={GeoLocater} /> */}
             </ Stack.Navigator>
     </ NavigationContainer>
     </UserProvider>
