@@ -35,7 +35,7 @@ export default function Register({ navigation }) {
           ]);
         })
         .catch((error) => {
-          console.log(error, "ERROR in REGISTER")
+          console.log(error, "Registration Failed")
         })
       };
 

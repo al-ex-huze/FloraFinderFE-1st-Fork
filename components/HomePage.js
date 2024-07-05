@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Pressable, Text, View, ImageBackground } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faHome, faLeaf, faBars, faMapMarker, faCamera } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faLeaf, faBars, faMapMarker, faCamera, faCircleDot } from '@fortawesome/free-solid-svg-icons';
 
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
@@ -37,6 +37,12 @@ export default function HomePage({ navigation }) {
           onPress={() => navigation.navigate("CollectNow")}
         >
           <Text style={styles.buttonText}>Collect Now <FontAwesomeIcon icon={faCamera} color={"white"}/></Text>
+        </Pressable>
+        <Pressable
+                    style={styles.button}
+                    onPress={()=> {navigation.navigate("GeoLocater")}}
+                >
+                    <Text style={styles.buttonText}> GeoLocater   <FontAwesomeIcon icon={faCircleDot} color={"white"} /></Text>
         </Pressable>
       </View>
     </ImageBackground>
