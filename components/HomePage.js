@@ -38,12 +38,6 @@ export default function HomePage({ navigation }) {
         >
           <Text style={styles.buttonText}>Collect Now <FontAwesomeIcon icon={faCamera} color={"white"}/></Text>
         </Pressable>
-        <Pressable
-                    style={styles.button}
-                    onPress={()=> {navigation.navigate("GeoLocater")}}
-                >
-                    <Text style={styles.buttonText}> GeoLocater   <FontAwesomeIcon icon={faCircleDot} color={"white"} /></Text>
-        </Pressable>
       </View>
     </ImageBackground>
   );
