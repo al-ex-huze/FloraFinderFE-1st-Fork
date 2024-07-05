@@ -46,7 +46,6 @@ export const getUserByUsername = (username) => {
 return floraFinderApi
 .get(`/users/${username}`)
 .then((response) => {
-
-    return response.data.username
+    return response.data.user
 })
 }
