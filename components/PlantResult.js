@@ -14,13 +14,15 @@ import {
     faBookmark,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from '../contexts/Contexts';
 
 import { postNewPlantToCollection } from "../api";
 import * as Location from "expo-location";
 
 export default function PlantResult({ route, navigation }) {
     const { plant } = route.params;
+    const { user, setUser } = useContext(UserContext);
 
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
@@ -39,7 +41,7 @@ export default function PlantResult({ route, navigation }) {
     }, []);
 
     const handleSavePlantToCollection = () => {
-        const username = "al-ex-huze";
+        const username = user.username;
 
         const newCollection = {
             speciesID: Number(plant.gbif.id),
