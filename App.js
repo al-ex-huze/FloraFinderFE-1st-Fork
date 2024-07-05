@@ -14,6 +14,7 @@ import LeagueTable from './components/LeagueTable';
 import HomePage from './components/HomePage';
 import PlantResult from './components/PlantResult';
 
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
