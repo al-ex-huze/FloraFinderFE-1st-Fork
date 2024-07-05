@@ -1,53 +1,80 @@
-import * as React from 'react'
-import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button} from "react-native";
-import { useState, useContext } from 'react';
+import * as React from 'react';
+import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, ImageBackground, Alert } from "react-native";
+import { useState, useContext, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { UserContext } from '../contexts/Contexts';
-
+import { getUserByUsername } from '../api';
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 export default function Login({ navigation }) {
-    const {user, setUser} = useContext(UserContext)
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-          emailAddress: '',
-          password: '',
-        }
-      });
-      const onSubmit = data => console.log(data);
-    
-      return (
+  const { user, setUser } = useContext(UserContext);
+  const { control, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: {
+      username: '',
+      password: '',
+    }
+  });
+
+  const onSubmit = (data) => {
+    setUser(data)
+    getUserByUsername(user.username)
+    .then((result) => {
+      console.log(result)
+      Alert.alert('You are logged in', 'Test', [
+        {
+          text: 'Go to Home',
+          onPress: () => navigation.navigate('HomePage'),
+          style: 'default',
+        },
+      ]);   
+    })
+    .catch((error) => {
+      console.log(error, "Login Failed");
+    });
+  };
+  
+ 
+  
+
+  return (
+    <ImageBackground
+      source={backgroundLeaf}
+      style={styles.background}
+      resizeMode="cover" // or "repeat" if page is really long (repeats image)
+    >
+      <View style={styles.overlay}>
+        <Text style={styles.heading}>Login</Text>
         <View style={styles.container}>
-           <Text style={styles.heading}>Log In To Your Account</Text>
-          <Text>Enter your email address:</Text>
+          <Text style={styles.labelContainerText}>Username:</Text>
           <Controller
             control={control}
             rules={{
-             required: true,
+              required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
-                placeholder="Email Address..."
+                placeholder="Enter username here"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
                 style={styles.textInput}
               />
             )}
-            name="emailAddress"
+            name="username"
           />
-          {errors.emailAddress && <Text>This is required.</Text>}
+          {errors.username && <Text>This is required.</Text>}
 
-          <Text>Enter your password:</Text>
+          <Text style={styles.labelContainerText}>Password:</Text>
           <Controller
             control={control}
             rules={{
-             maxLength: 100,
-             required: true
+              maxLength: 100,
+              required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
                 secureTextEntry={true}
-                placeholder="Password..."
+                placeholder="Enter password here"
                 onBlur={onBlur}
                 onChangeText={onChange}
                 value={value}
@@ -58,58 +85,78 @@ export default function Login({ navigation }) {
           />
           {errors.password && <Text>This is required.</Text>}
 
-        <Pressable style={styles.button} title="Log In" onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.buttonText}> Log In</Text>
-        </Pressable>
+          <Pressable style={styles.button} title="Log In" onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.buttonText}>Log In</Text>
+          </Pressable>
         </View>
-      );
+      </View>
+    </ImageBackground>
+  );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: "center",
+  },
   container: {
-      flex: 1, // makes sure the colour takes up the whole screen
-      backgroundColor: "#CCFFCC", // Kate colour change
-      alignItems: "center", // horizontal alex
-      justifyContent: "center", // vertical alex
+    alignItems: "center",
+    justifyContent: "center",
   },
   button: {
-      alignItems: "center",
-      justifyContent: "center",
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: "#006400",
-      width: "50%", // percentages need to be in in quotes alex
-      margin: 12,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#006400",
+    width: "50%",
+    margin: 12,
   },
   text: {
-      fontSize: 16,
-      lineHeight: 21,
-      fontWeight: "bold",
-      letterSpacing: 0.25,
-      color: "white",
-  },
-  image: {
-      width: '80%', 
-      resizeMode: 'contain',
-  },
-  buttonText : {
+    fontSize: 16,
+    lineHeight: 21,
+    fontWeight: "bold",
+    letterSpacing: 0.25,
     color: "white",
-},
-heading: {
-  fontSize: 25,
-  fontWeight: "bold",
-  color: "#006400",
-  margin: 12,
-},
-textInput: {
-backgroundColor: "white",
-height: 25,
-width: 200,
-borderWidth: 2,
-borderRadius: 5,
-borderStyle: "solid",
-borderColor: "#006400",
-},
+  },
+  textInput: {
+    backgroundColor: "white",
+    height: 40,
+    width: 250,
+    borderWidth: 2,
+    borderRadius: 5,
+    borderStyle: "solid",
+    borderColor: "#006400",
+    marginVertical: 10,
+    paddingHorizontal: 10,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#006400",
+    position: "absolute",
+    top: 40,
+    left: 20,
+  },
+  buttonText: {
+    color: "white",
+  },
+  labelContainerText: {
+    backgroundColor: "white",
+    borderWidth: 2,
+    borderRadius: 5,
+    borderStyle: "solid",
+    borderColor: "#006400",
+    padding: 5,
+    fontWeight: "bold",
+    marginRight: 165,
+    marginTop: 10,
+    marginBottom: -4,
+    
+  }
 });
