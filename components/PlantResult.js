@@ -3,7 +3,6 @@ import {
     View,
     Text,
     StyleSheet,
-    Button,
     Image,
     Pressable,
     TouchableOpacity,
@@ -40,26 +39,23 @@ export default function PlantResult({ route, navigation }) {
     }, []);
 
     const handleSavePlantToCollection = () => {
-        const username = "alex";
-        const currentTimestamp = new Date().toISOString();
-        console.log(currentTimestamp);
+        const username = "al-ex-huze";
+
         const newCollection = {
-            uniqueSerialID: plant.species.scientificNameWithoutAuthor,
             speciesID: Number(plant.gbif.id),
             speciesName: plant.species.commonNames[0],
             geoTag: JSON.stringify({latitude: location.coords.latitude, longitude: location.coords.longitude}),
             matchScore: plant.score,
-            dateCollected: currentTimestamp,
             image: plant.images[0].url.m,
             speciesFamily: plant.species.family.scientificNameWithoutAuthor,
         };
 
         postNewPlantToCollection(username, newCollection)
             .then((response) => {
-                console.log(response, "RESPONSE in PLANTRESULT");
+                console.log(response.speciesName, "RESPONSE in PLANTRESULT");
             })
             .catch((error) => {
-                console.log(response, "RESPONSE in PLANTRESULT");
+                console.log(error, "ERROR in PLANTRESULT");
             });
     };
     return (

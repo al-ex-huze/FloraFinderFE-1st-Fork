@@ -22,7 +22,7 @@ export const postPhotoToPlantNet = (imageUri) => {
              // only return the first ie best result out of several possibilities returned so the game will feel snappy alex
         })
         .catch((error) => {
-            console.log(error.response); // this may return a rejected promise if image isnt identified - not for future debugging alex
+            console.log(error.response); // this may return a rejected promise if image isnt identified - FOR future debugging alex
         });
 };
 
@@ -43,17 +43,13 @@ export const postNewUser = (newUser) => {
 }
 
 export const postNewPlantToCollection = (username, newCollection) => {
-    console.log(username, "USERNAME in API")
-    console.log(newCollection, "NEWCOLLECTION in API")
-
     return floraFinderApi
     .post(`/users/${username}/collections`, newCollection)
     .then((response) => {
-        console.log(response.data.collection, "NEW COLLECTION in API");
+        console.log(response.data.collection, "NEW COLLECTION RETURNED in API");
+        return response.data.collection;
     })
     .catch((error) => {
         console.log(error, "ERROR in API")
     })
 }
-
-// {"dateCollected": "1720105173123", "geoTag": "{\"latitude\":51.4504627,\"longitude\":0.1840617}", "image": "https://bs.plantnet.org/image/m/8efd9553559d0d2739623bc2b55d5f5cbc3695f6", "matchScore": 0.73118, "speciesFamily": "Cactaceae", "speciesID": "5383983", "speciesName": "Christmas cactus", "uniqueSerialID": "Schlumbergera truncata"} 
