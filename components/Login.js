@@ -1,7 +1,6 @@
 import * as React from "react";
 import {
     TextInput,
-    SafeAreaView,
     StyleSheet,
     Pressable,
     Text,
@@ -9,7 +8,7 @@ import {
     ImageBackground,
     Alert,
 } from "react-native";
-import { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { UserContext } from "../contexts/Contexts";
 import { getUserByUsername } from "../api";

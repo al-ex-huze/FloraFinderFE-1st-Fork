@@ -1,18 +1,17 @@
 import React from "react";
 import {
     StyleSheet,
-    Pressable,
-    Button,
-    Text,
     View,
-    TouchableOpacity,
 } from "react-native";
 import MapView, { Marker, Heatmap, PROVIDER_GOOGLE } from "react-native-maps";
 import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../contexts/Contexts";
 import { getCollectedPlantsList } from "../api";
-import { parseGeoTagLatitude, parseGeoTagLongitude } from "../utils/parseGeoTag";
+import {
+    parseGeoTagLatitude,
+    parseGeoTagLongitude,
+} from "../utils/parseGeoTag";
 
 const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png");
 const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png");
@@ -23,7 +22,6 @@ const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png");
 const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png");
 
 export default function CollectedMap({ navigation }) {
-    // const [markersArr, setMarkersArr] = useState([]);
     // const [heatMapPoints, setHeatMapPoints] = useState([]);
 
     const { user, setUser } = useContext(UserContext);
@@ -47,29 +45,23 @@ export default function CollectedMap({ navigation }) {
         setIsLoading(true);
         getCollectedPlantsList(username).then((usersPlants) => {
             setPlantsArr(usersPlants);
-            setIsLoading(false);
-        });        
-    }, []);
 
-    // const handleMapPress = (mapPressEvent) => {
-    //     let newMarker = {
-    //         coordinate: mapPressEvent.coordinate,
-    //         icon: flowerIcons[Math.floor(Math.random() * flowerIcons.length)], // random index generator ie * 7 for 0-6
-    //     };
-    //     setMarkersArr([...markersArr, newMarker]);
-    //     setHeatMapPoints([
-    //         ...heatMapPoints,
-    //         {
-    //             longitude: mapPressEvent.coordinate.longitude,
-    //             latitude: mapPressEvent.coordinate.latitude,
-    //             weight: 1,
-    //         },
-    //     ]);
-    // };
-    // const handleReset = () => {
-    //     setMarkersArr([]);
-    //     setHeatMapPoints([]);
-    // };
+            // adds coords to heat map
+            /*usersPlants.map((plant) => {
+                setHeatMapPoints([
+                    ...heatMapPoints,
+                    {
+                        longitude: parseGeoTagLongitude(plant),
+                        latitude: parseGeoTagLatitude(plant),
+                        weight: 1,
+                    },
+                ]);
+            });
+            */
+
+            setIsLoading(false);
+        });
+    }, []);
 
     return (
         <View style={styles.mapContainer}>
@@ -80,9 +72,8 @@ export default function CollectedMap({ navigation }) {
                     latitude: 51.4504791,
                     longitude: 0.1740766,
                     latitudeDelta: 0.01,
-                    longitudeDelta: 0.02, // delta relates to how zoomed in the map is and some function is performed on either one, relative to the width/height alex
+                    longitudeDelta: 0.02,
                 }}
-                onPress={(e) => handleMapPress(e.nativeEvent)}
             >
                 {plantsArr.map((plant, index) => (
                     <Marker
@@ -99,33 +90,15 @@ export default function CollectedMap({ navigation }) {
                     />
                 ))}
 
-                {/* {markersArr.map((marker, index) => (
-                        <Marker
-                            key={index}
-                            coordinate={{
-                                longitude: marker.coordinate.longitude,
-                                latitude: marker.coordinate.latitude,
-                            }}
-                            image={marker.icon}
-                        />
-                    ))} */}
                 {/* {heatMapPoints[0] ? (
-                        <Heatmap
-                            opacity={0.5}
-                            radius={30}
-                            points={heatMapPoints}
-                        ></Heatmap>
-                    ) : null} */}
+                    <Heatmap
+                        opacity={0.5}
+                        radius={30}
+                        points={heatMapPoints}
+                    ></Heatmap>
+                ) : null} */}
 
             </MapView>
-
-            {/* <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
-                {markersArr.length === 0 ? (
-                    <Text style={styles.text}>Press map to pin markers</Text>
-                ) : (
-                    <Text style={styles.text}>RESET</Text>
-                )}
-            </TouchableOpacity> */}
         </View>
     );
 }
@@ -141,18 +114,7 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
     },
-    pinDrop: {
-        position: "absolute", // overlay on map
-        width: "100%",
-        alignItems: "center",
-        justifyContent: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
-        elevation: 3,
-        backgroundColor: "black",
-        margin: 2,
-    },
+
     text: {
         fontSize: 24,
         fontWeight: "bold",
