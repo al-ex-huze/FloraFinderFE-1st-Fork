@@ -34,19 +34,19 @@ export default function Login({ navigation }) {
     };
 
     const handleGetUser = (newLogin) => {
-        console.log(newLogin.username)
-        console.log(user);
         getUserByUsername(newLogin.username)
             .then((result) => {
-                console.log(result);
-                setUser(result.username)
-                Alert.alert("You are logged in", "Test", [
-                    {
-                        text: "Go to Home",
-                        onPress: () => navigation.navigate("HomeTab"),
-                        style: "default",
-                    },
-                ]);
+                console.log(result, "RESULT");
+                setUser(result);
+                Alert.alert("You are logged in", result.username);
+                
+                // Alert.alert("You are logged in", "Test", [
+                //     {
+                //         text: "Go to Home",
+                //         onPress: () => navigation.navigate("HomeTab"),
+                //         style: "default",
+                //     },
+                // ]);
             })
             .catch((error) => {
                 console.log(error, "Login Failed");

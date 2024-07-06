@@ -12,6 +12,7 @@ import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../contexts/Contexts";
 import { getCollectedPlantsList } from "../api";
+import { parseGeoTagLatitude, parseGeoTagLongitude } from "../utils/parseGeoTag";
 
 const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png");
 const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png");
@@ -22,8 +23,15 @@ const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png");
 const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png");
 
 export default function CollectedMap({ navigation }) {
-    const [markersArr, setMarkersArr] = useState([]);
-    const [heatMapPoints, setHeatMapPoints] = useState([]);
+    // const [markersArr, setMarkersArr] = useState([]);
+    // const [heatMapPoints, setHeatMapPoints] = useState([]);
+
+    const { user, setUser } = useContext(UserContext);
+    const username = user.username;
+
+    const [isLoading, setIsLoading] = useState(true);
+    const [plantsArr, setPlantsArr] = useState([]);
+
     const [flowerIcons, setFlowerIcons] = useState([
         flowerIcon1,
         flowerIcon2,
@@ -34,41 +42,35 @@ export default function CollectedMap({ navigation }) {
         flowerIcon7,
     ]);
 
-    const { user, setUser } = useContext(UserContext);
-
-    const [isLoading, setIsLoading] = useState(true);
-    const [plantsArr, setPlantsArr] = useState([]);
-
-    const username = user.username;
-
     useEffect(() => {
         console.log("USE EFFECT in COLLECTED MAP");
         setIsLoading(true);
         getCollectedPlantsList(username).then((usersPlants) => {
             setPlantsArr(usersPlants);
             setIsLoading(false);
-        });
+        });        
     }, []);
 
-    const handleMapPress = (mapPressEvent) => {
-        let newMarker = {
-            coordinate: mapPressEvent.coordinate,
-            icon: flowerIcons[Math.floor(Math.random() * flowerIcons.length)], // random index generator ie * 7 for 0-6
-        };
-        setMarkersArr([...markersArr, newMarker]);
-        setHeatMapPoints([
-            ...heatMapPoints,
-            {
-                longitude: mapPressEvent.coordinate.longitude,
-                latitude: mapPressEvent.coordinate.latitude,
-                weight: 1,
-            },
-        ]);
-    };
-    const handleReset = () => {
-        setMarkersArr([]);
-        setHeatMapPoints([]);
-    };
+    // const handleMapPress = (mapPressEvent) => {
+    //     let newMarker = {
+    //         coordinate: mapPressEvent.coordinate,
+    //         icon: flowerIcons[Math.floor(Math.random() * flowerIcons.length)], // random index generator ie * 7 for 0-6
+    //     };
+    //     setMarkersArr([...markersArr, newMarker]);
+    //     setHeatMapPoints([
+    //         ...heatMapPoints,
+    //         {
+    //             longitude: mapPressEvent.coordinate.longitude,
+    //             latitude: mapPressEvent.coordinate.latitude,
+    //             weight: 1,
+    //         },
+    //     ]);
+    // };
+    // const handleReset = () => {
+    //     setMarkersArr([]);
+    //     setHeatMapPoints([]);
+    // };
+
     return (
         <View style={styles.mapContainer}>
             <MapView
@@ -86,12 +88,17 @@ export default function CollectedMap({ navigation }) {
                     <Marker
                         key={index}
                         coordinate={{
-                            longitude: plant.geoTag.longitude,
-                            latitude: plant.geoTag.latitude,
+                            longitude: parseGeoTagLongitude(plant),
+                            latitude: parseGeoTagLatitude(plant),
                         }}
-                        image={flowerIcons[Math.floor(Math.random() * flowerIcons.length)]}
+                        image={
+                            flowerIcons[
+                                Math.floor(Math.random() * flowerIcons.length)
+                            ]
+                        }
                     />
                 ))}
+
                 {/* {markersArr.map((marker, index) => (
                         <Marker
                             key={index}
@@ -109,14 +116,16 @@ export default function CollectedMap({ navigation }) {
                             points={heatMapPoints}
                         ></Heatmap>
                     ) : null} */}
+
             </MapView>
-            <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
+
+            {/* <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
                 {markersArr.length === 0 ? (
                     <Text style={styles.text}>Press map to pin markers</Text>
                 ) : (
                     <Text style={styles.text}>RESET</Text>
                 )}
-            </TouchableOpacity>
+            </TouchableOpacity> */}
         </View>
     );
 }
