@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     View,
     ActivityIndicator,
+    Image,
 } from "react-native";
 import { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
@@ -93,6 +94,11 @@ export default function CollectNow({ navigation }) {
 
     return (
         <CameraView ref={ref} style={styles.camera} facing={facing}>
+            {imageUri ? (
+                <View style={styles.preview_container}>
+                    <Image style={styles.preview_image} source={{ uri: imageUri }} />
+                </View>
+            ) : null}
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     style={styles.button}
@@ -139,6 +145,13 @@ export default function CollectNow({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    preview_container:{
+        flex: 1,
+        margin: 20,
+    },
+    preview_image: {
+        flex: 1,
+    },
     camera: {
         flex: 1,
     },
