@@ -1,38 +1,46 @@
 import React from "react";
-import { StyleSheet, Pressable, Button, Text, View, TouchableOpacity } from "react-native";
-import MapView, { Marker, Heatmap, PROVIDER_GOOGLE  } from "react-native-maps";
+import {
+    StyleSheet,
+    Pressable,
+    Button,
+    Text,
+    View,
+    TouchableOpacity,
+} from "react-native";
+import MapView, { Marker, Heatmap, PROVIDER_GOOGLE } from "react-native-maps";
 import { useContext, useEffect, useState } from "react";
 
 import { UserContext } from "../contexts/Contexts";
 import { getCollectedPlantsList } from "../api";
+import { parseGeoTagLatitude, parseGeoTagLongitude } from "../utils/parseGeoTag";
 
-const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png")
-const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png")
-const flowerIcon3 = require("../assets/flowericons/flowerIcon3.png")
-const flowerIcon4 = require("../assets/flowericons/flowerIcon4.png")
-const flowerIcon5 = require("../assets/flowericons/flowerIcon5.png")
-const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png")
-const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png")
+const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png");
+const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png");
+const flowerIcon3 = require("../assets/flowericons/flowerIcon3.png");
+const flowerIcon4 = require("../assets/flowericons/flowerIcon4.png");
+const flowerIcon5 = require("../assets/flowericons/flowerIcon5.png");
+const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png");
+const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png");
 
-export default function CollectedMap({navigation}) {
-        const [markersArr, setMarkersArr] = useState([]);
-        const [heatMapPoints, setHeatMapPoints] = useState([]);
-        const [flowerIcons, setFlowerIcons] = useState([
-            flowerIcon1,
-            flowerIcon2,
-            flowerIcon3,
-            flowerIcon4,
-            flowerIcon5,
-            flowerIcon6,
-            flowerIcon7,
-        ]);
+export default function CollectedMap({ navigation }) {
+    // const [markersArr, setMarkersArr] = useState([]);
+    // const [heatMapPoints, setHeatMapPoints] = useState([]);
 
-        const { user, setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
+    const username = user.username;
 
     const [isLoading, setIsLoading] = useState(true);
     const [plantsArr, setPlantsArr] = useState([]);
 
-    const username = user.username;
+    const [flowerIcons, setFlowerIcons] = useState([
+        flowerIcon1,
+        flowerIcon2,
+        flowerIcon3,
+        flowerIcon4,
+        flowerIcon5,
+        flowerIcon6,
+        flowerIcon7,
+    ]);
 
     useEffect(() => {
         console.log("USE EFFECT in COLLECTED MAP");
@@ -40,52 +48,58 @@ export default function CollectedMap({navigation}) {
         getCollectedPlantsList(username).then((usersPlants) => {
             setPlantsArr(usersPlants);
             setIsLoading(false);
-        });
+        });        
     }, []);
 
-        const handleMapPress = (mapPressEvent) => {
-            let newMarker = {
-                coordinate: mapPressEvent.coordinate,
-                icon: flowerIcons[Math.floor(Math.random() * flowerIcons.length)], // random index generator ie * 7 for 0-6
-            };
-            setMarkersArr([...markersArr, newMarker]);
-            setHeatMapPoints([
-                ...heatMapPoints,
-                {
-                    longitude: mapPressEvent.coordinate.longitude,
-                    latitude: mapPressEvent.coordinate.latitude,
-                    weight: 1,
-                },
-            ]);
-        };
-        const handleReset = () => {
-            setMarkersArr([]);
-            setHeatMapPoints([]);
-        };
-        return (
-            <View style={styles.mapContainer}>
-                <MapView
-                    style={styles.map}
-                    // provider={PROVIDER_GOOGLE}
-                    initialRegion={{
-                        latitude: 51.4504791,
-                        longitude: 0.1740766,
-                        latitudeDelta: 0.01,
-                        longitudeDelta: 0.02, // delta relates to how zoomed in the map is and some function is performed on either one, relative to the width/height alex
-                    }}
-                    onPress={(e) => handleMapPress(e.nativeEvent)}
-                >
-                     {plantsArr.map((plant, index) => (
-                        <Marker
-                            key={index}
-                            coordinate={{
-                                longitude: plant.geoTag.longitude,
-                                latitude: plant.geoTag.latitude,
-                            }}
-                            image={plant.image}
-                        />
-                    ))}
-                    {/* {markersArr.map((marker, index) => (
+    // const handleMapPress = (mapPressEvent) => {
+    //     let newMarker = {
+    //         coordinate: mapPressEvent.coordinate,
+    //         icon: flowerIcons[Math.floor(Math.random() * flowerIcons.length)], // random index generator ie * 7 for 0-6
+    //     };
+    //     setMarkersArr([...markersArr, newMarker]);
+    //     setHeatMapPoints([
+    //         ...heatMapPoints,
+    //         {
+    //             longitude: mapPressEvent.coordinate.longitude,
+    //             latitude: mapPressEvent.coordinate.latitude,
+    //             weight: 1,
+    //         },
+    //     ]);
+    // };
+    // const handleReset = () => {
+    //     setMarkersArr([]);
+    //     setHeatMapPoints([]);
+    // };
+
+    return (
+        <View style={styles.mapContainer}>
+            <MapView
+                style={styles.map}
+                // provider={PROVIDER_GOOGLE}
+                initialRegion={{
+                    latitude: 51.4504791,
+                    longitude: 0.1740766,
+                    latitudeDelta: 0.01,
+                    longitudeDelta: 0.02, // delta relates to how zoomed in the map is and some function is performed on either one, relative to the width/height alex
+                }}
+                onPress={(e) => handleMapPress(e.nativeEvent)}
+            >
+                {plantsArr.map((plant, index) => (
+                    <Marker
+                        key={index}
+                        coordinate={{
+                            longitude: parseGeoTagLongitude(plant),
+                            latitude: parseGeoTagLatitude(plant),
+                        }}
+                        image={
+                            flowerIcons[
+                                Math.floor(Math.random() * flowerIcons.length)
+                            ]
+                        }
+                    />
+                ))}
+
+                {/* {markersArr.map((marker, index) => (
                         <Marker
                             key={index}
                             coordinate={{
@@ -95,32 +109,30 @@ export default function CollectedMap({navigation}) {
                             image={marker.icon}
                         />
                     ))} */}
-                    {/* {heatMapPoints[0] ? (
+                {/* {heatMapPoints[0] ? (
                         <Heatmap
                             opacity={0.5}
                             radius={30}
                             points={heatMapPoints}
                         ></Heatmap>
                     ) : null} */}
-                
-                </MapView>
-                <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
-                    {markersArr.length === 0 ? (
-                        <Text style={styles.text}>Press map to pin markers</Text>
-                        
-                    ) : (
-                        <Text style={styles.text}>RESET</Text>
-                    )}
-                </TouchableOpacity>
-            
-            </View>
-        );
-    } 
 
+            </MapView>
+
+            {/* <TouchableOpacity style={styles.pinDrop} onPress={handleReset}>
+                {markersArr.length === 0 ? (
+                    <Text style={styles.text}>Press map to pin markers</Text>
+                ) : (
+                    <Text style={styles.text}>RESET</Text>
+                )}
+            </TouchableOpacity> */}
+        </View>
+    );
+}
 
 const styles = StyleSheet.create({
     titleText: {
-        color: "006400"
+        color: "006400",
     },
     mapContainer: {
         flex: 1,
@@ -155,6 +167,5 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         margin: 10,
-        
     },
 });
