@@ -15,7 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useContext, useEffect, useState } from "react";
-import { UserContext } from '../contexts/Contexts';
+import { UserContext } from "../contexts/Contexts";
 
 import { postNewPlantToCollection } from "../api";
 import * as Location from "expo-location";
@@ -35,7 +35,9 @@ export default function PlantResult({ route, navigation }) {
                 return;
             }
 
-            let location = await Location.getCurrentPositionAsync({});
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: 6,
+            });
             setLocation(location);
         })();
     }, []);
@@ -46,7 +48,10 @@ export default function PlantResult({ route, navigation }) {
         const newCollection = {
             speciesID: Number(plant.gbif.id),
             speciesName: plant.species.commonNames[0],
-            geoTag: JSON.stringify({latitude: location.coords.latitude, longitude: location.coords.longitude}),
+            geoTag: JSON.stringify({
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+            }),
             matchScore: plant.score,
             image: plant.images[0].url.m,
             speciesFamily: plant.species.family.scientificNameWithoutAuthor,
