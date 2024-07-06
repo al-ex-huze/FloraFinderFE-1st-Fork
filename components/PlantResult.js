@@ -27,6 +27,9 @@ export default function PlantResult({ route, navigation }) {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
+    const [isSaving, setIsSaving] = useState(false);
+    const [isPosting, setIsPosting] = useState(false);
+
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestForegroundPermissionsAsync();
@@ -34,7 +37,6 @@ export default function PlantResult({ route, navigation }) {
                 setErrorMsg("Permission to access location was denied");
                 return;
             }
-
             let location = await Location.getCurrentPositionAsync({
                 accuracy: 6,
             });
@@ -44,7 +46,6 @@ export default function PlantResult({ route, navigation }) {
 
     const handleSavePlantToCollection = () => {
         const username = user.username;
-
         const newCollection = {
             speciesID: Number(plant.gbif.id),
             speciesName: plant.species.commonNames[0],
@@ -56,7 +57,6 @@ export default function PlantResult({ route, navigation }) {
             image: plant.images[0].url.m,
             speciesFamily: plant.species.family.scientificNameWithoutAuthor,
         };
-
         postNewPlantToCollection(username, newCollection)
             .then((response) => {
                 console.log(response.speciesName, "RESPONSE in PLANTRESULT");
@@ -65,6 +65,7 @@ export default function PlantResult({ route, navigation }) {
                 console.log(error, "ERROR in PLANTRESULT");
             });
     };
+
     return (
         <View style={styles.container}>
             <Text style={styles.heading}>
