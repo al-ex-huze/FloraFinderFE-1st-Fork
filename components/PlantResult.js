@@ -27,6 +27,7 @@ export default function PlantResult({ route, navigation }) {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
 
+    const [isSaved, setIsSaved] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isPosting, setIsPosting] = useState(false);
 
@@ -45,25 +46,32 @@ export default function PlantResult({ route, navigation }) {
     }, []);
 
     const handleSavePlantToCollection = () => {
-        const username = user.username;
-        const newCollection = {
-            speciesID: Number(plant.gbif.id),
-            speciesName: plant.species.commonNames[0],
-            geoTag: JSON.stringify({
-                latitude: location.coords.latitude,
-                longitude: location.coords.longitude,
-            }),
-            matchScore: plant.score,
-            image: plant.images[0].url.m,
-            speciesFamily: plant.species.family.scientificNameWithoutAuthor,
-        };
-        postNewPlantToCollection(username, newCollection)
-            .then((response) => {
-                console.log(response.speciesName, "RESPONSE in PLANTRESULT");
-            })
-            .catch((error) => {
-                console.log(error, "ERROR in PLANTRESULT");
-            });
+        setIsSaved(false);
+        if (location) {
+            const username = user.username;
+            const newCollection = {
+                speciesID: Number(plant.gbif.id),
+                speciesName: plant.species.commonNames[0],
+                geoTag: JSON.stringify({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                }),
+                matchScore: plant.score,
+                image: plant.images[0].url.m,
+                speciesFamily: plant.species.family.scientificNameWithoutAuthor,
+            };
+            postNewPlantToCollection(username, newCollection)
+                .then((response) => {
+                    console.log(
+                        response.speciesName,
+                        "RESPONSE in PLANTRESULT"
+                    );
+                    setIsSaved(true);
+                })
+                .catch((error) => {
+                    console.log(error, "ERROR in PLANTRESULT");
+                });
+        }
     };
 
     return (
@@ -103,16 +111,26 @@ export default function PlantResult({ route, navigation }) {
                     <FontAwesomeIcon icon={faCamera} color={"white"} />
                 </Text>
             </Pressable>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={handleSavePlantToCollection}
-            >
-                <Text style={styles.buttonText}>
-                    {" "}
-                    Save To Collection{" "}
-                    <FontAwesomeIcon icon={faBookmark} color={"white"} />
-                </Text>
-            </TouchableOpacity>
+            {isSaved ? (
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>
+                        {" "}
+                        Saved!{" "}
+                        <FontAwesomeIcon icon={faBookmark} color={"white"} />
+                    </Text>
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSavePlantToCollection}
+                >
+                    <Text style={styles.buttonText}>
+                        {" "}
+                        Save To Collection{" "}
+                        <FontAwesomeIcon icon={faBookmark} color={"white"} />
+                    </Text>
+                </TouchableOpacity>
+            )}
             <Pressable
                 style={styles.button}
                 title="Home Page"
