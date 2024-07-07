@@ -1,51 +1,153 @@
-import * as React from 'react'
-import { View, Text, StyleSheet, Button, Image, Pressable, TouchableOpacity } from "react-native";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faHome, faCamera, faBookmark } from '@fortawesome/free-solid-svg-icons';
+import * as React from "react";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    Pressable,
+    TouchableOpacity,
+} from "react-native";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import {
+    faHome,
+    faCamera,
+    faBookmark,
+} from "@fortawesome/free-solid-svg-icons";
 
-export default function PlantResult({route, navigation}) {
-   const {plant}=route.params
-return(
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "../contexts/Contexts";
 
-<View style={styles.container}>
-    <Text style={styles.heading}>You found a {plant.species.commonNames[0]}!</Text>
-    <Pressable style={styles.resultCard} title="Result Card">
-            <View style={styles.resultContainer}>
-                <Text style={styles.label}>Plant Family: </Text>
-                <Text style={styles.value}>{plant.species.family.scientificNameWithoutAuthor}</Text>
-            </View>
+import { postNewPlantToCollection } from "../api";
+import * as Location from "expo-location";
 
-            <View style={styles.resultContainer}>
-                <Text style={styles.label}>Scientific Name: </Text>
-                <Text style={styles.value}>{plant.species.scientificNameWithoutAuthor}</Text>
-            </View>
+export default function PlantResult({ route, navigation }) {
+    const { plant } = route.params;
+    const { user, setUser } = useContext(UserContext);
 
-            <View style={styles.resultContainer}>
-                 <Text style={styles.label}>Your Match Score: </Text>
-                 <Text style={styles.value}>{plant.score}</Text>
-            </View>
-    </Pressable>
+    const [location, setLocation] = useState(null);
+    const [errorMsg, setErrorMsg] = useState(null);
 
-            <Image style={styles.image} source={{uri:plant.images[0].url.m}} />
-            
-            <Pressable style={styles.button} title="Go Back" onPress={() => navigation.goBack()}><Text style={styles.buttonText}>Find Another Plant   <FontAwesomeIcon icon={faCamera} color={"white"}/></Text></Pressable>
-            <TouchableOpacity
-                    style={styles.button}
-                    // onPress={savePlantToList} too be added later
-                >
-                    <Text style={styles.buttonText}> Save To Collection   <FontAwesomeIcon icon={faBookmark} color={"white"}/></Text>
+    const [isSaved, setIsSaved] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isPosting, setIsPosting] = useState(false);
+
+    useEffect(() => {
+        (async () => {
+            let { status } = await Location.requestForegroundPermissionsAsync();
+            if (status !== "granted") {
+                setErrorMsg("Permission to access location was denied");
+                return;
+            }
+            let location = await Location.getCurrentPositionAsync({
+                accuracy: 6,
+            });
+            setLocation(location);
+        })();
+    }, []);
+
+    const handleSavePlantToCollection = () => {
+        setIsSaved(false);
+        if (location) {
+            const username = user.username;
+            const newCollection = {
+                speciesID: Number(plant.gbif.id),
+                speciesName: plant.species.commonNames[0],
+                geoTag: JSON.stringify({
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                }),
+                matchScore: plant.score,
+                image: plant.images[0].url.m,
+                speciesFamily: plant.species.family.scientificNameWithoutAuthor,
+            };
+            postNewPlantToCollection(username, newCollection)
+                .then((response) => {
+                    console.log(
+                        response.speciesName,
+                        "RESPONSE in PLANTRESULT"
+                    );
+                    setIsSaved(true);
+                })
+                .catch((error) => {
+                    console.log(error, "ERROR in PLANTRESULT");
+                });
+        }
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.heading}>
+                You found a {plant.species.commonNames[0]}!
+            </Text>
+            <Pressable style={styles.resultCard} title="Result Card">
+                <View style={styles.resultContainer}>
+                    <Text style={styles.label}>Plant Family: </Text>
+                    <Text style={styles.value}>
+                        {plant.species.family.scientificNameWithoutAuthor}
+                    </Text>
+                </View>
+                <View style={styles.resultContainer}>
+                    <Text style={styles.label}>Scientific Name: </Text>
+                    <Text style={styles.value}>
+                        {plant.species.scientificNameWithoutAuthor}
+                    </Text>
+                </View>
+                <View style={styles.resultContainer}>
+                    <Text style={styles.label}>Your Match Score: </Text>
+                    <Text style={styles.value}>{plant.score}</Text>
+                </View>
+            </Pressable>
+            <Image
+                style={styles.image}
+                source={{ uri: plant.images[0].url.m }}
+            />
+            <Pressable
+                style={styles.button}
+                title="Go Back"
+                onPress={() => navigation.goBack()}
+            >
+                <Text style={styles.buttonText}>
+                    Find Another Plant{" "}
+                    <FontAwesomeIcon icon={faCamera} color={"white"} />
+                </Text>
+            </Pressable>
+            {isSaved ? (
+                <TouchableOpacity style={styles.button}>
+                    <Text style={styles.buttonText}>
+                        {" "}
+                        Saved!{" "}
+                        <FontAwesomeIcon icon={faBookmark} color={"white"} />
+                    </Text>
                 </TouchableOpacity>
-                <Pressable style={styles.button} title="Home Page" onPress={() => navigation.navigate("HomePage")}><Text style={styles.buttonText}>Back To Home   <FontAwesomeIcon icon={faHome} color={"white"}/></Text></Pressable>
-            
-</View>
-
-)
+            ) : (
+                <TouchableOpacity
+                    style={styles.button}
+                    onPress={handleSavePlantToCollection}
+                >
+                    <Text style={styles.buttonText}>
+                        {" "}
+                        Save To Collection{" "}
+                        <FontAwesomeIcon icon={faBookmark} color={"white"} />
+                    </Text>
+                </TouchableOpacity>
+            )}
+            <Pressable
+                style={styles.button}
+                title="Home Page"
+                onPress={() => navigation.navigate("HomePage")}
+            >
+                <Text style={styles.buttonText}>
+                    Back To Home{" "}
+                    <FontAwesomeIcon icon={faHome} color={"white"} />
+                </Text>
+            </Pressable>
+        </View>
+    );
 }
 
 const styles = StyleSheet.create({
     camera: {
         flex: 1,
-    
     },
     buttonContainer: {
         flex: 1,
@@ -62,7 +164,6 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         margin: 10,
-        
     },
     text: {
         fontSize: 24,
@@ -78,7 +179,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     image: {
-        borderRadius: 150/2,
+        borderRadius: 150 / 2,
         width: 128,
         height: 128,
         paddingVertical: 12,
@@ -89,17 +190,15 @@ const styles = StyleSheet.create({
         alignItems: "center", // horizontal alex
         justifyContent: "center", // vertical alex
     },
-    buttonText : {
-        color: "white"
+    buttonText: {
+        color: "white",
     },
-    resultContainer : {
+    resultContainer: {
         flexDirection: "row",
-        
     },
     label: {
         fontSize: 20,
         fontWeight: "bold",
-        
     },
     value: {
         fontSize: 20,
@@ -116,6 +215,5 @@ const styles = StyleSheet.create({
         fontSize: 25,
         fontWeight: "bold",
         color: "#006400",
-    
-     },
+    },
 });

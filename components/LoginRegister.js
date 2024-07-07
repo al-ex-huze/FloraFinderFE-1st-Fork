@@ -1,13 +1,17 @@
 import * as React from 'react'
-import { StyleSheet, Pressable, View, Text, Image } from "react-native";
-const favicon = require("../assets/FloraFinderCropped.png")
-
-
+import { StyleSheet, Pressable, View, Text, Image, ImageBackground } from "react-native";
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 export default function LoginRegister({ navigation }) {
 return (
+    <ImageBackground 
+    source={backgroundLeaf}
+    style={styles.background}
+    resizeMode="cover"
+    >
+
     <View style={styles.container}>
-        <Image source={favicon} style={styles.image}  />
+       
             <Pressable
                 style={styles.button}
                 title="Login"
@@ -26,17 +30,17 @@ return (
             >
                 <Text style={styles.buttonText}>Register</Text>
             </Pressable>
-            <Pressable style={styles.button} title="TempLogin" onPress={() => {navigation.navigate("HomePage");}}><Text style={styles.buttonText}>TempLogin</Text></Pressable>
     </View>
+    </ImageBackground>
 )
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1, // makes sure the colour takes up the whole screen
-        backgroundColor: "#CCFFCC", // Kate colour change
         alignItems: "center", // horizontal alex
-        justifyContent: "center", // vertical alex
+        justifyContent: "flex-start", // vertical alex
+        marginTop: 202,
     },
     button: {
         alignItems: "center",
@@ -47,7 +51,7 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         width: "50%", // percentages need to be in in quotes alex
-        margin: 12,
+        marginTop: 12,
     },
     text: {
         fontSize: 16,
@@ -55,10 +59,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         letterSpacing: 0.25,
         color: "white",
-    },
-    image: {
-        width: '80%', 
-        resizeMode: 'contain',
     },
     buttonText: {
         color: "white",
@@ -68,4 +68,15 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#006400",
      },
+     background: {
+        flex: 1,
+      },
+      overlay: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: 'rgba(0.5, 0.5, 0.5, 0.8)', // Adjust the rgba value for transparency (0.5 is 50% transparency)
+    },
 });
