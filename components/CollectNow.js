@@ -26,6 +26,7 @@ export default function CollectNow({ navigation }) {
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [isSettingPreview, setIsSettingPreview] = useState(false);
 
     if (!permission) {
         return <View />;
@@ -46,9 +47,11 @@ export default function CollectNow({ navigation }) {
     };
 
     const handleTakePicture = async () => {
+        setIsSettingPreview(true);
         try {
             await ref.current.takePictureAsync().then((photo) => {
                 setImageUri(photo.uri);
+                setIsSettingPreview(false);
             });
         } catch (error) {
             console.log(error, "<-- ERROR TAKE PICTURE");
@@ -72,6 +75,7 @@ export default function CollectNow({ navigation }) {
         const firstMatch = await postPhotoToPlantNet(imageUri)
             .then((firstMatch) => {
                 navigation.navigate("PlantResult", { plant: firstMatch });
+                setImageUri("");
                 setIsLoading(false);
             })
             .catch((error) => {
@@ -81,9 +85,9 @@ export default function CollectNow({ navigation }) {
 
     if (isLoading) {
         return (
-            <View style={styles.activityIndicatorBackground}>
+            <View style={styles.activity_indicator_background}>
                 <ActivityIndicator
-                    style={styles.loadPage}
+                    style={styles.load_page}
                     size="large"
                     color="#006400"
                 />
@@ -94,78 +98,90 @@ export default function CollectNow({ navigation }) {
 
     return (
         <CameraView ref={ref} style={styles.camera} facing={facing}>
-            {imageUri ? (
+            <View style={styles.hud_container}>
                 <View style={styles.preview_container}>
-                    <Image
-                        style={styles.preview_image}
-                        source={{ uri: imageUri }}
-                    />
+                    {imageUri ? (
+                        <Image
+                            style={styles.preview_image}
+                            source={{ uri: imageUri }}
+                        />
+                    ) : null}
                 </View>
-            ) : null}
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={toggleCameraFacing}
-                >
-                    <Text style={styles.buttonText}>
-                        {" "}
-                        Flip Camera{" "}
-                        <FontAwesomeIcon icon={faRefresh} color={"white"} />
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handleTakePicture}
-                >
-                    <Text style={styles.buttonText}>
-                        {" "}
-                        Capture{" "}
-                        <FontAwesomeIcon icon={faCamera} color={"white"} />{" "}
-                    </Text>
-                </TouchableOpacity>
-                {imageUri ? (
+
+                <View style={styles.button_container}>
                     <TouchableOpacity
                         style={styles.button}
-                        onPress={handlePostPicture}
+                        onPress={toggleCameraFacing}
                     >
-                        <Text style={styles.buttonText}>
+                        <Text style={styles.button_text}>
                             {" "}
-                            Post photo{" "}
-                            <FontAwesomeIcon
-                                icon={faPlusCircle}
-                                color={"white"}
-                            />
+                            Flip Camera{" "}
+                            <FontAwesomeIcon icon={faRefresh} color={"white"} />
                         </Text>
                     </TouchableOpacity>
-                ) : null}
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={pickImageAsync}
-                >
-                    <Text style={styles.buttonText}>
-                        {" "}
-                        Gallery <FontAwesomeIcon icon={faTh} color={"white"} />
-                    </Text>
-                </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={pickImageAsync}
+                    >
+                        <Text style={styles.button_text}>
+                            {" "}
+                            Gallery{" "}
+                            <FontAwesomeIcon icon={faTh} color={"white"} />
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+
+                <View style={styles.camera_button_container}>
+                    {isSettingPreview ? (
+                        <View style={styles.activity_indicator_preview}>
+                            <ActivityIndicator size="large" color="#006400" />
+                        </View>
+                    ) : (
+                        <TouchableOpacity
+                            style={styles.camera_button}
+                            onPress={handleTakePicture}
+                        >
+                            <Text style={styles.button_text}>
+                                <FontAwesomeIcon
+                                    icon={faCamera}
+                                    color={"white"}
+                                />
+                            </Text>
+                        </TouchableOpacity>
+                    )}
+                    {imageUri && !isSettingPreview ? (
+                        <TouchableOpacity
+                            style={styles.camera_button}
+                            onPress={handlePostPicture}
+                        >
+                            <Text style={styles.button_text}>ID</Text>
+                        </TouchableOpacity>
+                    ) : null}
+                </View>
             </View>
         </CameraView>
     );
 }
 
 const styles = StyleSheet.create({
+    hud_container: {
+        flex: 1,
+    },
     preview_container: {
         flex: 1,
-        margin: 20,
+        margin: 40,
     },
     preview_image: {
         flex: 1,
+        height: "30%",
+        borderRadius: 10,
     },
     camera: {
         flex: 1,
     },
-    buttonContainer: {
+    button_container: {
         flex: 1,
-        flexDirection: "column",
         backgroundColor: "transparent",
         margin: 64,
     },
@@ -179,29 +195,41 @@ const styles = StyleSheet.create({
         backgroundColor: "#006400",
         margin: 2,
     },
+    camera_button_container: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "transparent",
+    },
+    camera_button: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 75,
+        height: 75,
+        borderRadius: 50,
+        elevation: 3,
+        backgroundColor: "#006400",
+        margin: 2,
+    },
     text: {
         fontSize: 24,
         fontWeight: "bold",
         color: "white",
     },
-    idContainer: {
-        flex: 1,
-        alignItems: "center",
-    },
-    idText: {
-        fontSize: 32,
-        fontWeight: "bold",
-    },
-    buttonText: {
+    button_text: {
         color: "white",
     },
-    loadPage: {
+    load_page: {
         backgroundColor: "#CCFFCC",
     },
-    activityIndicatorBackground: {
+    activity_indicator_background: {
         backgroundColor: "#CCFFCC",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    activity_indicator_preview: {
+        flex: 1,
     },
 });
