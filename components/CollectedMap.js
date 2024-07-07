@@ -15,13 +15,7 @@ import {
     parseGeoTagLongitude,
 } from "../utils/parseGeoTag";
 
-const flowerIcon1 = require("../assets/flowericons/flowerIcon1.png");
-const flowerIcon2 = require("../assets/flowericons/flowerIcon2.png");
-const flowerIcon3 = require("../assets/flowericons/flowerIcon3.png");
-const flowerIcon4 = require("../assets/flowericons/flowerIcon4.png");
-const flowerIcon5 = require("../assets/flowericons/flowerIcon5.png");
-const flowerIcon6 = require("../assets/flowericons/flowerIcon6.png");
-const flowerIcon7 = require("../assets/flowericons/flowerIcon7.png");
+const flowerIconsArr = require("../assets/flowericons/flowerIcons.js"); // moved all to separate file in assets to tidy up
 
 export default function CollectedMap({ navigation }) {
     // const [heatMapPoints, setHeatMapPoints] = useState([]);
@@ -32,15 +26,7 @@ export default function CollectedMap({ navigation }) {
     const [isLoading, setIsLoading] = useState(true);
     const [plantsArr, setPlantsArr] = useState([]);
 
-    const [flowerIcons, setFlowerIcons] = useState([
-        flowerIcon1,
-        flowerIcon2,
-        flowerIcon3,
-        flowerIcon4,
-        flowerIcon5,
-        flowerIcon6,
-        flowerIcon7,
-    ]);
+    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
 
     useEffect(() => {
         console.log("USE EFFECT in COLLECTED MAP");

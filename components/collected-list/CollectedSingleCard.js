@@ -9,7 +9,8 @@ import MapView, {
 import { useEffect, useState } from "react";
 import { formatDate } from "../../utils/formatDate";
 
-const flowerIcon1 = require("../../assets/flowericons/flowerIcon1.png");
+const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
+
 import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,
@@ -18,6 +19,7 @@ import {
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;
 
+    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
     const [initialLatitude, setInitialLatitude] = useState();
     const [initialLongitude, setInitialLongitude] = useState();
 
@@ -84,7 +86,11 @@ export default function CollectedSingleCard({ route }) {
                                     longitude: parseGeoTagLongitude(plant),
                                     latitude: parseGeoTagLatitude(plant),
                                 }}
-                                image={flowerIcon1}
+                                image={
+                                    flowerIcons[
+                                        Math.floor(Math.random() * flowerIcons.length)
+                                    ]
+                                }
                             ></Marker>
                         </MapView>
                     </View>
