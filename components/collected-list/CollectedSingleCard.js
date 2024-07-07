@@ -1,10 +1,5 @@
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
-import MapView, {
-    Marker,
-    Callout,
-    Heatmap,
-    PROVIDER_GOOGLE,
-} from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 
 import { useEffect, useState } from "react";
 import { formatDate } from "../../utils/formatDate";
@@ -32,8 +27,8 @@ export default function CollectedSingleCard({ route }) {
     }, []);
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollView}>
+        <View style={styles.page_container}>
+            <ScrollView style={styles.scroll_view}>
                 <View style={styles.card_container}>
                     <View style={styles.card_template}>
                         <Image
@@ -49,8 +44,8 @@ export default function CollectedSingleCard({ route }) {
                             <Text
                                 style={
                                     plant.matchScore > 0.5
-                                        ? styles.scoreTextGood
-                                        : styles.scoreTextBad
+                                        ? styles.text_score_good
+                                        : styles.text_score_bad
                                 }
                             >
                                 {(plant.matchScore * 100).toFixed(2)}%
@@ -65,10 +60,10 @@ export default function CollectedSingleCard({ route }) {
                     </View>
                 </View>
 
-                <View style={styles.card_container}>
-                    <View style={styles.card_template}>
+                <View style={styles.map_container}>
+                    <View style={styles.map_template}>
                         <MapView
-                            style={styles.map}
+                            style={styles.map_view}
                             // provider={PROVIDER_GOOGLE}
                             pitchEnabled={false}
                             rotateEnabled={false}
@@ -88,7 +83,9 @@ export default function CollectedSingleCard({ route }) {
                                 }}
                                 image={
                                     flowerIcons[
-                                        Math.floor(Math.random() * flowerIcons.length)
+                                        Math.floor(
+                                            Math.random() * flowerIcons.length
+                                        )
                                     ]
                                 }
                             ></Marker>
@@ -101,24 +98,20 @@ export default function CollectedSingleCard({ route }) {
 }
 
 const styles = StyleSheet.create({
-    map: {
-        width: "100%",
-        // width: 128,
-        height: 128,
-    },
-    card_container: {
-        flex: 1,
-    },
-
-    container: {
+    page_container: {
         flex: 1,
         flexDirection: "row",
         backgroundColor: "#CCFFCC",
         alignItems: "center",
         justifyContent: "center",
     },
-    scrollView: {
+    scroll_view: {
         marginHorizontal: 10,
+    },
+    card_container: {
+        flex: 1,
+        marginTop: 5,
+        marginBottom: 5,
     },
     card_template: {
         width: "100%",
@@ -133,7 +126,7 @@ const styles = StyleSheet.create({
     text_container_1: {
         position: "absolute",
         width: "100%",
-        height: "10%",
+        height: "12%",
         padding: 4,
         backgroundColor: "rgba(0,0,0, 0.3)",
         borderTopLeftRadius: 10,
@@ -161,16 +154,32 @@ const styles = StyleSheet.create({
         color: "white",
         flex: 1 / 2,
     },
-    scoreTextGood: {
+    text_score_good: {
         fontSize: 32,
         fontWeight: "bold",
         color: "green",
         flex: 1,
     },
-    scoreTextBad: {
+    text_score_bad: {
         fontSize: 32,
         fontWeight: "bold",
         color: "red",
         flex: 1,
+    },
+    map_container: {
+        flex: 1,
+        marginBottom: 5,
+    },
+    map_template: {
+        width: "100%",
+        height: "100%",
+        boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
+        borderRadius: 10,
+        overflow: "hidden",
+    },
+    map_view: {
+        width: "100%",
+        height: 128,
+        borderRadius: 10,
     },
 });
