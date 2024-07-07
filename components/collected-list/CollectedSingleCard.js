@@ -1,43 +1,94 @@
-import {
-    StyleSheet,
-    View,
-    Text,
-    Image,
-    ScrollView,
-} from "react-native";
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 import { formatDate } from "../../utils/formatDate";
+import {
+    parseGeoTagLatitude,
+    parseGeoTagLongitude,
+} from "../../utils/parseGeoTag";
+
+const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
 
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;
 
+    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    const [initialLatitude, setInitialLatitude] = useState();
+    const [initialLongitude, setInitialLongitude] = useState();
+
+    useEffect(() => {
+        console.log("USE EFFECT INITIAL LOCATION");
+        const latitude = parseGeoTagLatitude(plant);
+        setInitialLatitude(latitude);
+        const longitude = parseGeoTagLongitude(plant);
+        setInitialLongitude(longitude);
+    }, []);
+
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollView}>
-                <View style={styles.card_template}>
-                    <Image
-                        style={styles.card_image}
-                        source={{ uri: plant.image }}
-                    />
-                    <View style={styles.text_container_1}>
-                        <Text style={styles.text_1}>{plant.speciesName}</Text>
+        <View style={styles.page_container}>
+            <ScrollView style={styles.scroll_view}>
+                <View style={styles.card_container}>
+                    <View style={styles.card_template}>
+                        <Image
+                            style={styles.card_image}
+                            source={{ uri: plant.image }}
+                        />
+                        <View style={styles.text_container_1}>
+                            <Text style={styles.text_1}>
+                                {plant.speciesName}
+                            </Text>
+                        </View>
+                        <View style={styles.text_container_2}>
+                            <Text
+                                style={
+                                    plant.matchScore > 0.5
+                                        ? styles.text_score_good
+                                        : styles.text_score_bad
+                                }
+                            >
+                                {(plant.matchScore * 100).toFixed(2)}%
+                            </Text>
+                            <Text style={styles.text_2}>
+                                Member of the {plant.speciesFamily} Family
+                            </Text>
+                            <Text style={styles.text_2}>
+                                Collected on {formatDate(plant.dateCollected)}
+                            </Text>
+                        </View>
                     </View>
-                    <View style={styles.text_container_2}>
-                        <Text
-                            style={
-                                plant.matchScore > 0.5
-                                    ? styles.scoreTextGood
-                                    : styles.scoreTextBad
-                            }
+                </View>
+
+                <View style={styles.map_container}>
+                    <View style={styles.map_template}>
+                        <MapView
+                            style={styles.map_view}
+                            // provider={PROVIDER_GOOGLE}
+                            pitchEnabled={false}
+                            rotateEnabled={false}
+                            scrollEnabled={false}
+                            zoomEnabled={false}
+                            region={{
+                                latitude: initialLatitude,
+                                longitude: initialLongitude,
+                                latitudeDelta: 0.01,
+                                longitudeDelta: 0.02,
+                            }}
                         >
-                            {(plant.matchScore * 100).toFixed(2)}%
-                        </Text>
-                        <Text style={styles.text_2}>
-                            Member of the {plant.speciesFamily} Family
-                        </Text>
-                        <Text style={styles.text_2}>
-                            Collected on {formatDate(plant.dateCollected)}
-                        </Text>
+                            <Marker
+                                coordinate={{
+                                    longitude: parseGeoTagLongitude(plant),
+                                    latitude: parseGeoTagLatitude(plant),
+                                }}
+                                image={
+                                    flowerIcons[
+                                        Math.floor(
+                                            Math.random() * flowerIcons.length
+                                        )
+                                    ]
+                                }
+                            ></Marker>
+                        </MapView>
                     </View>
                 </View>
             </ScrollView>
@@ -46,15 +97,20 @@ export default function CollectedSingleCard({ route }) {
 }
 
 const styles = StyleSheet.create({
-    container: {
+    page_container: {
         flex: 1,
         flexDirection: "row",
         backgroundColor: "#CCFFCC",
         alignItems: "center",
         justifyContent: "center",
     },
-    scrollView: {
+    scroll_view: {
         marginHorizontal: 10,
+    },
+    card_container: {
+        flex: 1,
+        marginTop: 5,
+        marginBottom: 5,
     },
     card_template: {
         width: "100%",
@@ -69,7 +125,7 @@ const styles = StyleSheet.create({
     text_container_1: {
         position: "absolute",
         width: "100%",
-        height: "10%",
+        height: "12%",
         padding: 4,
         backgroundColor: "rgba(0,0,0, 0.3)",
         borderTopLeftRadius: 10,
@@ -97,16 +153,32 @@ const styles = StyleSheet.create({
         color: "white",
         flex: 1 / 2,
     },
-    scoreTextGood: {
+    text_score_good: {
         fontSize: 32,
         fontWeight: "bold",
         color: "green",
         flex: 1,
     },
-    scoreTextBad: {
+    text_score_bad: {
         fontSize: 32,
         fontWeight: "bold",
         color: "red",
         flex: 1,
+    },
+    map_container: {
+        flex: 1,
+        marginBottom: 5,
+    },
+    map_template: {
+        width: "100%",
+        height: "100%",
+        boxShadow: "10px 10px 17px -12px rgba(0,0,0,0.75)",
+        borderRadius: 10,
+        overflow: "hidden",
+    },
+    map_view: {
+        width: "100%",
+        height: 128,
+        borderRadius: 10,
     },
 });

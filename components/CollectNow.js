@@ -96,7 +96,10 @@ export default function CollectNow({ navigation }) {
         <CameraView ref={ref} style={styles.camera} facing={facing}>
             {imageUri ? (
                 <View style={styles.preview_container}>
-                    <Image style={styles.preview_image} source={{ uri: imageUri }} />
+                    <Image
+                        style={styles.preview_image}
+                        source={{ uri: imageUri }}
+                    />
                 </View>
             ) : null}
             <View style={styles.buttonContainer}>
@@ -120,16 +123,21 @@ export default function CollectNow({ navigation }) {
                         <FontAwesomeIcon icon={faCamera} color={"white"} />{" "}
                     </Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={handlePostPicture}
-                >
-                    <Text style={styles.buttonText}>
-                        {" "}
-                        Post photo{" "}
-                        <FontAwesomeIcon icon={faPlusCircle} color={"white"} />
-                    </Text>
-                </TouchableOpacity>
+                {imageUri ? (
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={handlePostPicture}
+                    >
+                        <Text style={styles.buttonText}>
+                            {" "}
+                            Post photo{" "}
+                            <FontAwesomeIcon
+                                icon={faPlusCircle}
+                                color={"white"}
+                            />
+                        </Text>
+                    </TouchableOpacity>
+                ) : null}
                 <TouchableOpacity
                     style={styles.button}
                     onPress={pickImageAsync}
@@ -145,7 +153,7 @@ export default function CollectNow({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    preview_container:{
+    preview_container: {
         flex: 1,
         margin: 20,
     },
