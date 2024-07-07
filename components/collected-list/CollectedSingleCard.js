@@ -1,15 +1,14 @@
+import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
-import { useEffect, useState } from "react";
 import { formatDate } from "../../utils/formatDate";
-
-const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
-
 import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,
 } from "../../utils/parseGeoTag";
+
+const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
 
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;
