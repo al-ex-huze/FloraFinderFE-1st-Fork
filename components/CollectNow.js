@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+    Alert,
     Button,
     StyleSheet,
     Text,
@@ -9,7 +10,7 @@ import {
     Image,
 } from "react-native";
 import { useRef, useState } from "react";
-import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { postPhotoToPlantNet } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -42,6 +43,7 @@ export default function CollectNow({ navigation }) {
             </View>
         );
     }
+
     const toggleCameraFacing = () => {
         setFacing((current) => (current === "back" ? "front" : "back"));
     };
@@ -74,13 +76,22 @@ export default function CollectNow({ navigation }) {
         setIsLoading(true);
         const firstMatch = await postPhotoToPlantNet(imageUri)
             .then((firstMatch) => {
-                navigation.navigate("PlantResult", { plant: firstMatch });
-                setImageUri("");
-                setIsLoading(false);
+                if (firstMatch.species.commonNames[0] !== undefined) {
+                    navigation.navigate("PlantResult", { plant: firstMatch });
+                    setImageUri("");
+                    setIsLoading(false);
+                }
             })
             .catch((error) => {
                 console.log(error, "error in HANDLEPOST");
-            }); // Yusha- turned this to async function, declared variable for async process, copied in line 68, was empty before
+                setIsLoading(false);
+                Alert.alert("Unable to ID image", "Please try again", [
+                    {
+                        text: "OK",
+                        style: "default",
+                    },
+                ]);
+            });
     };
 
     if (isLoading) {
