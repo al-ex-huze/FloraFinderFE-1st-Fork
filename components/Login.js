@@ -7,12 +7,14 @@ import {
     View,
     ImageBackground,
     Alert,
+    Image,
 } from "react-native";
 import { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { UserContext } from "../contexts/Contexts";
 import { getUserByUsername } from "../api";
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
+const logo = require('../assets/FloraFinderLogo.png');
 
 export default function Login({ navigation }) {
     const { user, setUser } = useContext(UserContext);
@@ -37,8 +39,7 @@ export default function Login({ navigation }) {
             .then((result) => {
                 console.log(result, "RESULT");
                 setUser(result);
-                Alert.alert("You are logged in", result.username);
-                
+                Alert.alert("You are logged in", `Welcome, ${result.username}`);
                 // Alert.alert("You are logged in", "Test", [
                 //     {
                 //         text: "Go to Home",
@@ -56,59 +57,61 @@ export default function Login({ navigation }) {
         <ImageBackground
             source={backgroundLeaf}
             style={styles.background}
-            resizeMode="cover" // or "repeat" if page is really long (repeats image)
+            resizeMode="cover"
         >
-            <View style={styles.overlay}>
+            <View style={styles.overlay}></View>
+            <View style={styles.logoContainer}>
+                <Image source={logo} style={styles.logo} />
+            </View>
+            <View style={styles.container}>
                 <Text style={styles.heading}>Login</Text>
-                <View style={styles.container}>
-                    <Text style={styles.labelContainerText}>Username:</Text>
-                    <Controller
-                        control={control}
-                        rules={{
-                            required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                placeholder="Enter username here"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                style={styles.textInput}
-                            />
-                        )}
-                        name="username"
-                    />
-                    {errors.username && <Text>This is required.</Text>}
+                <Text style={styles.labelContainerText}>Username:</Text>
+                <Controller
+                    control={control}
+                    rules={{
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            placeholder="Enter username here"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            style={styles.textInput}
+                        />
+                    )}
+                    name="username"
+                />
+                {errors.username && <Text style={styles.alertText}>This is required.</Text>}
 
-                    <Text style={styles.labelContainerText}>Password:</Text>
-                    <Controller
-                        control={control}
-                        rules={{
-                            maxLength: 100,
-                            required: true,
-                        }}
-                        render={({ field: { onChange, onBlur, value } }) => (
-                            <TextInput
-                                secureTextEntry={true}
-                                placeholder="Enter password here"
-                                onBlur={onBlur}
-                                onChangeText={onChange}
-                                value={value}
-                                style={styles.textInput}
-                            />
-                        )}
-                        name="password"
-                    />
-                    {errors.password && <Text>This is required.</Text>}
+                <Text style={styles.labelContainerText}>Password:</Text>
+                <Controller
+                    control={control}
+                    rules={{
+                        maxLength: 100,
+                        required: true,
+                    }}
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <TextInput
+                            secureTextEntry={true}
+                            placeholder="Enter password here"
+                            onBlur={onBlur}
+                            onChangeText={onChange}
+                            value={value}
+                            style={styles.textInput}
+                        />
+                    )}
+                    name="password"
+                />
+                {errors.password && <Text style={styles.alertText}>This is required.</Text>}
 
-                    <Pressable
-                        style={styles.button}
-                        title="Log In"
-                        onPress={handleSubmit(onSubmit)}
-                    >
-                        <Text style={styles.buttonText}>Log In</Text>
-                    </Pressable>
-                </View>
+                <Pressable
+                    style={styles.button}
+                    title="Log In"
+                    onPress={handleSubmit(onSubmit)}
+                >
+                    <Text style={styles.buttonText}>Log In</Text>
+                </Pressable>
             </View>
         </ImageBackground>
     );
@@ -118,13 +121,22 @@ const styles = StyleSheet.create({
     background: {
         flex: 1,
     },
+    logoContainer: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        alignItems: 'center',
+    },
     overlay: {
-        flex: 1,
-        justifyContent: "center",
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
     container: {
+        flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        paddingTop: 20, // Added to ensure elements start from the center
     },
     button: {
         alignItems: "center",
@@ -156,26 +168,33 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     heading: {
-        fontSize: 30,
-        fontWeight: "bold",
         color: "#006400",
-        position: "absolute",
-        top: 40,
-        left: 20,
+        marginBottom: 10,
+        fontFamily: 'Inter_900Black', 
+        fontSize: 25,
     },
     buttonText: {
         color: "white",
     },
     labelContainerText: {
-        backgroundColor: "white",
-        borderWidth: 2,
-        borderRadius: 5,
-        borderStyle: "solid",
-        borderColor: "#006400",
-        padding: 5,
+        // backgroundColor: "white",
+        // borderWidth: 2,
+        // borderRadius: 5,
+        // borderStyle: "solid",
+        // borderColor: "#006400",
+        // padding: 5,
         fontWeight: "bold",
-        marginRight: 165,
+        alignSelf: 'flex-start',
+        marginLeft: 60,
         marginTop: 10,
         marginBottom: -4,
     },
+    logo: {
+        
+        height: 250,
+        resizeMode: 'contain',
+    },
+    alertText: {
+        color: 'red',
+    }
 });

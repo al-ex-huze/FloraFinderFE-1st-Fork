@@ -1,82 +1,81 @@
-import * as React from 'react'
-import { StyleSheet, Pressable, View, Text, Image, ImageBackground } from "react-native";
-const backgroundLeaf = require("../assets/backgroundtest.jpg");
+import * as React from 'react';
+import { StyleSheet, Pressable, View, Text, Image, ImageBackground } from 'react-native';
+
+const backgroundLeaf = require('../assets/backgroundtest.jpg');
+const logo = require('../assets/FloraFinderLogo.png');
 
 export default function LoginRegister({ navigation }) {
-return (
-    <ImageBackground 
-    source={backgroundLeaf}
-    style={styles.background}
-    resizeMode="cover"
-    >
-
-    <View style={styles.container}>
-       
-            <Pressable
-                style={styles.button}
-                title="Login"
-                onPress={() => {
-                    navigation.navigate("Login");
-                }}
-            >
-                <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
-            <Pressable
-                style={styles.button}
-                title="Register"
-                onPress={() => {
-                    navigation.navigate("Register");
-                }}
-            >
-                <Text style={styles.buttonText}>Register</Text>
-            </Pressable>
-    </View>
-    </ImageBackground>
-)
+    return (
+        <ImageBackground 
+            source={backgroundLeaf}
+            style={styles.background}
+            resizeMode="cover"
+        >
+            <View style={styles.overlay}></View>
+            <View style={styles.logoContainer}>
+                <Image source={logo} style={styles.logo} />
+            </View>
+            <View style={styles.container}>
+                <Pressable
+                    style={styles.button}
+                    title="Login"
+                    onPress={() => {
+                        navigation.navigate('Login');
+                    }}
+                >
+                    <Text style={styles.buttonText}>Login</Text>
+                </Pressable>
+                <Pressable
+                    style={styles.button}
+                    title="Register"
+                    onPress={() => {
+                        navigation.navigate('Register');
+                    }}
+                >
+                    <Text style={styles.buttonText}>Register</Text>
+                </Pressable>
+            </View>
+        </ImageBackground>
+    );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1, // makes sure the colour takes up the whole screen
-        alignItems: "center", // horizontal alex
-        justifyContent: "flex-start", // vertical alex
-        marginTop: 202,
+        flex: 1,
+        justifyContent: 'center', 
+        alignItems: 'center', 
+    },
+    logoContainer: {
+        position: 'absolute',
+        top: 40, // Adjust as needed for spacing from the top
+        left: 0,
+        right: 0,
+        alignItems: 'center',
     },
     button: {
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         paddingVertical: 12,
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: "#006400",
-        width: "50%", // percentages need to be in in quotes alex
+        backgroundColor: '#006400',
+        width: '50%',
         marginTop: 12,
     },
-    text: {
-        fontSize: 16,
-        lineHeight: 21,
-        fontWeight: "bold",
-        letterSpacing: 0.25,
-        color: "white",
-    },
     buttonText: {
-        color: "white",
+        color: 'white',
     },
-    heading: {
-        fontSize: 25,
-        fontWeight: "bold",
-        color: "#006400",
-     },
-     background: {
+    background: {
         flex: 1,
-      },
-      overlay: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(0.5, 0.5, 0.5, 0.8)', // Adjust the rgba value for transparency (0.5 is 50% transparency)
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)', //backgorund contrast, last number is the contract scale
+    },
+    logo: {
+        width: 250, // Adjust width and height, both need to change
+        height: 350,
+        resizeMode: 'contain',
     },
 });
