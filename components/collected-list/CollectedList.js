@@ -5,6 +5,7 @@ import {
     Text,
     Pressable,
     ActivityIndicator,
+    ImageBackground,
 } from "react-native";
 
 import { useContext, useEffect, useState } from "react";
@@ -13,6 +14,7 @@ import { UserContext } from "../../contexts/Contexts";
 import CollectedListCard from "./CollectedListCard"
 
 import { getCollectedPlantsList } from "../../api";
+const backgroundLeaf = require("../../assets/backgroundtest.jpg");
 
 export default function CollectedList({ navigation }) {
     const { user, setUser } = useContext(UserContext);
@@ -44,6 +46,12 @@ export default function CollectedList({ navigation }) {
         );
     }
     return (
+        <ImageBackground
+        source={backgroundLeaf}
+        style={styles.background}
+        resizeMode="repeat" // or "cover"
+      >
+         <View style={styles.overlay}></View>
         <View style={styles.container}>
             <ScrollView>
                 <ScrollView style={styles.scrollView}>
@@ -73,6 +81,7 @@ export default function CollectedList({ navigation }) {
                 </Pressable>
             </ScrollView>
         </View>
+    </ImageBackground>
     );
 }
 
@@ -83,7 +92,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#CCFFCC",
     },
     card: {
         margin: 10,
@@ -95,4 +103,17 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         color: "white",
     },
+    background: {
+        flexGrow: 1,
+      },
+      backgroundImage: {
+        flexGrow: 1,
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+},
+overlay: {
+...StyleSheet.absoluteFillObject,
+backgroundColor: 'rgba(255, 255, 255, 0.8)',
+}
 });
