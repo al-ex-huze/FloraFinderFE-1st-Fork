@@ -35,7 +35,8 @@ export default function Register({ navigation }) {
           ]);
         })
         .catch((error) => {
-          console.log(error, "Registration Failed")
+          console.log(error)
+          Alert.alert('Registration Failed!', `${error}`)
         })
       };
 
@@ -64,7 +65,9 @@ return (
             )}
             name="emailAddress"
           />
-          {errors.emailAddress && <Text style={styles.errorText}>Invalid Email Address.</Text>}
+          {errors.emailAddress?.type === 'pattern' && <Text style={styles.errorText}>Invalid Email Address.</Text>}
+          {errors.emailAddress?.type === 'required' && <Text style={styles.errorText}>Email Address is required.</Text>}
+
           <Text>Create a password:</Text>
           <Controller
             control={control}
@@ -86,12 +89,15 @@ return (
             )}
             name="password"
           />
-          {errors.password && <Text style={styles.errorText}>Password must be 5-20 characters long and only contain numbers, letters and underscores. </Text>}
+          {errors.password?.type === 'required' && <Text style={styles.errorText}>Password is required. </Text>}
+          {errors.password?.type === 'minLength' && <Text style={styles.errorText}>Password must be 5 or more characters. </Text>}
+          {errors.password?.type === 'maxLength' && <Text style={styles.errorText}>Password must be no more than 20 characters. </Text>}
+          {errors.password?.type === 'pattern' && <Text style={styles.errorText}>Password must contain only letters, digits or. </Text>}
           <Text>Enter a username:</Text>
           <Controller
             control={control}
             rules={{
-             maxLength: 100,
+             maxLength: 20,
              required: true
             }}
             render={({ field: { onChange, onBlur, value } }) => (
@@ -105,7 +111,8 @@ return (
             )}
             name="username"
           />
-          {errors.username && <Text>This is required.</Text>}
+          {errors.username?.type === 'required' && <Text style={styles.errorText}>This is required.</Text>}
+          {errors.username?.type === 'maxLength' && <Text style={styles.errorText}>No more than 20 characters.</Text>}
           <Text>Enter your first name:</Text>
           <Controller
             control={control}
@@ -124,7 +131,7 @@ return (
             )}
             name="firstName"
           />
-          {errors.firstName && <Text>This is required.</Text>}
+          {errors.firstName && <Text style={styles.errorText}>This is required.</Text>}
           <Text>Enter your last name:</Text>
           <Controller
             control={control}
@@ -143,7 +150,7 @@ return (
             )}
             name="lastName"
           />
-          {errors.lastName && <Text>This is required.</Text>}
+          {errors.lastName && <Text style={styles.errorText}>This is required.</Text>}
     
           <Pressable style={styles.button} title="Submit" onPress={handleSubmit(onSubmit)}>
             <Text style={styles.buttonText}>Create An Account</Text>
@@ -154,10 +161,10 @@ return (
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1, // makes sure the colour takes up the whole screen
-      backgroundColor: "#CCFFCC", // Kate colour change
-      alignItems: "center", // horizontal alex
-      justifyContent: "center", // vertical alex
+      flex: 1, 
+      backgroundColor: "#CCFFCC", 
+      alignItems: "center", 
+      justifyContent: "center", 
   },
   button: {
       alignItems: "center",
@@ -167,7 +174,7 @@ const styles = StyleSheet.create({
       borderRadius: 4,
       elevation: 3,
       backgroundColor: "#006400",
-      width: "50%", // percentages need to be in in quotes alex
+      width: "50%", 
       margin: 12,
   },
   text: {
