@@ -1,65 +1,58 @@
-import * as React from 'react';
-import { TextInput, StyleSheet, Pressable, Text, View, ImageBackground, Alert, Image, ScrollView } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { postNewUser } from '../api';
+import * as React from "react";
+import {
+  TextInput,
+  StyleSheet,
+  Pressable,
+  Text,
+  View,
+  ImageBackground,
+  Alert,
+  Image,
+  ScrollView,
+} from "react-native";
+import { useForm, Controller } from "react-hook-form";
+import { postNewUser } from "../api";
 
-const backgroundLeaf = require('../assets/backgroundtest.jpg');
-const logo = require('../assets/FloraFinderLogo.png');
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
+const logo = require("../assets/FloraFinderLogo.png");
 
 export default function Register({ navigation }) {
-  const { control, handleSubmit, formState: { errors } } = useForm({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      emailAddress: '',
-      password: '',
-      username: '',
-      firstName: '',
-      lastName: ''
-    }
+      emailAddress: "",
+      password: "",
+      username: "",
+      firstName: "",
+      lastName: "",
+    },
   });
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: {
-          emailAddress: '',
-          password: '',
-          username: '',
-          firstName: '',
-          lastName: ''
-        }
-      });
-      
-      const onSubmit = (data) => {
-        console.log(data, "data")
-        const newUser = {username: data.username, name: data.firstName + " " + data.lastName, email: data.emailAddress, password: data.password};
-        console.log(newUser);
-        postNewUser(newUser)
-        .then((user) => {
-          Alert.alert('Registration complete!', 'Please login to your account.', [
-            {
-              text: 'Login',
-              onPress: () => navigation.navigate('Login'),
-              style: 'default',
-            },
-          ]);
-        })
-        .catch((error) => {
-          console.log(error)
-          Alert.alert('Registration Failed!', `${error}`)
-        })
-      };
-
-
+  const onSubmit = (data) => {
+    console.log(data, "data");
+    const newUser = {
+      username: data.username,
+      name: data.firstName + " " + data.lastName,
+      email: data.emailAddress,
+      password: data.password,
+    };
+    console.log(newUser);
     postNewUser(newUser)
       .then((user) => {
-        Alert.alert('Registration complete!', 'Please login to your account.', [
+        Alert.alert("Registration complete!", "Please login to your account.", [
           {
-            text: 'Login',
-            onPress: () => navigation.navigate('Login'),
-            style: 'default',
+            text: "Login",
+            onPress: () => navigation.navigate("Login"),
+            style: "default",
           },
         ]);
       })
       .catch((error) => {
-        console.log(error, 'Registration Failed');
+        console.log(error);
+        Alert.alert("Registration Failed!", `${error}`);
       });
   };
 
@@ -67,7 +60,6 @@ export default function Register({ navigation }) {
     <ScrollView
       contentContainerStyle={styles.background}
       showsVerticalScrollIndicator={false}
-      
     >
       <ImageBackground
         source={backgroundLeaf}
@@ -76,17 +68,20 @@ export default function Register({ navigation }) {
       >
         <View style={styles.overlay}></View>
         <View style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image source={logo} style={styles.logo} />
-        </View>
+          <View style={styles.logoContainer}>
+            <Image source={logo} style={styles.logo} />
+          </View>
           <Text style={styles.heading}>Register</Text>
 
-          <Text style={styles.labelContainerText}>Enter your email address:</Text>
+          <Text style={styles.labelContainerText}>
+            Enter your email address:
+          </Text>
           <Controller
             control={control}
             rules={{
               required: true,
-              pattern: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+              pattern:
+                /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -100,8 +95,12 @@ export default function Register({ navigation }) {
             name="emailAddress"
           />
 
-          {errors.emailAddress?.type === 'pattern' && <Text style={styles.errorText}>Invalid Email Address.</Text>}
-          {errors.emailAddress?.type === 'required' && <Text style={styles.errorText}>Email Address is required.</Text>}
+          {errors.emailAddress?.type === "pattern" && (
+            <Text style={styles.errorText}>Invalid Email Address.</Text>
+          )}
+          {errors.emailAddress?.type === "required" && (
+            <Text style={styles.errorText}>Email Address is required.</Text>
+          )}
 
           <Text>Create a password:</Text>
 
@@ -111,7 +110,7 @@ export default function Register({ navigation }) {
               maxLength: 20,
               minLength: 5,
               required: true,
-              pattern: /\w/
+              pattern: /\w/,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -126,17 +125,30 @@ export default function Register({ navigation }) {
             name="password"
           />
 
-          {errors.password?.type === 'required' && <Text style={styles.errorText}>Password is required. </Text>}
-          {errors.password?.type === 'minLength' && <Text style={styles.errorText}>Password must be 5 or more characters. </Text>}
-          {errors.password?.type === 'maxLength' && <Text style={styles.errorText}>Password must be no more than 20 characters. </Text>}
-          {errors.password?.type === 'pattern' && <Text style={styles.errorText}>Password must contain only letters, digits or. </Text>}
+          {errors.password?.type === "required" && (
+            <Text style={styles.errorText}>Password is required. </Text>
+          )}
+          {errors.password?.type === "minLength" && (
+            <Text style={styles.errorText}>
+              Password must be 5 or more characters.{" "}
+            </Text>
+          )}
+          {errors.password?.type === "maxLength" && (
+            <Text style={styles.errorText}>
+              Password must be no more than 20 characters.{" "}
+            </Text>
+          )}
+          {errors.password?.type === "pattern" && (
+            <Text style={styles.errorText}>
+              Password must contain only letters, digits or.{" "}
+            </Text>
+          )}
           <Text>Enter a username:</Text>
           <Controller
             control={control}
             rules={{
-             maxLength: 20,
-             required: true
-
+              maxLength: 20,
+              required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -150,15 +162,19 @@ export default function Register({ navigation }) {
             name="username"
           />
 
-          {errors.username?.type === 'required' && <Text style={styles.errorText}>This is required.</Text>}
-          {errors.username?.type === 'maxLength' && <Text style={styles.errorText}>No more than 20 characters.</Text>}
+          {errors.username?.type === "required" && (
+            <Text style={styles.errorText}>This is required.</Text>
+          )}
+          {errors.username?.type === "maxLength" && (
+            <Text style={styles.errorText}>No more than 20 characters.</Text>
+          )}
           <Text>Enter your first name:</Text>
 
           <Controller
             control={control}
             rules={{
               maxLength: 100,
-              required: true
+              required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -171,7 +187,9 @@ export default function Register({ navigation }) {
             )}
             name="firstName"
           />
-          {errors.firstName && <Text style={styles.errorText}>This is required.</Text>}
+          {errors.firstName && (
+            <Text style={styles.errorText}>This is required.</Text>
+          )}
 
           <Text>Enter your last name:</Text>
 
@@ -179,7 +197,7 @@ export default function Register({ navigation }) {
             control={control}
             rules={{
               maxLength: 100,
-              required: true
+              required: true,
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -192,9 +210,15 @@ export default function Register({ navigation }) {
             )}
             name="lastName"
           />
-          {errors.lastName && <Text style={styles.errorText}>This is required.</Text>}
+          {errors.lastName && (
+            <Text style={styles.errorText}>This is required.</Text>
+          )}
 
-          <Pressable style={styles.button} title="Submit" onPress={handleSubmit(onSubmit)}>
+          <Pressable
+            style={styles.button}
+            title="Submit"
+            onPress={handleSubmit(onSubmit)}
+          >
             <Text style={styles.buttonText}>Create An Account</Text>
           </Pressable>
         </View>
@@ -204,68 +228,66 @@ export default function Register({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-
-  container: {
-      flex: 1, 
-      backgroundColor: "#CCFFCC", 
-      alignItems: "center", 
-      justifyContent: "center", 
-  },
-  button: {
-      alignItems: "center",
-      justifyContent: "center",
-      paddingVertical: 12,
-      paddingHorizontal: 32,
-      borderRadius: 4,
-      elevation: 3,
-      backgroundColor: "#006400",
-      width: "50%", 
-      margin: 12,
-
-  },
-  backgroundImage: {
-    flexGrow: 1,
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-  },
-  
-    overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-  },
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 20,
+    backgroundColor: "#CCFFCC",
+    alignItems: "center",
+    justifyContent: "center",
   },
-
   button: {
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 4,
     elevation: 3,
-    backgroundColor: '#006400',
-    width: '50%', // percentages need to be in quotes
+    backgroundColor: "#006400",
+    width: "50%",
+    margin: 12,
+  },
+  backgroundImage: {
+    flexGrow: 1,
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  logoContainer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    alignItems: "center",
+  },
+
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  },
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingTop: 20,
+  },
+
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    borderRadius: 4,
+    elevation: 3,
+    backgroundColor: "#006400",
+    width: "50%", // percentages need to be in quotes
     margin: 12,
   },
   heading: {
     color: "#006400",
     marginBottom: 10,
-    fontFamily: 'Inter_900Black', 
+    fontFamily: "Inter_900Black",
     fontSize: 25,
     paddingTop: 150,
-},
+  },
   textInput: {
     backgroundColor: "white",
     height: 40,
@@ -276,12 +298,12 @@ const styles = StyleSheet.create({
     borderColor: "#006400",
     marginVertical: 10,
     paddingHorizontal: 10,
-},
+  },
   buttonText: {
-    color: 'white',
+    color: "white",
   },
   errorText: {
-    color: 'red',
+    color: "red",
   },
   labelContainerText: {
     // backgroundColor: "white",
@@ -291,8 +313,8 @@ const styles = StyleSheet.create({
     // borderColor: "#006400",
     // padding: 5,
     fontWeight: "bold",
-    alignSelf: 'flex-start',
+    alignSelf: "flex-start",
     marginTop: 10,
     marginBottom: -4,
-},
+  },
 });
