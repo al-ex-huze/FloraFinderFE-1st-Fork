@@ -1,3 +1,4 @@
+
 import * as React from "react";
 import {
     Alert,
@@ -23,26 +24,39 @@ import {
     faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
+import * as ImagePicker from "expo-image-picker";
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
+import { faRefresh, faCamera, faPlusCircle, faTh, faCircleDot } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function CollectNow({ navigation }) {
+
     const [facing, setFacing] = useState("back");
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [isSettingPreview, setIsSettingPreview] = useState(false);
+    const [identifiedPlant, setIdentifiedPlant] = useState([]);
+    const [iddPlantUid, setIddPlantUid] = useState("");
+    const [iddPlantMatchScore, setIddPlantMatchScore] = useState("");
+    const [iddPlantCommonName, setIddPlantCommonName] = useState("");
+    const [iddPlantScientificName, setIddPlantScientificName] = useState("");
+    const [iddPlantFamily, setIddPlantFamily] = useState("");
+    const [iddPlantGenus, setIddPlantGenus] = useState("");
+    const [isLoading, setIsLoading] = useState(false)
+    
+
+    const cameraRef = useRef("")
 
     const [zoomLevel, setZoomLevel] = useState(0);
+
 
     if (!permission) {
         return <View />;
     }
-
+    
     if (!permission.granted) {
-        return (
+    return (
             <View style={styles.container}>
-                <Text style={{ textAlign: "center" }}>
-                    Flora Finder wants to use your camera?
-                </Text>
+                <Text style={{ textAlign: "center" }}> PERMISSION PLEASE </Text>
                 <Button onPress={requestPermission} title="grant permission" />
             </View>
         );
@@ -51,16 +65,14 @@ export default function CollectNow({ navigation }) {
     const toggleCameraFacing = () => {
         setFacing((current) => (current === "back" ? "front" : "back"));
     };
-
     const handleTakePicture = async () => {
-        setIsSettingPreview(true);
         try {
-            await ref.current.takePictureAsync().then((photo) => {
-                setImageUri(photo.uri);
-                setIsSettingPreview(false);
+            await ref.current.takePictureAsync().then((photo) => { // it was neccessary to identify the <CameraView.. below with ref={ref} and add ref.current.. here but otherwise a picture is taken and stored in local cache with only the ..takePictureAsync method. can pass in options like quality - alex
+                MediaLibrary.saveToLibraryAsync(photo.uri); // this library allows saving to device with this method (is not needed to take photo and send to api) - alex
+                setImageUri(photo.uri); // storing the uri in state - alex
             });
         } catch (error) {
-            console.log(error, "<-- ERROR TAKE PICTURE");
+            console.log(error, "<-- ERROR");
         }
     };
 
@@ -70,11 +82,13 @@ export default function CollectNow({ navigation }) {
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
-        });
+        })
         if (!result.canceled) {
-            setImageUri(result.assets[0].uri);
-        }
-    };
+            setImageUri(result.assets[0].uri)
+          }
+    } 
+    
+
 
     const handlePostPicture = async () => {
         setIsLoading(true);
@@ -108,22 +122,16 @@ export default function CollectNow({ navigation }) {
         if (zoomLevel > 0) {
             setZoomLevel(zoomLevel - 0.1);
         }
+
     };
 
-    if (isLoading) {
-        return (
-            <View style={styles.activity_indicator_background}>
-                <ActivityIndicator
-                    style={styles.load_page}
-                    size="large"
-                    color="#006400"
-                />
-                <Text>Fetching plant data...</Text>
-            </View>
-        );
+    if(isLoading) {
+        return ( <View style={styles.activityIndicatorBackground}><ActivityIndicator style={styles.loadPage} size="large" color="#006400" /><Text>Fetching plant data...</Text></View>)
     }
 
     return (
+
+       
         <CameraView
             ref={ref}
             style={styles.camera}
@@ -212,29 +220,19 @@ export default function CollectNow({ navigation }) {
                         </TouchableOpacity>
                     ) : null}
                 </View>
+
             </View>
         </CameraView>
     );
 }
-
+// <TouchableOpacity.. like a button but goes transparent when pressed alex
 const styles = StyleSheet.create({
-    hud_container: {
-        flex: 1,
-    },
-    preview_container: {
-        flex: 1,
-        margin: 40,
-    },
-    preview_image: {
-        flex: 1,
-        height: "30%",
-        borderRadius: 10,
-    },
     camera: {
         flex: 1,
     },
-    button_container: {
+    buttonContainer: {
         flex: 1,
+        flexDirection: "column",
         backgroundColor: "transparent",
         margin: 64,
     },
@@ -283,24 +281,31 @@ const styles = StyleSheet.create({
         backgroundColor: "#006400",
         margin: 2,
     },
+
     text: {
         fontSize: 24,
         fontWeight: "bold",
         color: "white",
     },
-    button_text: {
-        color: "white",
-    },
-    load_page: {
-        backgroundColor: "#CCFFCC",
-    },
-    activity_indicator_background: {
-        backgroundColor: "#CCFFCC",
+    idContainer: {
         flex: 1,
-        justifyContent: "center",
         alignItems: "center",
     },
-    activity_indicator_preview: {
-        flex: 1,
+    idText: {
+        fontSize: 32,
+        fontWeight: "bold",
     },
+    buttonText : {
+        color: "white",
+ },
+ loadPage: {
+    backgroundColor: "#CCFFCC",
+ },
+ activityIndicatorBackground: {
+    backgroundColor: "white",
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+},
+ 
 });
