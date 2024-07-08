@@ -10,7 +10,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../../contexts/Contexts";
 
-import CollectedListCard from "./CollectedListCard"
+import CollectedListCard from "./CollectedListCard";
 
 import { getCollectedPlantsList } from "../../api";
 
@@ -45,25 +45,22 @@ export default function CollectedList({ navigation }) {
     }
     return (
         <View style={styles.container}>
-            <ScrollView>
-                <ScrollView style={styles.scrollView}>
-                    
-                    {plantsArr.map((plant, index) => (
-                        <Pressable
-                            key={index}
-                            style={styles.card}
-                            title="CollectedSingleCard"
-                            onPress={() => {
-                                navigation.navigate("CollectedSingleCard", {
-                                    plant: plant,
-                                });
-                            }}
-                        >
-                            <CollectedListCard plant={plant} />
-                        </Pressable>
-                    ))}
-                    
-                </ScrollView>
+            <ScrollView style={styles.scrollView}>
+                {plantsArr.map((plant, index) => (
+                    <Pressable
+                        key={index}
+                        style={styles.card}
+                        title="CollectedSingleCard"
+                        onPress={() => {
+                            navigation.navigate("CollectedSingleCard", {
+                                plant: plant,
+                            });
+                        }}
+                    >
+                        <CollectedListCard plant={plant} />
+                    </Pressable>
+                ))}
+
                 <Pressable
                     style={styles.button}
                     title="Home Page"
@@ -80,7 +77,7 @@ const styles = StyleSheet.create({
     scrollView: {},
     container: {
         flex: 1,
-        flexDirection: 'row',
+        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         backgroundColor: "#CCFFCC",
