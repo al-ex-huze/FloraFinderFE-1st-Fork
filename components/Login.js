@@ -44,13 +44,7 @@ export default function Login({ navigation }) {
           throw new Error("Invalid response from server");
         }
         setUser(user);
-        Alert.alert("You are logged in!", `Welcome back, ${user.username}`, [
-          {
-            text: "Go Home",
-            onPress: () => navigation.navigate("HomeTab"),
-            style: "default",
-          },
-        ]);
+        Alert.alert("You are logged in!", `Welcome back, ${user.username}`);
       })
       .catch((error) => {
         console.error("Login Failed:", error);
