@@ -12,7 +12,9 @@ import { UserContext } from "../../contexts/Contexts";
 
 import CollectedListCard from "./CollectedListCard"
 
+
 import { getCollectedPlantsList } from "../../api";
+
 
 export default function CollectedList({ navigation }) {
     const { user, setUser } = useContext(UserContext);
@@ -31,6 +33,43 @@ export default function CollectedList({ navigation }) {
         });
     }, []);
 
+
+    const sortByRecency = () => {
+
+        let newPlants= [...plantsArr];
+
+        newPlants.sort((a, b) => {
+            const aDate = new Date(a.dateCollected);
+      const bDate = new Date(b.dateCollected);
+          return bDate - aDate
+        });
+    
+        setPlantsArr(newPlants);
+      };
+
+      const sortByRating = () => {
+
+        let newPlants= [...plantsArr];
+
+        
+        newPlants.sort((a, b) => {
+          return b.matchScore- a.matchScore
+        });
+    
+        setPlantsArr(newPlants);
+      };
+
+      const sortByPlantName = () => {
+
+        let newPlants= [...plantsArr];
+
+        newPlants.sort((a, b) => a.speciesName.localeCompare(b.speciesName))
+    
+        setPlantsArr(newPlants);
+      };
+
+
+
     if (isLoading) {
         return (
             <View style={styles.activityIndicatorBackground}>
@@ -43,10 +82,19 @@ export default function CollectedList({ navigation }) {
             </View>
         );
     }
+
+
     return (
         <View style={styles.container}>
             <ScrollView>
                 <ScrollView style={styles.scrollView}>
+                    <Pressable style={styles.button} title="Sort By Recency"
+                    onPress={sortByRecency}><Text>Sort by Recency</Text></Pressable>
+                    <Pressable style={styles.button} title="Sort By Rating"
+                    onPress={sortByRating}><Text>Sort by Score</Text></Pressable>
+                    <Pressable style={styles.button} title="Sort by Plant Name"
+                    onPress={sortByPlantName}><Text>Sort by Plant Species Name A-Z</Text></Pressable>
+                   
                     
                     {plantsArr.map((plant, index) => (
                         <Pressable
@@ -95,4 +143,15 @@ const styles = StyleSheet.create({
         letterSpacing: 0.25,
         color: "white",
     },
+    button: {
+        alignItems: "center",
+        justifyContent: "center",
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: "#006400",
+        width: "50%",
+        margin: 12,
+      }
 });
