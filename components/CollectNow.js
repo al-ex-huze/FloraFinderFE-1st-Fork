@@ -1,13 +1,13 @@
 import * as React from "react";
 import {
-    Alert,
-    Button,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-    ActivityIndicator,
-    Image,
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  Image,
 } from "react-native";
 import { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
@@ -15,12 +15,12 @@ import { postPhotoToPlantNet } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-    faRefresh,
-    faCamera,
-    faPlusCircle,
-    faTh,
-    faMagnifyingGlassPlus,
-    faMagnifyingGlassMinus,
+  faRefresh,
+  faCamera,
+  faPlusCircle,
+  faTh,
+  faMagnifyingGlassPlus,
+  faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
 
@@ -46,7 +46,20 @@ export default function CollectNow({ navigation }) {
                 <Button onPress={requestPermission} title="grant permission" />
             </View>
         );
+ 
     }
+  };
+  const pickImageAsync = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+  };
 
     const toggleCameraFacing = () => {
         setFacing((current) => (current === "back" ? "front" : "back"));
@@ -121,8 +134,15 @@ export default function CollectNow({ navigation }) {
                 <Text>Fetching plant data...</Text>
             </View>
         );
-    }
 
+    }
+  };
+  const handleZoomOut = () => {
+    if (zoomLevel > 0) {
+      setZoomLevel(zoomLevel - 0.1);
+    }
+  };
+  if (isLoading) {
     return (
         <CameraView
             ref={ref}
@@ -214,7 +234,71 @@ export default function CollectNow({ navigation }) {
                 </View>
             </View>
         </CameraView>
+
     );
+  }
+  return (
+    <CameraView
+      ref={ref}
+      style={styles.camera}
+      facing={facing}
+      zoom={zoomLevel}
+    >
+      <View style={styles.hud_container}>
+        <View style={styles.preview_container}>
+          {imageUri ? (
+            <Image style={styles.preview_image} source={{ uri: imageUri }} />
+          ) : null}
+        </View>
+        <View style={styles.button_container}>
+          <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+            <Text style={styles.button_text}>
+              {" "}
+              Flip Camera <FontAwesomeIcon icon={faRefresh} color={"white"} />
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={pickImageAsync}>
+            <Text style={styles.button_text}>
+              {" "}
+              Gallery <FontAwesomeIcon icon={faTh} color={"white"} />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.zoom_button_container}>
+          <TouchableOpacity style={styles.zoom_button} onPress={handleZoomIn}>
+            <FontAwesomeIcon icon={faMagnifyingGlassPlus} color={"white"} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.zoom_button} onPress={handleZoomOut}>
+            <FontAwesomeIcon icon={faMagnifyingGlassMinus} color={"white"} />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.camera_button_container}>
+          {isSettingPreview ? (
+            <View style={styles.activity_indicator_preview}>
+              <ActivityIndicator size="large" color="#006400" />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={styles.camera_button}
+              onPress={handleTakePicture}
+            >
+              <Text style={styles.button_text}>
+                <FontAwesomeIcon icon={faCamera} color={"white"} />
+              </Text>
+            </TouchableOpacity>
+          )}
+          {imageUri && !isSettingPreview ? (
+            <TouchableOpacity
+              style={styles.camera_button}
+              onPress={handlePostPicture}
+            >
+              <Text style={styles.button_text}>ID</Text>
+            </TouchableOpacity>
+          ) : null}
+        </View>
+      </View>
+    </CameraView>
+  );
 }
 
 const styles = StyleSheet.create({
