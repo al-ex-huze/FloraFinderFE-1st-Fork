@@ -24,9 +24,7 @@ import {
     faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
-import * as ImagePicker from "expo-image-picker";
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faRefresh, faCamera, faPlusCircle, faTh, faCircleDot } from '@fortawesome/free-solid-svg-icons';
+
 
 
 export default function CollectNow({ navigation }) {
