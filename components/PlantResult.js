@@ -24,13 +24,9 @@ import { UserContext } from "../contexts/Contexts";
 import { postNewPlantToCollection } from "../api";
 import * as Location from "expo-location";
 
-const cactusIcon = require("../assets/familyIcons/cactus.png");
-const plantIcon = require("../assets/familyIcons/plant.png");
-const springIcon = require("../assets/familyIcons/spring.png");
-const treeIcon = require("../assets/familyIcons/tree.png");
-const flowerPurpleIcon = require("../assets/familyIcons/flowerPurple.png");
-const flowerRedIcon = require("../assets/familyIcons/flowerRed.png");
-const flowerWhiteIcon = require("../assets/familyIcons/flowerWhite.png");
+const branchSticker = require("../assets/familyIcons/cactus_256.png");
+const cactusSticker = require("../assets/familyIcons/cactus_256.png");
+const treeSticker = require("../assets/familyIcons/cactus_256.png");
 
 export default function PlantResult({ route, navigation }) {
     const { plant } = route.params;
@@ -40,8 +36,8 @@ export default function PlantResult({ route, navigation }) {
     const [errorMsg, setErrorMsg] = useState(null);
 
     const [isSaved, setIsSaved] = useState(false);
-    const [isSaving, setIsSaving] = useState(false);
-    const [isPosting, setIsPosting] = useState(false);
+    // const [isSaving, setIsSaving] = useState(false);
+    // const [isPosting, setIsPosting] = useState(false);
 
     const winWidth = Dimensions.get("window").width;
     const winHeight = Dimensions.get("window").height;
@@ -121,11 +117,6 @@ export default function PlantResult({ route, navigation }) {
                                         .scientificNameWithoutAuthor
                                 }
                             </Text>
-                            {plant.species.family
-                                .scientificNameWithoutAuthor ===
-                            "Cactacaeae" ? (
-                                <Image source={cactusIcon} />
-                            ) : null}
                         </View>
                     </View>
 
@@ -164,18 +155,15 @@ export default function PlantResult({ route, navigation }) {
                             style={styles.image}
                             source={{ uri: plant.images[0].url.m }}
                         />
+                        {plant.species.family.scientificNameWithoutAuthor ===
+                        "Cactaceae" ? (
+                            <Image
+                                style={styles.sticker}
+                                source={cactusSticker}
+                            />
+                        ) : null}
                     </View>
                 </View>
-                <Pressable
-                    style={styles.button}
-                    title="Go Back"
-                    onPress={() => navigation.goBack()}
-                >
-                    <Text style={styles.button_text}>
-                        Find Another Plant{" "}
-                        <FontAwesomeIcon icon={faCamera} color={"white"} />
-                    </Text>
-                </Pressable>
                 {isSaved ? (
                     <TouchableOpacity style={styles.button}>
                         <Text style={styles.button_text}>
@@ -202,6 +190,16 @@ export default function PlantResult({ route, navigation }) {
                         </Text>
                     </TouchableOpacity>
                 )}
+                <Pressable
+                    style={styles.button}
+                    title="Go Back"
+                    onPress={() => navigation.goBack()}
+                >
+                    <Text style={styles.button_text}>
+                        Find Another Plant{" "}
+                        <FontAwesomeIcon icon={faCamera} color={"white"} />
+                    </Text>
+                </Pressable>
                 <Pressable
                     style={styles.button}
                     title="Home Page"
@@ -277,7 +275,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         alignSelf: "flex-end",
     },
-    buttonContainer: {
+    button_container: {
         flex: 1,
         flexDirection: "column",
         backgroundColor: "transparent",
@@ -297,6 +295,14 @@ const styles = StyleSheet.create({
         height: 175,
         paddingVertical: 12,
         zIndex: 1,
+    },
+    sticker: {
+        position: "absolute",
+        width: 100,
+        height: 100,
+        transform: [{ rotate: "335deg" }],
+        right: 1,
+        zIndex: 2,
     },
     button: {
         alignItems: "center",
