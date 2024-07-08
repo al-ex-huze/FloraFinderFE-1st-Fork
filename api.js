@@ -78,3 +78,15 @@ export const getCollectedPlantsList = (username) => {
             return response.data.collections;
         });
 };
+
+export const getUsers = () => {
+  return floraFinderApi
+    .get("/users")
+    .then((response) => {
+      console.log("Fetched Users:", response.data);
+      return response.data.users;
+    })
+    .catch((error) => {
+      console.log(error, "ERROR fetching users");
+    });
+};
