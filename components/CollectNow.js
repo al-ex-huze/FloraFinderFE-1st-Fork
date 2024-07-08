@@ -25,8 +25,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
 
-
-
 export default function CollectNow({ navigation }) {
 
     const [facing, setFacing] = useState("back");

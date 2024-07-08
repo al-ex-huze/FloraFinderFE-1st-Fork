@@ -1,13 +1,15 @@
+
 import * as React from 'react'
 import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button, Alert, Image, ScrollView, ImageBackground} from "react-native";
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { postNewUser } from '../api';
 
-const backgroundLeaf = require('../assets/backgroundtest.jpg');
-const logo = require('../assets/FloraFinderLogo.png');
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
+const logo = require("../assets/FloraFinderLogo.png");
 
 export default function Register({ navigation }) {
+
     const { control, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
           emailAddress: '',
