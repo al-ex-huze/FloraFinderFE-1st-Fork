@@ -17,13 +17,36 @@ export default function Register({ navigation }) {
     }
   });
 
-  const onSubmit = (data) => {
-    const newUser = {
-      username: data.username,
-      name: data.firstName + ' ' + data.lastName,
-      email: data.emailAddress,
-      password: data.password
-    };
+    const { control, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+          emailAddress: '',
+          password: '',
+          username: '',
+          firstName: '',
+          lastName: ''
+        }
+      });
+      
+      const onSubmit = (data) => {
+        console.log(data, "data")
+        const newUser = {username: data.username, name: data.firstName + " " + data.lastName, email: data.emailAddress, password: data.password};
+        console.log(newUser);
+        postNewUser(newUser)
+        .then((user) => {
+          Alert.alert('Registration complete!', 'Please login to your account.', [
+            {
+              text: 'Login',
+              onPress: () => navigation.navigate('Login'),
+              style: 'default',
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.log(error)
+          Alert.alert('Registration Failed!', `${error}`)
+        })
+      };
+
 
     postNewUser(newUser)
       .then((user) => {
@@ -76,9 +99,12 @@ export default function Register({ navigation }) {
             )}
             name="emailAddress"
           />
-          {errors.emailAddress && <Text style={styles.errorText}>Invalid Email Address.</Text>}
 
-          <Text style={styles.labelContainerText}>Create a password:</Text>
+          {errors.emailAddress?.type === 'pattern' && <Text style={styles.errorText}>Invalid Email Address.</Text>}
+          {errors.emailAddress?.type === 'required' && <Text style={styles.errorText}>Email Address is required.</Text>}
+
+          <Text>Create a password:</Text>
+
           <Controller
             control={control}
             rules={{
@@ -99,14 +125,18 @@ export default function Register({ navigation }) {
             )}
             name="password"
           />
-          {errors.password && <Text style={styles.errorText}>Password must be 5-20 characters long and only contain numbers, letters and underscores. </Text>}
 
-          <Text style={styles.labelContainerText}>Enter a username:</Text>
+          {errors.password?.type === 'required' && <Text style={styles.errorText}>Password is required. </Text>}
+          {errors.password?.type === 'minLength' && <Text style={styles.errorText}>Password must be 5 or more characters. </Text>}
+          {errors.password?.type === 'maxLength' && <Text style={styles.errorText}>Password must be no more than 20 characters. </Text>}
+          {errors.password?.type === 'pattern' && <Text style={styles.errorText}>Password must contain only letters, digits or. </Text>}
+          <Text>Enter a username:</Text>
           <Controller
             control={control}
             rules={{
-              maxLength: 100,
-              required: true
+             maxLength: 20,
+             required: true
+
             }}
             render={({ field: { onChange, onBlur, value } }) => (
               <TextInput
@@ -119,9 +149,11 @@ export default function Register({ navigation }) {
             )}
             name="username"
           />
-          {errors.username && <Text style={styles.errorText}>This is required.</Text>}
 
-          <Text style={styles.labelContainerText}>Enter your first name:</Text>
+          {errors.username?.type === 'required' && <Text style={styles.errorText}>This is required.</Text>}
+          {errors.username?.type === 'maxLength' && <Text style={styles.errorText}>No more than 20 characters.</Text>}
+          <Text>Enter your first name:</Text>
+
           <Controller
             control={control}
             rules={{
@@ -141,7 +173,8 @@ export default function Register({ navigation }) {
           />
           {errors.firstName && <Text style={styles.errorText}>This is required.</Text>}
 
-          <Text style={styles.labelContainerText}>Enter your last name:</Text>
+          <Text>Enter your last name:</Text>
+
           <Controller
             control={control}
             rules={{
@@ -171,12 +204,24 @@ export default function Register({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  logo: {
-    height: 250,
-    resizeMode: 'contain',
+
+  container: {
+      flex: 1, 
+      backgroundColor: "#CCFFCC", 
+      alignItems: "center", 
+      justifyContent: "center", 
   },
-  background: {
-    flexGrow: 1,
+  button: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 32,
+      borderRadius: 4,
+      elevation: 3,
+      backgroundColor: "#006400",
+      width: "50%", 
+      margin: 12,
+
   },
   backgroundImage: {
     flexGrow: 1,
