@@ -19,6 +19,8 @@ import {
     faCamera,
     faPlusCircle,
     faTh,
+    faMagnifyingGlassPlus,
+    faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
 
@@ -28,6 +30,8 @@ export default function CollectNow({ navigation }) {
     const [imageUri, setImageUri] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSettingPreview, setIsSettingPreview] = useState(false);
+
+    const [zoomLevel, setZoomLevel] = useState(0);
 
     if (!permission) {
         return <View />;
@@ -94,6 +98,18 @@ export default function CollectNow({ navigation }) {
             });
     };
 
+    const handleZoomIn = () => {
+        if (zoomLevel < 1) {
+            setZoomLevel(zoomLevel + 0.1);
+        }
+    };
+
+    const handleZoomOut = () => {
+        if (zoomLevel > 0) {
+            setZoomLevel(zoomLevel - 0.1);
+        }
+    };
+
     if (isLoading) {
         return (
             <View style={styles.activity_indicator_background}>
@@ -108,7 +124,12 @@ export default function CollectNow({ navigation }) {
     }
 
     return (
-        <CameraView ref={ref} style={styles.camera} facing={facing}>
+        <CameraView
+            ref={ref}
+            style={styles.camera}
+            facing={facing}
+            zoom={zoomLevel}
+        >
             <View style={styles.hud_container}>
                 <View style={styles.preview_container}>
                     {imageUri ? (
@@ -143,6 +164,27 @@ export default function CollectNow({ navigation }) {
                     </TouchableOpacity>
                 </View>
 
+                <View style={styles.zoom_button_container}>
+                    <TouchableOpacity
+                        style={styles.zoom_button}
+                        onPress={handleZoomIn}
+                    >
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlassPlus}
+                            color={"white"}
+                        />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.zoom_button}
+                        onPress={handleZoomOut}
+                    >
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlassMinus}
+                            color={"white"}
+                        />
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.camera_button_container}>
                     {isSettingPreview ? (
                         <View style={styles.activity_indicator_preview}>
@@ -202,6 +244,24 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingHorizontal: 32,
         borderRadius: 4,
+        elevation: 3,
+        backgroundColor: "#006400",
+        margin: 2,
+    },
+    zoom_button_container: {
+        flex: 1,
+        alignSelf: "flex-end",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "transparent",
+    },
+    zoom_button: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 40,
+        height: 40,
+        borderRadius: 10,
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
