@@ -12,6 +12,7 @@ export default function HomePage({ navigation }) {
       style={styles.background}
       resizeMode="cover" // or "repeat"
     >
+      <View style={styles.overlay}></View>
       <View style={styles.container}>
         <Text style={styles.heading}>Home <FontAwesomeIcon icon={faHome} color={"#006400"} size={35}/></Text>
         <Pressable
@@ -47,6 +48,10 @@ const styles = StyleSheet.create({
   background: {
     flex: 1, // Ensures the background covers the entire screen
   },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
   container: {
     flex: 1,
     alignItems: "center",
@@ -77,11 +82,9 @@ const styles = StyleSheet.create({
     color: "white",
   },
   heading: {
-    fontSize: 40,
-    fontWeight: "bold",
     color: "#006400",
-    position: "absolute",
-    top: 20,
-    left: 20,
-  },
+    marginBottom: 10,
+    fontFamily: 'Inter_900Black', 
+    fontSize: 25,
+},
 });
