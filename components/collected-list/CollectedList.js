@@ -95,7 +95,7 @@ export default function CollectedList({ navigation }) {
          <View style={styles.overlay}></View>
         <View style={styles.container}>
 
-            <ScrollView>
+        
                 <ScrollView style={styles.scrollView}>
                     <Pressable style={styles.button} title="Sort By Recency"
                     onPress={sortByRecency}><Text>Sort by Recency</Text></Pressable>
@@ -133,7 +133,7 @@ export default function CollectedList({ navigation }) {
             </ScrollView>
         </View>
     </ImageBackground>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
