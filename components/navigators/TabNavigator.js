@@ -34,7 +34,7 @@ export function TabNavigator() {
     if (user.username) { // if user is logged in show the tab navigator 
         return (
             <Tab.Navigator
-                screenOptions={{ headerShown: false }}
+                screenOptions={{ headerShown: false, tabBarActiveTintColor: 'green' }}
             >
                 <Tab.Screen
                     name="HomeTab"

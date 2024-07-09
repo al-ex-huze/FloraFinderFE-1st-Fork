@@ -48,6 +48,18 @@ export default function CollectNow({ navigation }) {
         );
     }
 
+    const pickImageAsync = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };
+
     const toggleCameraFacing = () => {
         setFacing((current) => (current === "back" ? "front" : "back"));
     };
@@ -61,18 +73,6 @@ export default function CollectNow({ navigation }) {
             });
         } catch (error) {
             console.log(error, "<-- ERROR TAKE PICTURE");
-        }
-    };
-
-    const pickImageAsync = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-        if (!result.canceled) {
-            setImageUri(result.assets[0].uri);
         }
     };
 
