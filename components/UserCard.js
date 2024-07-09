@@ -39,10 +39,12 @@ const UserCard = ({ route }) => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Image
-          source={{ uri: user.avatar || "https://via.placeholder.com/150" }}
-          style={styles.avatar}
-        />
+        <View style={styles.avatarContainer}>
+          <Image
+            source={{ uri: user.avatar || "https://via.placeholder.com/150" }}
+            style={styles.avatar}
+          />
+        </View>
         <View style={styles.infoContainer}>
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.username}>@{user.username}</Text>
@@ -60,60 +62,58 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#fff",
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  noDataText: {
-    fontSize: 18,
-    color: "#666",
-    textAlign: "center",
+    backgroundColor: "#f5f5f5",
   },
   card: {
     flexDirection: "row",
     backgroundColor: "white",
     borderRadius: 10,
-    padding: 15,
+    padding: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    alignItems: "center",
+  },
+  avatarContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    overflow: "hidden",
+    marginRight: 12,
   },
   avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginRight: 15,
+    width: "100%",
+    height: "200%",
+    resizeMode: "cover",
+    position: "absolute",
+    top: 0, // Align to the top
+    left: 0,
   },
   infoContainer: {
     flex: 1,
     justifyContent: "center",
   },
   name: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: "bold",
-    marginBottom: 4,
+    marginBottom: 2,
   },
   username: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
-    marginBottom: 4,
+    marginBottom: 1,
   },
   email: {
-    fontSize: 16,
+    fontSize: 14,
     color: "#666",
-    marginBottom: 4,
+    marginBottom: 1,
   },
   score: {
-    fontSize: 16,
-    fontWeight: "bold",
+    fontSize: 14,
     color: "#4CAF50",
-    marginTop: 8,
+    fontWeight: "bold",
   },
 });
-
 export default UserCard;
