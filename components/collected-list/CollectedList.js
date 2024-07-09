@@ -22,10 +22,12 @@ export default function CollectedList({ navigation }) {
   const [isLoading, setIsLoading] = useState(true);
   const [plantsArr, setPlantsArr] = useState([]);
   const [items, setItems] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
+  const [openFilter, setOpenFilter] = useState(false);
+  const [openSort, setOpenSort] = useState(false);
+  const [valueFilter, setValueFilter] = useState([]);
+  const [valueSort, setValueSort] = useState([]);
   const [originalPlants, setOriginalPlants] = useState([])
-
+  const [itemsSort, setItemsSort] = useState([{ label: "Score", value: "Score" }, { label: "Recency", value: "Recency" }, { label: "Plant name A-Z", value: "Plant name A-Z" }])
   const username = user.username;
 
   useEffect(() => {
@@ -59,36 +61,39 @@ export default function CollectedList({ navigation }) {
 
 
 
-  const sortByRecency = () => {
+  const sortBy = (item) => {
+console.log(item)
     let newPlants = [...plantsArr];
+    const val = item[0].value
+    
+    if(val === 'Recency'){
+        newPlants.sort((a, b) => {
+            const aDate = new Date(a.dateCollected);
+            const bDate = new Date(b.dateCollected);
+            return bDate - aDate;
+          });
+      
+          setPlantsArr(newPlants);
+          setValueSort(newPlants)
+    }
+    if(val === 'Score'){
+        newPlants.sort((a, b) => {
+            return b.matchScore - a.matchScore;
+          });
+      
+          setPlantsArr(newPlants);
+          setValueSort(newPlants)
+    }
 
-    newPlants.sort((a, b) => {
-      const aDate = new Date(a.dateCollected);
-      const bDate = new Date(b.dateCollected);
-      return bDate - aDate;
-    });
-
-    setPlantsArr(newPlants);
-  };
-
-  const sortByRating = () => {
-    let newPlants = [...plantsArr];
-
-    newPlants.sort((a, b) => {
-      return b.matchScore - a.matchScore;
-    });
-
-    setPlantsArr(newPlants);
-  };
-
-  const sortByPlantName = () => {
-    let newPlants = [...plantsArr];
-
+    else if( val === "Plant name A-Z"){
     newPlants.sort((a, b) => a.speciesName.localeCompare(b.speciesName));
 
     setPlantsArr(newPlants);
-  };
+    setValueSort(newPlants)
+    }
 
+
+  }
   const filterByFamily = (item) => {
 
     const val = item[0].value
@@ -100,7 +105,7 @@ export default function CollectedList({ navigation }) {
     );
 
     setPlantsArr(filteredPlants);
-    setValue(filteredPlants)
+    setValueFilter(filteredPlants)
    
   };
 
@@ -131,37 +136,10 @@ export default function CollectedList({ navigation }) {
       <View style={styles.overlay}></View>
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
-          <Pressable
-            style={styles.button}
-            title="Sort By Recency"
-            onPress={sortByRecency}
-          >
-            <Text style={styles.buttonText}>Sort by Recency</Text>
-          </Pressable>
-          <Pressable
-            style={styles.button}
-            title="Sort By Rating"
-            onPress={sortByRating}
-          >
-            <Text style={styles.buttonText}>Sort by Score</Text>
-          </Pressable>
-          <Pressable
-            style={styles.button}
-            title="Sort by Plant Name"
-            onPress={sortByPlantName}
-          >
-            <Text style={styles.buttonText}>Sort by Plant Species Name A-Z</Text>
-          </Pressable>
-          <Pressable
-            style={styles.button}
-            title="Reset"
-            onPress={handleReset}
-          >
-            <Text style={styles.buttonText}>Reset</Text>
-          </Pressable>
-          
-            <DropDownPicker style ={styles.dropdown}
-              open={open}
+        <View style={{zIndex: 2000}}>
+          <DropDownPicker style ={styles.dropdown}
+              open={openFilter}
+              dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
               listMode="SCROLLVIEW"
               placeholder="Filter by Plant Family"
               placeholderStyle={{
@@ -170,7 +148,7 @@ export default function CollectedList({ navigation }) {
               }}
               multipleText={'Filter By Plant Family'}
               showTickIcon={true}
-              value={value}
+              value={valueFilter}
               multiple={true}
               min={0}
               max={50}
@@ -179,11 +157,43 @@ export default function CollectedList({ navigation }) {
               onSelectItem={(item) => {
                 
                 filterByFamily(item)
-                setOpen(false)
+                setOpenFilter(false)
               }}
-              setOpen={setOpen}
+              setOpen={setOpenFilter}
             />
+          </View>
+          <Pressable
+            style={styles.button}
+            title="Reset"
+            onPress={handleReset}
+          >
+            <Text style={styles.buttonText}>Reset</Text>
+          </Pressable>
           
+          <View style={{zIndex: 1000}}>
+            <DropDownPicker style ={styles.dropdown}
+              open={openSort}
+              listMode="SCROLLVIEW"
+              placeholder="Sort by..."
+              placeholderStyle={{
+                color: "white",
+                fontWeight: "bold"
+              }}
+              multipleText={'Sort by...'}
+              value={valueSort}
+              multiple={true}
+              min={0}
+              max={10}
+              items={itemsSort}
+              closeAfterSelecting={true}
+              onSelectItem={(item) => {
+                
+                sortBy(item)
+                setOpenSort(false)
+              }}
+              setOpen={setOpenSort}
+            />
+          </View>
           {plantsArr.map((plant, index) => (
             <Pressable
               key={index}
@@ -199,13 +209,6 @@ export default function CollectedList({ navigation }) {
             </Pressable>
           ))}
 
-          <Pressable
-            style={styles.button}
-            title="Home Page"
-            onPress={() => navigation.navigate("HomePage")}
-          >
-            <Text style={styles.buttonText}>Back To Home</Text>
-          </Pressable>
         </ScrollView>
       </View>
     </ImageBackground>
@@ -258,11 +261,15 @@ const styles = StyleSheet.create({
   },
   dropdown:{
     backgroundColor: "#006400",
+    zIndex: 10,
     width: "50%",
     alignItems: "center",
     justifyContent: "center",
+    margin: 12,
+    
   },
    buttonText: {
     color: "white",
   },
+ 
 });
