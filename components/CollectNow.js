@@ -15,9 +15,7 @@ import { postPhotoToPlantNet } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-    faRefresh,
     faCamera,
-    faPlusCircle,
     faTh,
     faMagnifyingGlassPlus,
     faMagnifyingGlassMinus,
@@ -53,10 +51,6 @@ export default function CollectNow({ navigation }) {
         if (!result.canceled) {
             setImageUri(result.assets[0].uri);
         }
-    };
-
-    const toggleCameraFacing = () => {
-        setFacing((current) => (current === "back" ? "front" : "back"));
     };
 
     const handleTakePicture = async () => {
@@ -119,6 +113,7 @@ export default function CollectNow({ navigation }) {
             style={styles.camera}
             facing={facing}
             zoom={zoomLevel}
+            focusMode={"off"}
         >
             <View style={styles.hud_container}>
                 <View style={styles.preview_container}>
