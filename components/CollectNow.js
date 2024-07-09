@@ -54,9 +54,11 @@ export default function CollectNow({ navigation }) {
             setImageUri(result.assets[0].uri);
         }
     };
+
     const toggleCameraFacing = () => {
         setFacing((current) => (current === "back" ? "front" : "back"));
     };
+
     const handleTakePicture = async () => {
         setIsSettingPreview(true);
         try {
