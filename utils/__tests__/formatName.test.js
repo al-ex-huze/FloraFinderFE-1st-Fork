@@ -1,5 +1,4 @@
 const { formatName } = require("../formatName")
-const testCollection = require("../../test-data/collection")
 
 describe("formatName", () => {
     test("Takes a string and returns with each word capitalized", () => {
