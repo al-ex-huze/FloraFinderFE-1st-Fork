@@ -109,7 +109,7 @@ export default function CollectNow({ navigation }) {
                     size="large"
                     color="#006400"
                 />
-                <Text>Fetching plant data...</Text>
+                <Text>Analysing plant data...</Text>
             </View>
         );
     }
@@ -129,28 +129,6 @@ export default function CollectNow({ navigation }) {
                         />
                     ) : null}
                 </View>
-                <View style={styles.button_container}>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={toggleCameraFacing}
-                    >
-                        <Text style={styles.button_text}>
-                            {" "}
-                            Flip Camera{" "}
-                            <FontAwesomeIcon icon={faRefresh} color={"white"} />
-                        </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={pickImageAsync}
-                    >
-                        <Text style={styles.button_text}>
-                            {" "}
-                            Gallery{" "}
-                            <FontAwesomeIcon icon={faTh} color={"white"} />
-                        </Text>
-                    </TouchableOpacity>
-                </View>
                 <View style={styles.zoom_button_container}>
                     <TouchableOpacity
                         style={styles.zoom_button}
@@ -169,6 +147,14 @@ export default function CollectNow({ navigation }) {
                             icon={faMagnifyingGlassMinus}
                             color={"white"}
                         />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.gallery_button_container}>
+                    <TouchableOpacity
+                        style={styles.gallery_button}
+                        onPress={pickImageAsync}
+                    >
+                        <FontAwesomeIcon icon={faTh} color={"white"} />
                     </TouchableOpacity>
                 </View>
                 <View style={styles.camera_button_container}>
@@ -218,20 +204,25 @@ const styles = StyleSheet.create({
     camera: {
         flex: 1,
     },
-    button_container: {
+    gallery_button_container: {
         flex: 1,
-        backgroundColor: "transparent",
-        margin: 64,
-    },
-    button: {
+        alignSelf: "flex-end",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
+        backgroundColor: "transparent",
+    },
+    gallery_button: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 40,
+        height: 40,
+        borderRadius: 10,
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
     },
     zoom_button_container: {
         flex: 1,
@@ -250,6 +241,8 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
     },
     camera_button_container: {
         flex: 1,
@@ -267,6 +260,8 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
     },
     text: {
         fontSize: 24,
