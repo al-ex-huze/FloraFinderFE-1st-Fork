@@ -10,13 +10,12 @@ const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 export default function ProfilePage() {
   const { user, setUser } = useContext(UserContext);
-  const [userData, setUserData] = useState({});
   const navigation = useNavigation();
 
   useEffect(() => {
     getUserByUsername(user.username)
       .then((fetchedUser) => {
-        setUserData(fetchedUser);
+        setUser(fetchedUser);
       })
       .catch((error) => {
         console.error("Error fetching profile", error);
@@ -59,11 +58,11 @@ export default function ProfilePage() {
           <View style={styles.userInfo}>
             <Text>Username: {user.username}</Text>
             <Text>Email: {user.email}</Text>
-            <Text>Name: {userData.name}</Text>
+            <Text>Name: {user.name}</Text>
             <Text>Total Score: {user.total_score}</Text>
-            {userData.avatar ? (
+            {user.avatar ? (
               <View style={styles.avatarContainer}>
-                <Image source={{ uri: userData.avatar }} style={styles.avatar} />
+                <Image source={{ uri: user.avatar }} style={styles.avatar} />
                 <Text style={styles.avatarLabel}>Avatar</Text>
               </View>
             ) : (
@@ -112,7 +111,7 @@ const styles = StyleSheet.create({
   },
   avatar: {
     width: 100,
-    height: 100,
+    height: 200,
     borderRadius: 50,
   },
   avatarLabel: {
