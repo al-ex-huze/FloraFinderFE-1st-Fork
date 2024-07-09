@@ -1,5 +1,6 @@
 import * as React from "react";
 import {
+    Alert,
     Button,
     StyleSheet,
     Text,
@@ -9,29 +10,27 @@ import {
     Image,
 } from "react-native";
 import { useRef, useState } from "react";
-import { CameraView, useCameraPermissions } from "expo-camera"; // needed to take picture alex
+import { CameraView, useCameraPermissions } from "expo-camera";
 import { postPhotoToPlantNet } from "../api";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
-    faRefresh,
     faCamera,
-    faPlusCircle,
     faTh,
+    faMagnifyingGlassPlus,
+    faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
-
 export default function CollectNow({ navigation }) {
-    const [facing, setFacing] = useState("back");
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSettingPreview, setIsSettingPreview] = useState(false);
+    const [zoomLevel, setZoomLevel] = useState(0);
 
     if (!permission) {
         return <View />;
     }
-
     if (!permission.granted) {
         return (
             <View style={styles.container}>
@@ -42,8 +41,16 @@ export default function CollectNow({ navigation }) {
             </View>
         );
     }
-    const toggleCameraFacing = () => {
-        setFacing((current) => (current === "back" ? "front" : "back"));
+    const pickImageAsync = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
     };
 
     const handleTakePicture = async () => {
@@ -57,32 +64,37 @@ export default function CollectNow({ navigation }) {
             console.log(error, "<-- ERROR TAKE PICTURE");
         }
     };
-
-    const pickImageAsync = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
-        });
-        if (!result.canceled) {
-            setImageUri(result.assets[0].uri);
-        }
-    };
-
     const handlePostPicture = async () => {
         setIsLoading(true);
         const firstMatch = await postPhotoToPlantNet(imageUri)
             .then((firstMatch) => {
-                navigation.navigate("PlantResult", { plant: firstMatch });
-                setImageUri("");
-                setIsLoading(false);
+                if (firstMatch.species.commonNames[0] !== undefined) {
+                    navigation.navigate("PlantResult", { plant: firstMatch });
+                    setImageUri("");
+                    setIsLoading(false);
+                }
             })
             .catch((error) => {
                 console.log(error, "error in HANDLEPOST");
-            }); // Yusha- turned this to async function, declared variable for async process, copied in line 68, was empty before
+                setIsLoading(false);
+                Alert.alert("Unable to ID image", "Please try again", [
+                    {
+                        text: "OK",
+                        style: "default",
+                    },
+                ]);
+            });
     };
-
+    const handleZoomIn = () => {
+        if (zoomLevel < 1) {
+            setZoomLevel(zoomLevel + 0.1);
+        }
+    };
+    const handleZoomOut = () => {
+        if (zoomLevel > 0) {
+            setZoomLevel(zoomLevel - 0.1);
+        }
+    };
     if (isLoading) {
         return (
             <View style={styles.activity_indicator_background}>
@@ -95,9 +107,13 @@ export default function CollectNow({ navigation }) {
             </View>
         );
     }
-
     return (
-        <CameraView ref={ref} style={styles.camera} facing={facing}>
+        <CameraView
+            ref={ref}
+            style={styles.camera}
+            zoom={zoomLevel}
+            focusMode={"off"}
+        >
             <View style={styles.hud_container}>
                 <View style={styles.preview_container}>
                     {imageUri ? (
@@ -107,31 +123,34 @@ export default function CollectNow({ navigation }) {
                         />
                     ) : null}
                 </View>
-
-                <View style={styles.button_container}>
+                <View style={styles.zoom_button_container}>
                     <TouchableOpacity
-                        style={styles.button}
-                        onPress={toggleCameraFacing}
+                        style={styles.zoom_button}
+                        onPress={handleZoomIn}
                     >
-                        <Text style={styles.button_text}>
-                            {" "}
-                            Flip Camera{" "}
-                            <FontAwesomeIcon icon={faRefresh} color={"white"} />
-                        </Text>
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlassPlus}
+                            color={"white"}
+                        />
                     </TouchableOpacity>
-
                     <TouchableOpacity
-                        style={styles.button}
-                        onPress={pickImageAsync}
+                        style={styles.zoom_button}
+                        onPress={handleZoomOut}
                     >
-                        <Text style={styles.button_text}>
-                            {" "}
-                            Gallery{" "}
-                            <FontAwesomeIcon icon={faTh} color={"white"} />
-                        </Text>
+                        <FontAwesomeIcon
+                            icon={faMagnifyingGlassMinus}
+                            color={"white"}
+                        />
                     </TouchableOpacity>
                 </View>
-
+                <View style={styles.gallery_button_container}>
+                    <TouchableOpacity
+                        style={styles.gallery_button}
+                        onPress={pickImageAsync}
+                    >
+                        <FontAwesomeIcon icon={faTh} color={"white"} />
+                    </TouchableOpacity>
+                </View>
                 <View style={styles.camera_button_container}>
                     {isSettingPreview ? (
                         <View style={styles.activity_indicator_preview}>
@@ -144,6 +163,7 @@ export default function CollectNow({ navigation }) {
                         >
                             <Text style={styles.button_text}>
                                 <FontAwesomeIcon
+                                    style={styles.iconButtonStyle}
                                     icon={faCamera}
                                     color={"white"}
                                 />
@@ -163,7 +183,6 @@ export default function CollectNow({ navigation }) {
         </CameraView>
     );
 }
-
 const styles = StyleSheet.create({
     hud_container: {
         flex: 1,
@@ -180,20 +199,45 @@ const styles = StyleSheet.create({
     camera: {
         flex: 1,
     },
-    button_container: {
+    gallery_button_container: {
         flex: 1,
-        backgroundColor: "transparent",
-        margin: 64,
-    },
-    button: {
+        alignSelf: "flex-end",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        paddingVertical: 12,
-        paddingHorizontal: 32,
-        borderRadius: 4,
+        backgroundColor: "transparent",
+    },
+    gallery_button: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 40,
+        height: 40,
+        borderRadius: 10,
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
+    },
+    zoom_button_container: {
+        flex: 1,
+        alignSelf: "flex-end",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "transparent",
+    },
+    zoom_button: {
+        alignItems: "center",
+        justifyContent: "center",
+        width: 40,
+        height: 40,
+        borderRadius: 10,
+        elevation: 3,
+        backgroundColor: "#006400",
+        margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
     },
     camera_button_container: {
         flex: 1,
@@ -211,6 +255,8 @@ const styles = StyleSheet.create({
         elevation: 3,
         backgroundColor: "#006400",
         margin: 2,
+        borderWidth: 1,
+        borderColor: "white",
     },
     text: {
         fontSize: 24,
@@ -232,4 +278,7 @@ const styles = StyleSheet.create({
     activity_indicator_preview: {
         flex: 1,
     },
+    iconButtonStyle: {
+        marginTop: -8,
+    }
 });
