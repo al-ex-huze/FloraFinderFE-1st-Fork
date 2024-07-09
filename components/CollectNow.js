@@ -163,6 +163,7 @@ export default function CollectNow({ navigation }) {
                         >
                             <Text style={styles.button_text}>
                                 <FontAwesomeIcon
+                                    style={styles.iconButtonStyle}
                                     icon={faCamera}
                                     color={"white"}
                                 />
@@ -277,4 +278,7 @@ const styles = StyleSheet.create({
     activity_indicator_preview: {
         flex: 1,
     },
+    iconButtonStyle: {
+        marginTop: -8,
+    }
 });
