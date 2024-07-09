@@ -22,12 +22,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
 export default function CollectNow({ navigation }) {
-    const [facing, setFacing] = useState("back");
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [isSettingPreview, setIsSettingPreview] = useState(false);
     const [zoomLevel, setZoomLevel] = useState(0);
+
     if (!permission) {
         return <View />;
     }
@@ -111,7 +111,6 @@ export default function CollectNow({ navigation }) {
         <CameraView
             ref={ref}
             style={styles.camera}
-            facing={facing}
             zoom={zoomLevel}
             focusMode={"off"}
         >
