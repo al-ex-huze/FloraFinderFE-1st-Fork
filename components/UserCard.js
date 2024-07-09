@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
-import { getUserByUsername } from "../api";
+import { getUserByUsername, getCollectedPlantsList } from "../api";
 
 const UserCard = ({ route }) => {
   const { username } = route.params;
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [score, setScore] = useState(0);
 
   useEffect(() => {
-    getUserByUsername(username)
-      .then((fetchedUser) => {
+    Promise.all([getUserByUsername(username), getCollectedPlantsList(username)])
+      .then(([fetchedUser, collectedPlants]) => {
         setUser(fetchedUser);
+        const calculatedScore = calculateScore(collectedPlants);
+        setScore(calculatedScore);
         setIsLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching user:", error);
+        console.error("Error fetching user data:", error);
         setIsLoading(false);
       });
   }, [username]);
+
+  const calculateScore = (plants) => {
+    return plants.reduce((totalScore, plant) => {
+      let plantScore = 1;
+      return totalScore + plantScore;
+    }, 0);
+  };
 
   if (isLoading) {
     return (
@@ -49,9 +59,7 @@ const UserCard = ({ route }) => {
           <Text style={styles.name}>{user.name}</Text>
           <Text style={styles.username}>@{user.username}</Text>
           <Text style={styles.email}>{user.email}</Text>
-          {user.total_score !== undefined && (
-            <Text style={styles.score}>Total Score: {user.total_score}</Text>
-          )}
+          <Text style={styles.score}>Total Score: {score}</Text>
         </View>
       </View>
     </View>
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
     height: "200%",
     resizeMode: "cover",
     position: "absolute",
-    top: 0, // Align to the top
+    top: 0,
     left: 0,
   },
   infoContainer: {
