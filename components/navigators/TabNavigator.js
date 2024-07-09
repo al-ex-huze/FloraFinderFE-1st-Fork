@@ -10,6 +10,7 @@ import CollectNow from "../CollectNow";
 import LeagueTable from "../LeagueTable";
 import HomePage from "../HomePage";
 import PlantResult from "../PlantResult";
+import ProfilePage from "../ProfilePage";
 
 import { UserContext } from "../../contexts/Contexts";
 
@@ -92,6 +93,7 @@ const HomeStack = () => {
             <Stack.Screen name="LeagueTable" component={LeagueTable} />
             <Stack.Screen name="HomePage" component={HomePage} />
             <Stack.Screen name="PlantResult" component={PlantResult} />
+            <Stack.Screen name="ProfilePage" component={ProfilePage} />
             <Stack.Screen
                 name="CollectedSingleCard"
                 component={CollectedSingleCard}
@@ -112,6 +114,7 @@ const CollectedListStack = () => {
             <Stack.Screen name="LeagueTable" component={LeagueTable} />
             <Stack.Screen name="HomePage" component={HomePage} />
             <Stack.Screen name="PlantResult" component={PlantResult} />
+            <Stack.Screen name="ProfilePage" component={ProfilePage} />
             <Stack.Screen
                 name="CollectedSingleCard"
                 component={CollectedSingleCard}

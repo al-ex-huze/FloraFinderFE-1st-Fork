@@ -60,10 +60,13 @@ export const postNewPlantToCollection = (username, newCollection) => {
 };
 
 export const getUserByUsername = (username) => {
-  console.log("getUser API");
+  console.log("getUser API")
   return floraFinderApi.get(`/users/${username}`).then((response) => {
-    return response.data.user;
-  });
+    return response.data.user
+  })
+  .catch((error) => {
+    console.log(error, "ERROR fetching user");
+  })
 };
 
 export const getCollectedPlantsList = (username) => {
