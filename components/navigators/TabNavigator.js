@@ -15,6 +15,7 @@ import CollectNow from "../CollectNow";
 import LeagueTable from "../LeagueTable";
 import HomePage from "../HomePage";
 import PlantResult from "../PlantResult";
+import ProfilePage from "../ProfilePage";
 import UserCard from "../UserCard";
 
 import { UserContext } from "../../contexts/Contexts";
@@ -27,6 +28,7 @@ export function TabNavigator() {
 
   if (user.username) {
     return (
+      
       <Tab.Navigator
         screenOptions={{ headerShown: false, tabBarActiveTintColor: "green" }}
       >
@@ -62,9 +64,6 @@ export function TabNavigator() {
 const HomeStack = () => (
   <Stack.Navigator initialRouteName="HomePage">
     <Stack.Screen name="HomePage" component={HomePage} />
-    <Stack.Screen name="LoginRegister" component={LoginRegister} />
-    <Stack.Screen name="Login" component={Login} />
-    <Stack.Screen name="Register" component={Register} />
     <Stack.Screen name="CollectedList" component={CollectedList} />
     <Stack.Screen name="CollectedMap" component={CollectedMap} />
     <Stack.Screen name="CollectNow" component={CollectNow} />
@@ -72,6 +71,7 @@ const HomeStack = () => (
     <Stack.Screen name="PlantResult" component={PlantResult} />
     <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
     <Stack.Screen name="UserCard" component={UserCard} />
+    <Stack.Screen name="ProfilePage" component={ProfilePage} />
   </Stack.Navigator>
 );
 
@@ -85,5 +85,6 @@ const CollectedListStack = () => (
     <Stack.Screen name="PlantResult" component={PlantResult} />
     <Stack.Screen name="UserCard" component={UserCard} />
     <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
+    <Stack.Screen name="ProfilePage" component={ProfilePage} />
   </Stack.Navigator>
 );
