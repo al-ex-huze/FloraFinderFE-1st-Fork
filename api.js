@@ -1,7 +1,9 @@
 import axios from "axios";
 const FormData = require("form-data");
 
-const API_KEY = "2b10QhGgcy4JKjO6xKQHN1O";
+const { API_KEY } = require("./.plant_net.js");
+console.log(API_KEY)
+
 const plantNetApi = axios.create({
   baseURL: "https://my-api.plantnet.org",
 });
@@ -26,7 +28,7 @@ export const postPhotoToPlantNet = (imageUri) => {
       return response.data.results[0];
     })
     .catch((error) => {
-      console.log(error.response); // this may return a rejected promise if image isnt identified - FOR future debugging alex
+      console.log(error.response);
     });
 };
 
