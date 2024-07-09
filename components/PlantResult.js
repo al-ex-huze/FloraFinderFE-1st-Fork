@@ -24,6 +24,8 @@ import { UserContext } from "../contexts/Contexts";
 import { postNewPlantToCollection } from "../api";
 import * as Location from "expo-location";
 
+import { formatName } from "../utils/formatName";
+
 const branchSticker = require("../assets/familyIcons/cactus_256.png");
 const cactusSticker = require("../assets/familyIcons/cactus_256.png");
 const treeSticker = require("../assets/familyIcons/cactus_256.png");
@@ -62,14 +64,14 @@ export default function PlantResult({ route, navigation }) {
             const username = user.username;
             const newCollection = {
                 speciesID: Number(plant.gbif.id),
-                speciesName: plant.species.commonNames[0],
+                speciesName: formatName(plant.species.commonNames[0]),
                 geoTag: JSON.stringify({
                     latitude: location.coords.latitude,
                     longitude: location.coords.longitude,
                 }),
                 matchScore: plant.score,
                 image: plant.images[0].url.m,
-                speciesFamily: plant.species.family.scientificNameWithoutAuthor,
+                speciesFamily: formatName(plant.species.family.scientificNameWithoutAuthor),
             };
             postNewPlantToCollection(username, newCollection)
                 .then((response) => {
@@ -91,7 +93,7 @@ export default function PlantResult({ route, navigation }) {
                 <View style={styles.heading_container}>
                     <Text style={styles.heading_1}>You found a</Text>
                     <Text style={styles.heading_2}>
-                        {plant.species.commonNames[0]}!
+                        {formatName(plant.species.commonNames[0])}!
                     </Text>
                 </View>
                 <View style={styles.result_card}>
@@ -101,7 +103,7 @@ export default function PlantResult({ route, navigation }) {
                         </View>
                         <View style={styles.value_container}>
                             <Text style={styles.value}>
-                                {plant.species.scientificNameWithoutAuthor}
+                                {formatName(plant.species.scientificNameWithoutAuthor)}
                             </Text>
                         </View>
                     </View>
@@ -113,8 +115,8 @@ export default function PlantResult({ route, navigation }) {
                         <View style={styles.value_container}>
                             <Text style={styles.value}>
                                 {
-                                    plant.species.family
-                                        .scientificNameWithoutAuthor
+                                    formatName(plant.species.family
+                                        .scientificNameWithoutAuthor)
                                 }
                             </Text>
                         </View>

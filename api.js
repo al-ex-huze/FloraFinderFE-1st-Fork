@@ -103,3 +103,16 @@ export const postLogin = (credentials) => {
       console.log(error, "ERROR posting user");
     });
 };
+
+export const deleteUser = (username) => {
+  return floraFinderApi
+    .delete(`/users/${username}`)
+    .then((response) => {
+      console.log("Deleted User:", response.data);
+      return response.data;
+    })
+    .catch((error) => {
+      console.log(error, "ERROR deleting user");
+      throw error;
+    });
+};
