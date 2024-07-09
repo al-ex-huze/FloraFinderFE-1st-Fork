@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUsers, deleteUser } from "../api";
+import { getUsers } from "../api";
 import {
   StyleSheet,
   View,
@@ -7,8 +7,8 @@ import {
   ActivityIndicator,
   ScrollView,
   TouchableOpacity,
-  Alert,
   Dimensions,
+  Image,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -34,31 +34,7 @@ export default function LeagueTable() {
       });
   }, []);
 
-  const handleDeleteUser = (username) => {
-    Alert.alert("Delete User", `Are you sure you want to delete ${username}?`, [
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-      {
-        text: "OK",
-        onPress: () => {
-          deleteUser(username)
-            .then(() => {
-              setUsers((prevUsers) =>
-                prevUsers.filter((user) => user.username !== username)
-              );
-            })
-            .catch((error) => {
-              console.error("Error deleting user:", error);
-              Alert.alert("Error", "Failed to delete user. Please try again.");
-            });
-        },
-      },
-    ]);
-  };
-
-  const tableHead = ["Username", "Rank", "Action"];
+  const tableHead = ["Avatar", "Username", "Rank"];
 
   const handleUsernamePress = (username) => {
     navigation.navigate("UserCard", { username });
@@ -105,6 +81,16 @@ export default function LeagueTable() {
                   index % 2 === 0 ? styles.evenRow : styles.oddRow,
                 ]}
               >
+                <View style={[styles.cell, styles.columnAvatar]}>
+                  <View style={styles.avatarContainer}>
+                    <Image
+                      source={{
+                        uri: user.avatar || "https://via.placeholder.com/100",
+                      }}
+                      style={styles.avatar}
+                    />
+                  </View>
+                </View>
                 <TouchableOpacity
                   style={[styles.cell, styles.columnUsername]}
                   onPress={() => handleUsernamePress(user.username)}
@@ -118,14 +104,6 @@ export default function LeagueTable() {
                 </TouchableOpacity>
                 <View style={[styles.cell, styles.columnRank]}>
                   <Text style={styles.cellText}>{index + 1}</Text>
-                </View>
-                <View style={[styles.cell, styles.columnAction]}>
-                  <TouchableOpacity
-                    style={styles.deleteButton}
-                    onPress={() => handleDeleteUser(user.username)}
-                  >
-                    <Text style={styles.deleteButtonText}>Delete</Text>
-                  </TouchableOpacity>
                 </View>
               </View>
             ))}
@@ -203,19 +181,21 @@ const styles = StyleSheet.create({
     color: "blue",
     textDecorationLine: "underline",
   },
-  deleteButton: {
-    backgroundColor: "#ff4444",
-    padding: 5,
-    borderRadius: 4,
-    justifyContent: "center",
-    alignItems: "center",
+  avatarContainer: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    overflow: "hidden",
   },
-  deleteButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 12,
+  avatar: {
+    width: "100%",
+    height: "200%",
+    resizeMode: "cover",
+    position: "absolute",
+    top: 0,
+    left: 0,
   },
-  columnUsername: { flex: 0.45 },
-  columnRank: { flex: 0.25 },
-  columnAction: { flex: 0.3 },
+  columnAvatar: { flex: 0.2, alignItems: "center", justifyContent: "center" },
+  columnUsername: { flex: 0.5, alignItems: "flex-start" },
+  columnRank: { flex: 0.3, alignItems: "center" },
 });
