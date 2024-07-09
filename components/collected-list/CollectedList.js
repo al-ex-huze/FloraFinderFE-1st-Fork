@@ -139,7 +139,7 @@ console.log(item)
         <View style={{zIndex: 2000}}>
           <DropDownPicker style ={styles.dropdown}
               open={openFilter}
-              dropDownContainerStyle={{ backgroundColor: 'white',zIndex: 1000, elevation: 1000 }}
+              dropDownContainerStyle={styles.dropDownContainerStyle}
               listMode="SCROLLVIEW"
               placeholder="Filter by Plant Family"
               placeholderStyle={{
@@ -149,6 +149,8 @@ console.log(item)
               multipleText={'Filter By Plant Family'}
               showTickIcon={true}
               value={valueFilter}
+              itemSeparator={true}
+              listItemLabelStyle={styles.listItemLabelStyle}
               multiple={true}
               min={0}
               max={50}
@@ -172,6 +174,7 @@ console.log(item)
           
           <View style={{zIndex: 1000}}>
             <DropDownPicker style ={styles.dropdown}
+            dropDownContainerStyle={styles.dropDownContainerStyle}
               open={openSort}
               listMode="SCROLLVIEW"
               placeholder="Sort by..."
@@ -180,7 +183,9 @@ console.log(item)
                 fontWeight: "bold"
               }}
               multipleText={'Sort by...'}
+              itemSeparator={true}
               value={valueSort}
+              listItemLabelStyle={styles.listItemLabelStyle}
               multiple={true}
               min={0}
               max={10}
@@ -271,5 +276,13 @@ const styles = StyleSheet.create({
    buttonText: {
     color: "white",
   },
+  dropDownContainerStyle:{
+    backgroundColor: 'green',
+    width: "50%",
+    margin: 12,
+  },
+  listItemLabelStyle:{
+    color: "white",
+  }
  
 });
