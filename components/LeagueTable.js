@@ -1,10 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { getUsers } from "../api";
-import { Table, Row, Rows } from "react-native-table-component";
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView } from "react-native";
+import { getUsers, deleteUser } from "../api";
+import {
+  StyleSheet,
+  View,
+  Text,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 export default function LeagueTable() {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation();
+
   useEffect(() => {
     getUsers()
       .then((fetchedUsers) => {
@@ -19,16 +30,37 @@ export default function LeagueTable() {
         setIsLoading(false);
       });
   }, []);
-  const tableHead = ["Username", "Email", "Name", "Rank"];
-  const tableData =
-    users.length > 0
-      ? users.map((user, index) => [
-          user.username,
-          user.email,
-          user.name,
-          index + 1,
-        ])
-      : [];
+
+  const handleDeleteUser = (username) => {
+    Alert.alert("Delete User", `Are you sure you want to delete ${username}?`, [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => {
+          deleteUser(username)
+            .then(() => {
+              setUsers((prevUsers) =>
+                prevUsers.filter((user) => user.username !== username)
+              );
+            })
+            .catch((error) => {
+              console.error("Error deleting user:", error);
+              Alert.alert("Error", "Failed to delete user. Please try again.");
+            });
+        },
+      },
+    ]);
+  };
+
+  const tableHead = ["Username", "Email", "Name", "Rank", "Action"];
+
+  const handleUsernamePress = (username) => {
+    navigation.navigate("UserCard", { username });
+  };
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -37,6 +69,7 @@ export default function LeagueTable() {
       </View>
     );
   }
+
   if (users.length === 0) {
     return (
       <View style={styles.container}>
@@ -44,25 +77,58 @@ export default function LeagueTable() {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>League Table</Text>
       <ScrollView vertical>
-        <Table borderStyle={styles.tableBorder}>
-          <Row
-            data={tableHead}
-            style={styles.head}
-            textStyle={StyleSheet.flatten(styles.headerText)}
-          />
-          <Rows
-            data={tableData}
-            textStyle={StyleSheet.flatten(styles.rowText)}
-          />
-        </Table>
+        <View style={styles.table}>
+          <View style={styles.tableRow}>
+            {tableHead.map((header, index) => (
+              <View key={index} style={styles.headerCell}>
+                <Text style={styles.headerText}>{header}</Text>
+              </View>
+            ))}
+          </View>
+          {users.map((user, index) => (
+            <View
+              key={index}
+              style={[
+                styles.tableRow,
+                index % 2 === 0 ? styles.evenRow : styles.oddRow,
+              ]}
+            >
+              <TouchableOpacity
+                style={styles.cell}
+                onPress={() => handleUsernamePress(user.username)}
+              >
+                <Text style={[styles.cellText, styles.linkText]}>
+                  {user.username}
+                </Text>
+              </TouchableOpacity>
+              <View style={styles.cell}>
+                <Text style={styles.cellText}>{user.email}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Text style={styles.cellText}>{user.name}</Text>
+              </View>
+              <View style={styles.cell}>
+                <Text style={styles.cellText}>{index + 1}</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.deleteButton}
+                onPress={() => handleDeleteUser(user.username)}
+              >
+                <Text style={styles.deleteButtonText}>Delete</Text>
+              </TouchableOpacity>
+            </View>
+          ))}
+        </View>
       </ScrollView>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -83,23 +149,37 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#006400",
   },
-  tableBorder: {
-    borderWidth: 2,
+  table: {
+    borderWidth: 1,
     borderColor: "#006400",
   },
-  head: {
-    height: 40,
+  tableRow: {
+    flexDirection: "row",
+    borderBottomWidth: 1,
+    borderColor: "#006400",
+  },
+  headerCell: {
+    flex: 1,
+    padding: 10,
     backgroundColor: "#006400",
   },
   headerText: {
-    margin: 6,
-    textAlign: "center",
     color: "white",
-  },
-  rowText: {
-    margin: 6,
+    fontWeight: "bold",
     textAlign: "center",
-    color: "#000000",
+  },
+  cell: {
+    flex: 1,
+    padding: 10,
+  },
+  cellText: {
+    textAlign: "center",
+  },
+  evenRow: {
+    backgroundColor: "#FFFFFF",
+  },
+  oddRow: {
+    backgroundColor: "#F0F0F0",
   },
   noDataText: {
     textAlign: "center",
@@ -107,18 +187,21 @@ const styles = StyleSheet.create({
     color: "#006400",
     marginTop: 20,
   },
-  button: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 32,
-    borderRadius: 4,
-    elevation: 3,
-    backgroundColor: "#006400",
-    width: "50%",
-    margin: 12,
+  linkText: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
-  buttonText: {
-    color: "white",
+  deleteButton: {
+    backgroundColor: "#ff4444",
+    padding: 5,
+    borderRadius: 4,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 5,
+  },
+  deleteButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 12,
   },
 });
