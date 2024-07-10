@@ -186,7 +186,7 @@ export default function CollectNow({ navigation }) {
                             style={styles.camera_button}
                             onPress={handlePostPicture}
                         >
-                            <Text style={styles.button_text}>ID</Text>
+                            <Text style={styles.button_text}>ID Plant</Text>
                         </TouchableOpacity>
                     ) : null}
                 </View>
