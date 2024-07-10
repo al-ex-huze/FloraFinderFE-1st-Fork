@@ -84,7 +84,7 @@ export default function LeagueTable() {
         <Text style={styles.heading}>League Table</Text>
         <View style={styles.tableContainer}>
           <View style={styles.table}>
-            <View style={styles.tableRow}>
+            <View style={styles.tableHeader}>
               {tableHead.map((header, index) => (
                 <View
                   key={index}
@@ -174,6 +174,10 @@ const styles = StyleSheet.create({
     width: screenWidth * 0.9,
     backgroundColor: "white",
   },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#006400",
+  },
   tableRow: {
     flexDirection: "row",
     borderBottomWidth: 1,
@@ -181,7 +185,6 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     padding: 10,
-    backgroundColor: "#006400",
   },
   headerText: {
     color: "white",
@@ -227,7 +230,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
-  columnAvatar: { flex: 0.2, alignItems: "center", justifyContent: "center" },
-  columnUsername: { flex: 0.5, alignItems: "flex-start" },
-  columnRank: { flex: 0.3, alignItems: "center" },
+  columnAvatar: {
+    width: "20%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  columnUsername: { width: "35%", alignItems: "flex-start" },
+  columnScore: { width: "25%", alignItems: "center" },
+  columnRank: { width: "20%", alignItems: "center" },
 });
