@@ -34,7 +34,7 @@ export default function LeagueTable() {
       });
   }, []);
 
-  const tableHead = ["Avatar", "Username", "Rank"];
+  const tableHead = ["Avatar", "Username", "Score", "Rank"];
 
   const handleUsernamePress = (username) => {
     navigation.navigate("UserCard", { username });
@@ -102,6 +102,9 @@ export default function LeagueTable() {
                     {user.username}
                   </Text>
                 </TouchableOpacity>
+                <View style={[styles.cell, styles.columnScore]}>
+                  <Text style={styles.cellText}>{user.total_score}</Text>
+                </View>
                 <View style={[styles.cell, styles.columnRank]}>
                   <Text style={styles.cellText}>{index + 1}</Text>
                 </View>
