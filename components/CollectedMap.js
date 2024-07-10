@@ -1,6 +1,13 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, ActivityIndicator, Image } from "react-native";
+import {
+    StyleSheet,
+    View,
+    Text,
+    ActivityIndicator,
+    Image,
+    ImageBackground,
+} from "react-native";
 import MapView, {
     Marker,
     Callout,
@@ -16,6 +23,8 @@ import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,
 } from "../utils/parseGeoTag";
+
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 // const flowerIconsArr = require("../assets/flowerIcons/flowerIcons.js");
 const plantIconsArr = require("../assets/plantIcons/plantIcons.js");
@@ -69,14 +78,17 @@ export default function CollectedMap({ navigation }) {
 
     if (isLoading || isLocating) {
         return (
-            <View style={styles.activityIndicatorBackground}>
-                <ActivityIndicator
-                    style={styles.loadPage}
-                    size="large"
-                    color="#006400"
-                />
-                <Text>Loading map...</Text>
-            </View>
+            <ImageBackground
+                source={backgroundLeaf}
+                style={styles.imageBackground}
+                resizeMode="cover"
+            >
+                <View style={styles.overlay} />
+                <View style={styles.activity_indicator_background}>
+                    <ActivityIndicator size="large" color="#006400" />
+                    <Text>Loading...</Text>
+                </View>
+            </ImageBackground>
         );
     }
     return (
@@ -215,11 +227,20 @@ const styles = StyleSheet.create({
     loadPage: {
         backgroundColor: "#CCFFCC",
     },
-    activityIndicatorBackground: {
-        backgroundColor: "#CCFFCC",
+    activity_indicator_background: {
+        backgroundColor: "transparent",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    imageBackground: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: "rgba(255, 255, 255, 0.8)",
     },
     icon: {
         width: 25,

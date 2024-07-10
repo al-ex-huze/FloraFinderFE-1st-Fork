@@ -8,6 +8,7 @@ import {
     View,
     ActivityIndicator,
     Image,
+    ImageBackground
 } from "react-native";
 import { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
@@ -21,6 +22,9 @@ import {
     faMagnifyingGlassMinus,
 } from "@fortawesome/free-solid-svg-icons";
 const ref = React.createRef();
+
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
+
 export default function CollectNow({ navigation }) {
     const [permission, requestPermission] = useCameraPermissions();
     const [imageUri, setImageUri] = useState("");
@@ -97,6 +101,12 @@ export default function CollectNow({ navigation }) {
     };
     if (isLoading) {
         return (
+            <ImageBackground
+            source={backgroundLeaf}
+            style={styles.imageBackground}
+            resizeMode="cover"
+        >
+            <View style={styles.overlay} />
             <View style={styles.activity_indicator_background}>
                 <ActivityIndicator
                     style={styles.load_page}
@@ -105,7 +115,8 @@ export default function CollectNow({ navigation }) {
                 />
                 <Text>Fetching plant data...</Text>
             </View>
-        );
+            </ImageBackground>
+        )
     }
     return (
         <CameraView
@@ -267,10 +278,10 @@ const styles = StyleSheet.create({
         color: "white",
     },
     load_page: {
-        backgroundColor: "#CCFFCC",
+        backgroundColor: "transparent",
     },
     activity_indicator_background: {
-        backgroundColor: "#CCFFCC",
+        backgroundColor: "transparent",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
@@ -280,5 +291,14 @@ const styles = StyleSheet.create({
     },
     iconButtonStyle: {
         marginTop: -8,
-    }
+    },
+    imageBackground: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    },
 });
