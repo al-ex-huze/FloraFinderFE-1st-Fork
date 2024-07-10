@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faHome, faLeaf } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faCamera, faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 import LoginRegister from "../LoginRegister";
 import Login from "../Login";
@@ -40,6 +40,14 @@ export function TabNavigator() {
             tabBarIcon: () => <FontAwesomeIcon icon={faHome} color={"green"} />,
           }}
         />
+          <Tab.Screen
+          name="CollectTab"
+          component={CollectNowStack}
+          options={{
+            tabBarLabel: "Collect Now",
+            tabBarIcon: () => <FontAwesomeIcon icon={faCamera} color={"green"} />,
+          }}
+        />
         <Tab.Screen
           name="CollectedListTab"
           component={CollectedListStack}
@@ -63,6 +71,20 @@ export function TabNavigator() {
 
 const HomeStack = () => (
   <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={HomePage} />
+    <Stack.Screen name="Collected Plants" component={CollectedList} />
+    <Stack.Screen name="Collected Map" component={CollectedMap} />
+    <Stack.Screen name="Collect Now" component={CollectNow} />
+    <Stack.Screen name="League Table" component={LeagueTable} />
+    <Stack.Screen name="Found Plant" component={PlantResult} />
+    <Stack.Screen name="Single Plant" component={CollectedSingleCard} />
+    <Stack.Screen name="User" component={UserCard} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
+  </Stack.Navigator>
+);
+
+const CollectNowStack = () => (
+  <Stack.Navigator initialRouteName="Collect Now">
     <Stack.Screen name="Home" component={HomePage} />
     <Stack.Screen name="Collected Plants" component={CollectedList} />
     <Stack.Screen name="Collected Map" component={CollectedMap} />
