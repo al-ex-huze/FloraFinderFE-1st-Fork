@@ -9,6 +9,8 @@ import {
     Alert,
     Image,
     ScrollView,
+    Platform, //added YUSHA
+    Dimensions, //added YUSHA
 } from "react-native";
 import { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -16,6 +18,8 @@ import { UserContext } from "../contexts/Contexts";
 import { postLogin } from "../api/apiFunctions";
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 const logo = require("../assets/FloraFinderLogo.png");
+
+const { height } = Dimensions.get('window');  // getting screen height YUSHA
 
 export default function Login() {
     const { user, setUser } = useContext(UserContext);
@@ -134,6 +138,10 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     logoContainer: {
+        alignItems: "center", //YUSHA
+        justifyContent: "center", //YUSHA
+        marginBottom: Platform.OS === 'ios' ? 0 : 10, // Adjust margin for Android(right of :) after setting ios (left of :) YUSHA
+        marginTop: Platform.OS === 'ios' ? height * 0.05 : height * 0.15, // Adjust top margin for ios on left and android on right again YUSHA
         position: "absolute",
         top: 0,
         left: 0,
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        paddingTop: 20, // Added to ensure elements start from the center
+        paddingTop: 20, 
     },
     button: {
         alignItems: "center",
@@ -184,17 +192,12 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         fontFamily: "Inter_900Black",
         fontSize: 25,
+        textAlign: 'centre', //added YUSHA
     },
     buttonText: {
         color: "white",
     },
     labelContainerText: {
-        // backgroundColor: "white",
-        // borderWidth: 2,
-        // borderRadius: 5,
-        // borderStyle: "solid",
-        // borderColor: "#006400",
-        // padding: 5,
         fontWeight: "bold",
         alignSelf: "flex-start",
         marginLeft: 60,
@@ -202,7 +205,7 @@ const styles = StyleSheet.create({
         marginBottom: -4,
     },
     logo: {
-        height: 250,
+        height: height * 0.3, // Adjust height based on screen size YUSHA
         resizeMode: "contain",
     },
     alertText: {
