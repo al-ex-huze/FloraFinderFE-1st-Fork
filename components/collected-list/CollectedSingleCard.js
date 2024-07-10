@@ -8,7 +8,7 @@ import {
     parseGeoTagLongitude,
 } from "../../utils/parseGeoTag";
 
-const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
+const flowerIconsArr = require("../../assets/flowerIcons/flowerIcons.js");
 
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;

@@ -4,7 +4,7 @@
     "slug": "FloraFinder",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/flowericons/flowerIcon7.png",
+    "icon": "./assets/flowerIcons/flowerIcon7.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/FloraFinderLogo.png",
