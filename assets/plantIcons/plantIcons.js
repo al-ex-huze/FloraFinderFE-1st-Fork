@@ -6,9 +6,6 @@ const plantIcon5 = require("./plant_5.png");
 const plantIcon6 = require("./plant_6.png");
 const plantIcon7 = require("./plant_7.png");
 const plantIcon8 = require("./plant_8.png");
-const plantIcon9 = require("./plant_9.png");
-const plantIcon10 = require("./plant_10.png");
-const plantIcon11 = require("./plant_11.png");
 
 module.exports = [
     plantIcon1,
@@ -19,7 +16,4 @@ module.exports = [
     plantIcon6,
     plantIcon7,
     plantIcon8,
-    plantIcon9,
-    plantIcon10,
-    plantIcon11,
 ]
