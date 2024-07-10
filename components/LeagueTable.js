@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUsers } from "../api";
+import { getUsers } from "../api/apiFunctions";
 import {
   StyleSheet,
   View,
@@ -9,10 +9,12 @@ import {
   TouchableOpacity,
   Dimensions,
   Image,
+  ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 export default function LeagueTable() {
   const [users, setUsers] = useState([]);
@@ -34,98 +36,127 @@ export default function LeagueTable() {
       });
   }, []);
 
-  const tableHead = ["Avatar", "Username", "Rank"];
+  const tableHead = ["Avatar", "Username", "Score", "Rank"];
 
   const handleUsernamePress = (username) => {
-    navigation.navigate("UserCard", { username });
+    navigation.navigate("User", { username });
   };
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#006400" />
-        <Text>Loading...</Text>
-      </View>
+      <ImageBackground
+        source={backgroundLeaf}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#006400" />
+          <Text>Loading...</Text>
+        </View>
+      </ImageBackground>
     );
   }
 
   if (users.length === 0) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.noDataText}>No data available</Text>
-      </View>
+      <ImageBackground
+        source={backgroundLeaf}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+        <View style={styles.container}>
+          <Text style={styles.noDataText}>No data available</Text>
+        </View>
+      </ImageBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>League Table</Text>
-      <View style={styles.tableContainer}>
-        <View style={styles.table}>
-          <View style={styles.tableRow}>
-            {tableHead.map((header, index) => (
-              <View
-                key={index}
-                style={[styles.headerCell, styles[`column${header}`]]}
-              >
-                <Text style={styles.headerText}>{header}</Text>
-              </View>
-            ))}
-          </View>
-          <ScrollView>
-            {users.map((user, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.tableRow,
-                  index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                ]}
-              >
-                <View style={[styles.cell, styles.columnAvatar]}>
-                  <View style={styles.avatarContainer}>
-                    <Image
-                      source={{
-                        uri: user.avatar || "https://via.placeholder.com/100",
-                      }}
-                      style={styles.avatar}
-                    />
+    <ImageBackground
+      source={backgroundLeaf}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        <Text style={styles.heading}>League Table</Text>
+        <View style={styles.tableContainer}>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              {tableHead.map((header, index) => (
+                <View
+                  key={index}
+                  style={[styles.headerCell, styles[`column${header}`]]}
+                >
+                  <Text style={styles.headerText}>{header}</Text>
+                </View>
+              ))}
+            </View>
+            <ScrollView>
+              {users.map((user, index) => (
+                <View
+                  key={index}
+                  style={[
+                    styles.tableRow,
+                    index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                  ]}
+                >
+                  <View style={[styles.cell, styles.columnAvatar]}>
+                    <View style={styles.avatarContainer}>
+                      <Image
+                        source={{
+                          uri: user.avatar || "https://via.placeholder.com/100",
+                        }}
+                        style={styles.avatar}
+                      />
+                    </View>
+                  </View>
+                  <TouchableOpacity
+                    style={[styles.cell, styles.columnUsername]}
+                    onPress={() => handleUsernamePress(user.username)}
+                  >
+                    <Text
+                      style={[styles.cellText, styles.linkText]}
+                      numberOfLines={1}
+                    >
+                      {user.username}
+                    </Text>
+                  </TouchableOpacity>
+                  <View style={[styles.cell, styles.columnScore]}>
+                    <Text style={styles.cellText}>{user.total_score}</Text>
+                  </View>
+                  <View style={[styles.cell, styles.columnRank]}>
+                    <Text style={styles.cellText}>{index + 1}</Text>
                   </View>
                 </View>
-                <TouchableOpacity
-                  style={[styles.cell, styles.columnUsername]}
-                  onPress={() => handleUsernamePress(user.username)}
-                >
-                  <Text
-                    style={[styles.cellText, styles.linkText]}
-                    numberOfLines={1}
-                  >
-                    {user.username}
-                  </Text>
-                </TouchableOpacity>
-                <View style={[styles.cell, styles.columnRank]}>
-                  <Text style={styles.cellText}>{index + 1}</Text>
-                </View>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
+          </View>
         </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  },
   container: {
     flex: 1,
     padding: 16,
     paddingTop: 30,
-    backgroundColor: "#CCFFCC",
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#CCFFCC",
   },
   heading: {
     fontSize: 24,
@@ -141,6 +172,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#006400",
     width: screenWidth * 0.9,
+    backgroundColor: "white",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    backgroundColor: "#006400",
   },
   tableRow: {
     flexDirection: "row",
@@ -149,7 +185,6 @@ const styles = StyleSheet.create({
   },
   headerCell: {
     padding: 10,
-    backgroundColor: "#006400",
   },
   headerText: {
     color: "white",
@@ -166,10 +201,10 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   evenRow: {
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
   },
   oddRow: {
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "rgba(240, 240, 240, 0.8)",
   },
   noDataText: {
     textAlign: "center",
@@ -195,7 +230,12 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
   },
-  columnAvatar: { flex: 0.2, alignItems: "center", justifyContent: "center" },
-  columnUsername: { flex: 0.5, alignItems: "flex-start" },
-  columnRank: { flex: 0.3, alignItems: "center" },
+  columnAvatar: {
+    width: "20%",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  columnUsername: { width: "35%", alignItems: "flex-start" },
+  columnScore: { width: "25%", alignItems: "center" },
+  columnRank: { width: "20%", alignItems: "center" },
 });

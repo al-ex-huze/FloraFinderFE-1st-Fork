@@ -1,6 +1,13 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import {
+    StyleSheet,
+    View,
+    Text,
+    ActivityIndicator,
+    Image,
+    ImageBackground,
+} from "react-native";
 import MapView, {
     Marker,
     Callout,
@@ -11,13 +18,16 @@ import { WebView } from "react-native-webview";
 import * as Location from "expo-location";
 
 import { UserContext } from "../contexts/Contexts";
-import { getCollectedPlantsList } from "../api";
+import { getCollectedPlantsList } from "../api/apiFunctions.js";
 import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,
 } from "../utils/parseGeoTag";
 
-const flowerIconsArr = require("../assets/flowericons/flowerIcons.js"); // moved all to separate file in assets to tidy up
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
+
+// const flowerIconsArr = require("../assets/flowerIcons/flowerIcons.js");
+const plantIconsArr = require("../assets/plantIcons/plantIcons.js");
 
 export default function CollectedMap({ navigation }) {
     // const [heatMapPoints, setHeatMapPoints] = useState([]);
@@ -27,7 +37,8 @@ export default function CollectedMap({ navigation }) {
     const [isLocating, setIsLocating] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [location, setLocation] = useState(null);
-    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    // const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    const [plantIcons, setplantIcons] = useState(plantIconsArr);
     const [plantsArr, setPlantsArr] = useState([]);
 
     useEffect(() => {
@@ -67,14 +78,17 @@ export default function CollectedMap({ navigation }) {
 
     if (isLoading || isLocating) {
         return (
-            <View style={styles.activityIndicatorBackground}>
-                <ActivityIndicator
-                    style={styles.loadPage}
-                    size="large"
-                    color="#006400"
-                />
-                <Text>Loading map...</Text>
-            </View>
+            <ImageBackground
+                source={backgroundLeaf}
+                style={styles.imageBackground}
+                resizeMode="cover"
+            >
+                <View style={styles.overlay} />
+                <View style={styles.activity_indicator_background}>
+                    <ActivityIndicator size="large" color="#006400" />
+                    <Text>Loading...</Text>
+                </View>
+            </ImageBackground>
         );
     }
     return (
@@ -98,16 +112,23 @@ export default function CollectedMap({ navigation }) {
                             longitude: parseGeoTagLongitude(plant),
                             latitude: parseGeoTagLatitude(plant),
                         }}
-                        image={
-                            flowerIcons[
-                                Math.floor(Math.random() * flowerIcons.length)
-                            ]
-                        }
                     >
+                        <Image
+                            source={
+                                plantIcons[
+                                    Math.floor(
+                                        Math.random() * plantIcons.length
+                                    )
+                                ]
+                            }
+                            style={{ width: 50, height: 50 }}
+                            resizeMode="center"
+                            resizeMethod="resize"
+                        />
                         <Callout
                             tooltip={true}
                             onPress={() => {
-                                navigation.navigate("CollectedSingleCard", {
+                                navigation.navigate("Single Plant", {
                                     plant: plant,
                                 });
                             }}
@@ -206,10 +227,23 @@ const styles = StyleSheet.create({
     loadPage: {
         backgroundColor: "#CCFFCC",
     },
-    activityIndicatorBackground: {
-        backgroundColor: "#CCFFCC",
+    activity_indicator_background: {
+        backgroundColor: "transparent",
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    imageBackground: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: "rgba(255, 255, 255, 0.8)",
+    },
+    icon: {
+        width: 25,
+        aspectRatio: 1,
     },
 });

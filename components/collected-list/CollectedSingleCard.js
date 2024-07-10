@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, Image, ScrollView } from "react-native";
+import { StyleSheet, View, Text, Image, ScrollView, ImageBackground } from "react-native";
 import MapView, { Marker } from "react-native-maps";
 
 import { formatDate } from "../../utils/formatDate";
@@ -8,12 +8,15 @@ import {
     parseGeoTagLongitude,
 } from "../../utils/parseGeoTag";
 
-const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
+// const flowerIconsArr = require("../../assets/flowerIcons/flowerIcons.js");
+const plantIconsArr = require("../../assets/plantIcons/plantIcons.js");
+const backgroundLeaf = require("../../assets/backgroundtest.jpg");
 
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;
 
-    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    // const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    const [plantIcons, setplantIcons] = useState(plantIconsArr);
     const [initialLatitude, setInitialLatitude] = useState();
     const [initialLongitude, setInitialLongitude] = useState();
 
@@ -26,73 +29,95 @@ export default function CollectedSingleCard({ route }) {
     }, []);
 
     return (
-        <View style={styles.page_container}>
-            <ScrollView style={styles.scroll_view}>
-                <View style={styles.card_container}>
-                    <View style={styles.card_template}>
-                        <Image
-                            style={styles.card_image}
-                            source={{ uri: plant.image }}
-                        />
-                        <View style={styles.text_container_1}>
-                            <Text style={styles.text_1}>
-                                {plant.speciesName}
-                            </Text>
-                        </View>
-                        <View style={styles.text_container_2}>
-                            <Text
-                                style={
-                                    plant.matchScore > 0.5
-                                        ? styles.text_score_good
-                                        : styles.text_score_bad
-                                }
-                            >
-                                {(plant.matchScore * 100).toFixed(2)}%
-                            </Text>
-                            <Text style={styles.text_2}>
-                                Member of the {plant.speciesFamily} Family
-                            </Text>
-                            <Text style={styles.text_2}>
-                                Collected on {formatDate(plant.dateCollected)}
-                            </Text>
+        <ImageBackground
+            source={backgroundLeaf}
+            style={styles.imageBackground}
+            resizeMode="cover"
+        >
+            <View style={styles.overlay} />
+            <View style={styles.page_container}>
+                <ScrollView style={styles.scroll_view}>
+                    <View style={styles.card_container}>
+                        <View style={styles.card_template}>
+                            <Image
+                                style={styles.card_image}
+                                source={{ uri: plant.image }}
+                            />
+                            <View style={styles.text_container_1}>
+                                <Text style={styles.text_1}>
+                                    {plant.speciesName}
+                                </Text>
+                            </View>
+                            <View style={styles.text_container_2}>
+                                <Text
+                                    style={
+                                        plant.matchScore > 0.5
+                                            ? styles.text_score_good
+                                            : styles.text_score_bad
+                                    }
+                                >
+                                    {(plant.matchScore * 100).toFixed(2)}%
+                                </Text>
+                                <Text style={styles.text_2}>
+                                    Member of the {plant.speciesFamily} Family
+                                </Text>
+                                <Text style={styles.text_2}>
+                                    Collected on{" "}
+                                    {formatDate(plant.dateCollected)}
+                                </Text>
+                            </View>
                         </View>
                     </View>
-                </View>
 
-                <View style={styles.map_container}>
-                    <View style={styles.map_template}>
-                        <MapView
-                            style={styles.map_view}
-                            // provider={PROVIDER_GOOGLE}
-                            pitchEnabled={false}
-                            rotateEnabled={false}
-                            scrollEnabled={false}
-                            zoomEnabled={false}
-                            region={{
-                                latitude: initialLatitude,
-                                longitude: initialLongitude,
-                                latitudeDelta: 0.01,
-                                longitudeDelta: 0.02,
-                            }}
-                        >
-                            <Marker
-                                coordinate={{
-                                    longitude: parseGeoTagLongitude(plant),
-                                    latitude: parseGeoTagLatitude(plant),
+                    <View style={styles.map_container}>
+                        <View style={styles.map_template}>
+                            <MapView
+                                style={styles.map_view}
+                                // provider={PROVIDER_GOOGLE}
+                                pitchEnabled={false}
+                                rotateEnabled={false}
+                                scrollEnabled={false}
+                                zoomEnabled={false}
+                                region={{
+                                    latitude: initialLatitude,
+                                    longitude: initialLongitude,
+                                    latitudeDelta: 0.01,
+                                    longitudeDelta: 0.02,
                                 }}
-                                image={
-                                    flowerIcons[
-                                        Math.floor(
-                                            Math.random() * flowerIcons.length
-                                        )
-                                    ]
-                                }
-                            ></Marker>
-                        </MapView>
+                            >
+                                <Marker
+                                    coordinate={{
+                                        longitude: parseGeoTagLongitude(plant),
+                                        latitude: parseGeoTagLatitude(plant),
+                                    }}
+                                    // image={
+                                    //     flowerIcons[
+                                    //         Math.floor(
+                                    //             Math.random() * flowerIcons.length
+                                    //         )
+                                    //     ]
+                                    // }
+                                >
+                                    <Image
+                                        source={
+                                            plantIcons[
+                                                Math.floor(
+                                                    Math.random() *
+                                                        plantIcons.length
+                                                )
+                                            ]
+                                        }
+                                        style={{ width: 50, height: 50 }}
+                                        resizeMode="center"
+                                        resizeMethod="resize"
+                                    />
+                                </Marker>
+                            </MapView>
+                        </View>
                     </View>
-                </View>
-            </ScrollView>
-        </View>
+                </ScrollView>
+            </View>
+        </ImageBackground>
     );
 }
 
@@ -100,7 +125,6 @@ const styles = StyleSheet.create({
     page_container: {
         flex: 1,
         flexDirection: "row",
-        backgroundColor: "#CCFFCC",
         alignItems: "center",
         justifyContent: "center",
     },
@@ -180,5 +204,14 @@ const styles = StyleSheet.create({
         width: "100%",
         height: 128,
         borderRadius: 10,
+    },
+    imageBackground: {
+        flex: 1,
+        width: "100%",
+        height: "100%",
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
 });

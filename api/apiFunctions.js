@@ -1,11 +1,13 @@
 import axios from "axios";
 const FormData = require("form-data");
 
-const { API_KEY } = require("./.plant_net.js");
-console.log(API_KEY)
-
 const plantNetApi = axios.create({
   baseURL: "https://my-api.plantnet.org",
+});
+const { API_KEY } = require("../.plant_net.js");
+
+const floraFinderApi = axios.create({
+  baseURL: "http://16.170.228.135:3000/api",
 });
 
 export const postPhotoToPlantNet = (imageUri) => {
@@ -28,13 +30,9 @@ export const postPhotoToPlantNet = (imageUri) => {
       return response.data.results[0];
     })
     .catch((error) => {
-      console.log(error.response);
+      handleApiError(error, "postPhotoToPlantNet");
     });
 };
-
-const floraFinderApi = axios.create({
-  baseURL: "http://16.170.228.135:3000/api",
-});
 
 export const postNewUser = (newUser) => {
   console.log("postNewUser API");
@@ -44,7 +42,7 @@ export const postNewUser = (newUser) => {
       return response.data.user;
     })
     .catch((error) => {
-      console.log(error, "ERROR in API");
+      handleApiError(error, "postNewUser");
     });
 };
 
@@ -53,22 +51,23 @@ export const postNewPlantToCollection = (username, newCollection) => {
   return floraFinderApi
     .post(`/users/${username}/collections`, newCollection)
     .then((response) => {
-      console.log(response.data.collection, "NEW COLLECTION RETURNED in API");
       return response.data.collection;
     })
     .catch((error) => {
-      console.log(error, "ERROR in API");
+      handleApiError(error, "postNewPlantToCollection");
     });
 };
 
 export const getUserByUsername = (username) => {
-  console.log("getUser API")
-  return floraFinderApi.get(`/users/${username}`).then((response) => {
-    return response.data.user
-  })
-  .catch((error) => {
-    console.log(error, "ERROR fetching user");
-  })
+  console.log("getUser API");
+  return floraFinderApi
+    .get(`/users/${username}`)
+    .then((response) => {
+      return response.data.user;
+    })
+    .catch((error) => {
+      handleApiError(error, "getUserByUsername");
+    });
 };
 
 export const getCollectedPlantsList = (username) => {
@@ -76,20 +75,22 @@ export const getCollectedPlantsList = (username) => {
   return floraFinderApi
     .get(`/users/${username}/collections`)
     .then((response) => {
-      console.log(response.data.collections, "GET Collection in API");
       return response.data.collections;
+    })
+    .catch((error) => {
+      handleApiError(error, "getCollectedPlantsList");
     });
 };
 
 export const getUsers = () => {
+  console.log("getUsers API");
   return floraFinderApi
     .get("/users")
     .then((response) => {
-      console.log("Fetched Users:", response.data.users);
       return response.data.users;
     })
     .catch((error) => {
-      console.log(error, "ERROR fetching users");
+      handleApiError(error, "getUsers");
     });
 };
 
@@ -98,23 +99,21 @@ export const postLogin = (credentials) => {
   return floraFinderApi
     .post(`/users/login`, credentials)
     .then((response) => {
-      console.log("Posted User:", response.data.user);
       return response.data.user;
     })
     .catch((error) => {
-      console.log(error, "ERROR posting user");
+      handleApiError(error, "postLogin");
     });
 };
 
 export const deleteUser = (username) => {
+  console.log("deleteUser API");
   return floraFinderApi
     .delete(`/users/${username}`)
     .then((response) => {
-      console.log("Deleted User:", response.data);
       return response.data;
     })
     .catch((error) => {
-      console.log(error, "ERROR deleting user");
-      throw error;
+      handleApiError(error, "deleteUser");
     });
 };

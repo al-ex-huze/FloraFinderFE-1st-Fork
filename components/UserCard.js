@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Image } from "react-native";
-import { getUserByUsername, getCollectedPlantsList } from "../api";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  Image,
+  ImageBackground,
+} from "react-native";
+import { getUserByUsername, getUsers } from "../api/apiFunctions";
+
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
 const UserCard = ({ route }) => {
   const { username } = route.params;
@@ -9,11 +18,13 @@ const UserCard = ({ route }) => {
   const [score, setScore] = useState(0);
 
   useEffect(() => {
-    Promise.all([getUserByUsername(username), getCollectedPlantsList(username)])
-      .then(([fetchedUser, collectedPlants]) => {
+    Promise.all([getUserByUsername(username), getUsers()])
+      .then(([fetchedUser, allUsers]) => {
         setUser(fetchedUser);
-        const calculatedScore = calculateScore(collectedPlants);
-        setScore(calculatedScore);
+        const userWithScore = allUsers.find((u) => u.username === username);
+        if (userWithScore) {
+          setScore(userWithScore.total_score);
+        }
         setIsLoading(false);
       })
       .catch((error) => {
@@ -22,55 +33,81 @@ const UserCard = ({ route }) => {
       });
   }, [username]);
 
-  const calculateScore = (plants) => {
-    return plants.reduce((totalScore, plant) => {
-      let plantScore = 1;
-      return totalScore + plantScore;
-    }, 0);
-  };
-
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#006400" />
-        <Text>Loading...</Text>
-      </View>
+      <ImageBackground
+        source={backgroundLeaf}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#006400" />
+          <Text>Loading...</Text>
+        </View>
+      </ImageBackground>
     );
   }
 
   if (!user) {
     return (
-      <View style={styles.container}>
-        <Text style={styles.noDataText}>This user data is not available</Text>
-      </View>
+      <ImageBackground
+        source={backgroundLeaf}
+        style={styles.background}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+        <View style={styles.container}>
+          <Text style={styles.noDataText}>This user data is not available</Text>
+        </View>
+      </ImageBackground>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.avatarContainer}>
-          <Image
-            source={{ uri: user.avatar || "https://via.placeholder.com/150" }}
-            style={styles.avatar}
-          />
-        </View>
-        <View style={styles.infoContainer}>
-          <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.username}>@{user.username}</Text>
-          <Text style={styles.email}>{user.email}</Text>
-          <Text style={styles.score}>Total Score: {score}</Text>
+    <ImageBackground
+      source={backgroundLeaf}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      <View style={styles.overlay} />
+      <View style={styles.container}>
+        <View style={styles.card}>
+          <View style={styles.avatarContainer}>
+            <Image
+              source={{ uri: user.avatar || "https://via.placeholder.com/150" }}
+              style={styles.avatar}
+            />
+          </View>
+          <View style={styles.infoContainer}>
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.username}>@{user.username}</Text>
+            <Text style={styles.email}>{user.email}</Text>
+            <Text style={styles.score}>Total Score: {score}</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+  },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(255, 255, 255, 0.8)",
+  },
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   card: {
     flexDirection: "row",
@@ -123,5 +160,11 @@ const styles = StyleSheet.create({
     color: "#4CAF50",
     fontWeight: "bold",
   },
+  noDataText: {
+    textAlign: "center",
+    fontSize: 18,
+    color: "#006400",
+  },
 });
+
 export default UserCard;

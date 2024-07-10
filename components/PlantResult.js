@@ -8,7 +8,9 @@ import {
     TouchableOpacity,
     ScrollView,
     Dimensions,
+    ImageBackground,
 } from "react-native";
+
 import { Emitter } from "react-native-particles";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -21,7 +23,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/Contexts";
 
-import { postNewPlantToCollection } from "../api";
+import { postNewPlantToCollection } from "../api/apiFunctions";
 import * as Location from "expo-location";
 
 import { formatName } from "../utils/formatName";
@@ -29,6 +31,8 @@ import { formatName } from "../utils/formatName";
 const branchSticker = require("../assets/familyIcons/cactus_256.png");
 const cactusSticker = require("../assets/familyIcons/cactus_256.png");
 const treeSticker = require("../assets/familyIcons/cactus_256.png");
+const backgroundLeaf = require("../assets/backgroundtest.jpg");
+
 
 export default function PlantResult({ route, navigation }) {
     const { plant } = route.params;
@@ -88,12 +92,15 @@ export default function PlantResult({ route, navigation }) {
     };
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scroll_view_container}>
+        <ImageBackground source={backgroundLeaf}
+        style={styles.imageBackground}
+        resizeMode="cover">
+            <View style={styles.overlay} />
+            <ScrollView style={styles.scroll_view_container} contentContainerStyle={styles.scrollViewContent}>
                 <View style={styles.heading_container}>
-                    <Text style={styles.heading_1}>You found a</Text>
+                    <Text style={styles.heading_1}>{user.username}, you've found a</Text>
                     <Text style={styles.heading_2}>
-                        {formatName(plant.species.commonNames[0])}!
+                        "{formatName(plant.species.commonNames[0])}"!
                     </Text>
                 </View>
                 <View style={styles.result_card}>
@@ -205,7 +212,7 @@ export default function PlantResult({ route, navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Home Page"
-                    onPress={() => navigation.navigate("HomePage")}
+                    onPress={() => navigation.navigate("Home")}
                 >
                     <Text style={styles.button_text}>
                         Back To Home{" "}
@@ -213,35 +220,46 @@ export default function PlantResult({ route, navigation }) {
                     </Text>
                 </Pressable>
             </ScrollView>
-        </View>
+        </ImageBackground>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        alignSelf: "stretch",
+    imageBackground: {
         flex: 1,
-        backgroundColor: "#CCFFCC",
-        alignItems: "center",
-        justifyContent: "center",
+        width: "100%",
+        height: "100%",
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
     },
     scroll_view_container: {
         flex: 1,
-        width: "90%",
+    },
+    scrollViewContent: {
+        alignItems: "center",
+        paddingBottom: 20,
     },
     heading_container: {
-        flex: 1,
+        marginTop: 20,
+        alignItems: "center",
     },
     heading_1: {
-        fontSize: 20,
-        color: "#006400",
-        textAlign: "center",
-    },
-    heading_2: {
-        fontSize: 44,
+        marginTop: 20,
         fontWeight: "bold",
         color: "#006400",
         textAlign: "center",
+        fontFamily: 'Inter_900Black',
+        fontSize: 25,
+    },
+    heading_2: {
+        marginBottom: 10,
+        fontWeight: "bold",
+        color: "#006400",
+        textAlign: "center",
+        fontFamily: 'Inter_900Black',
+        fontSize: 25,
     },
     result_card: {
         backgroundColor: "white",
@@ -250,23 +268,29 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 3,
         margin: 8,
+        width: '90%',
+        
     },
     scientifc_container: {
         flexDirection: "row",
+        marginBottom: 10,
     },
     family_container: {
         flexDirection: "row",
+        marginBottom:10,
     },
     score_container: {
         flexDirection: "row",
+        marginBottom: 10,
     },
     label_container: {
         flex: 1,
     },
     label: {
-        fontSize: 16,
+        fontSize: 15,
         fontWeight: "bold",
         alignSelf: "flex-start",
+        color: "#006400",
     },
     value_container: {
         flex: 1,
@@ -274,7 +298,7 @@ const styles = StyleSheet.create({
     value: {
         flexWrap: "wrap",
         textAlign: "right",
-        fontSize: 16,
+        fontSize: 15,
         alignSelf: "flex-end",
     },
     button_container: {
@@ -287,6 +311,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        marginVertical: '20',
     },
     emitter: {
         zIndex: 0,
@@ -322,13 +347,13 @@ const styles = StyleSheet.create({
     text_score_good: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "green",
+        color: "#006400",
         alignSelf: "flex-end",
     },
     text_score_bad: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "red",
+        color: "#006400",
         alignSelf: "flex-end",
     },
 });
