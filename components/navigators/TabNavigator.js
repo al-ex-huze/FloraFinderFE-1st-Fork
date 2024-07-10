@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faHome, faLeaf } from "@fortawesome/free-solid-svg-icons";
+import { faHome, faCamera, faLeaf } from "@fortawesome/free-solid-svg-icons";
 
 import LoginRegister from "../LoginRegister";
 import Login from "../Login";
@@ -40,6 +40,14 @@ export function TabNavigator() {
             tabBarIcon: () => <FontAwesomeIcon icon={faHome} color={"green"} />,
           }}
         />
+          <Tab.Screen
+          name="CollectTab"
+          component={CollectNowStack}
+          options={{
+            tabBarLabel: "Collect Now",
+            tabBarIcon: () => <FontAwesomeIcon icon={faCamera} color={"green"} />,
+          }}
+        />
         <Tab.Screen
           name="CollectedListTab"
           component={CollectedListStack}
@@ -52,8 +60,8 @@ export function TabNavigator() {
     );
   } else {
     return (
-      <Stack.Navigator initialRouteName="LoginRegister">
-        <Stack.Screen name="LoginRegister" component={LoginRegister} />
+      <Stack.Navigator initialRouteName="Flora Finder">
+        <Stack.Screen name="Flora Finder" component={LoginRegister} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
@@ -62,29 +70,43 @@ export function TabNavigator() {
 }
 
 const HomeStack = () => (
-  <Stack.Navigator initialRouteName="HomePage">
-    <Stack.Screen name="HomePage" component={HomePage} />
-    <Stack.Screen name="CollectedList" component={CollectedList} />
-    <Stack.Screen name="CollectedMap" component={CollectedMap} />
-    <Stack.Screen name="CollectNow" component={CollectNow} />
-    <Stack.Screen name="LeagueTable" component={LeagueTable} />
-    <Stack.Screen name="PlantResult" component={PlantResult} />
-    <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
-    <Stack.Screen name="UserCard" component={UserCard} />
-    <Stack.Screen name="ProfilePage" component={ProfilePage} />
+  <Stack.Navigator initialRouteName="Home">
+    <Stack.Screen name="Home" component={HomePage} />
+    <Stack.Screen name="Collected Plants" component={CollectedList} />
+    <Stack.Screen name="Collected Map" component={CollectedMap} />
+    <Stack.Screen name="Collect Now" component={CollectNow} />
+    <Stack.Screen name="League Table" component={LeagueTable} />
+    <Stack.Screen name="Found Plant" component={PlantResult} />
+    <Stack.Screen name="Single Plant" component={CollectedSingleCard} />
+    <Stack.Screen name="User" component={UserCard} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
+  </Stack.Navigator>
+);
+
+const CollectNowStack = () => (
+  <Stack.Navigator initialRouteName="Collect Now">
+    <Stack.Screen name="Home" component={HomePage} />
+    <Stack.Screen name="Collected Plants" component={CollectedList} />
+    <Stack.Screen name="Collected Map" component={CollectedMap} />
+    <Stack.Screen name="Collect Now" component={CollectNow} />
+    <Stack.Screen name="League Table" component={LeagueTable} />
+    <Stack.Screen name="Found Plant" component={PlantResult} />
+    <Stack.Screen name="Single Plant" component={CollectedSingleCard} />
+    <Stack.Screen name="User" component={UserCard} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
   </Stack.Navigator>
 );
 
 const CollectedListStack = () => (
-  <Stack.Navigator initialRouteName="CollectedList">
-    <Stack.Screen name="CollectedList" component={CollectedList} />
-    <Stack.Screen name="CollectedMap" component={CollectedMap} />
-    <Stack.Screen name="CollectNow" component={CollectNow} />
-    <Stack.Screen name="LeagueTable" component={LeagueTable} />
-    <Stack.Screen name="HomePage" component={HomePage} />
-    <Stack.Screen name="PlantResult" component={PlantResult} />
-    <Stack.Screen name="UserCard" component={UserCard} />
-    <Stack.Screen name="CollectedSingleCard" component={CollectedSingleCard} />
-    <Stack.Screen name="ProfilePage" component={ProfilePage} />
+  <Stack.Navigator initialRouteName="Collected Plants">
+    <Stack.Screen name="Home" component={HomePage} />
+    <Stack.Screen name="Collected Plants" component={CollectedList} />
+    <Stack.Screen name="Collected Map" component={CollectedMap} />
+    <Stack.Screen name="Collect Now" component={CollectNow} />
+    <Stack.Screen name="League Table" component={LeagueTable} />
+    <Stack.Screen name="Found Plant" component={PlantResult} />
+    <Stack.Screen name="Single Plant" component={CollectedSingleCard} />
+    <Stack.Screen name="User" component={UserCard} />
+    <Stack.Screen name="Profile" component={ProfilePage} />
   </Stack.Navigator>
 );

@@ -212,7 +212,7 @@ export default function PlantResult({ route, navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Home Page"
-                    onPress={() => navigation.navigate("HomePage")}
+                    onPress={() => navigation.navigate("Home")}
                 >
                     <Text style={styles.button_text}>
                         Back To Home{" "}
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     label: {
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: "bold",
         alignSelf: "flex-start",
         color: "#006400",
@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
     value: {
         flexWrap: "wrap",
         textAlign: "right",
-        fontSize: 20,
+        fontSize: 15,
         alignSelf: "flex-end",
     },
     button_container: {
