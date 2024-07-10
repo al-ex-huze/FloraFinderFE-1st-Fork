@@ -8,12 +8,14 @@ import {
     parseGeoTagLongitude,
 } from "../../utils/parseGeoTag";
 
-const flowerIconsArr = require("../../assets/flowericons/flowerIcons.js");
+// const flowerIconsArr = require("../../assets/flowerIcons/flowerIcons.js");
+const plantIconsArr = require("../../assets/plantIcons/plantIcons.js");
 
 export default function CollectedSingleCard({ route }) {
     const { plant } = route.params;
 
-    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    // const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    const [plantIcons, setplantIcons] = useState(plantIconsArr);
     const [initialLatitude, setInitialLatitude] = useState();
     const [initialLongitude, setInitialLongitude] = useState();
 
@@ -80,14 +82,28 @@ export default function CollectedSingleCard({ route }) {
                                     longitude: parseGeoTagLongitude(plant),
                                     latitude: parseGeoTagLatitude(plant),
                                 }}
-                                image={
-                                    flowerIcons[
-                                        Math.floor(
-                                            Math.random() * flowerIcons.length
-                                        )
-                                    ]
-                                }
-                            ></Marker>
+                                // image={
+                                //     flowerIcons[
+                                //         Math.floor(
+                                //             Math.random() * flowerIcons.length
+                                //         )
+                                //     ]
+                                // }
+                            >
+                                <Image
+                                    source={
+                                        plantIcons[
+                                            Math.floor(
+                                                Math.random() *
+                                                    plantIcons.length
+                                            )
+                                        ]
+                                    }
+                                    style={{ width: 50, height: 50 }}
+                                    resizeMode="center"
+                                    resizeMethod="resize"
+                                />
+                            </Marker>
                         </MapView>
                     </View>
                 </View>

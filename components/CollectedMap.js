@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator, Image } from "react-native";
 import MapView, {
     Marker,
     Callout,
@@ -17,7 +17,8 @@ import {
     parseGeoTagLongitude,
 } from "../utils/parseGeoTag";
 
-const flowerIconsArr = require("../assets/flowericons/flowerIcons.js"); // moved all to separate file in assets to tidy up
+// const flowerIconsArr = require("../assets/flowerIcons/flowerIcons.js");
+const plantIconsArr = require("../assets/plantIcons/plantIcons.js");
 
 export default function CollectedMap({ navigation }) {
     // const [heatMapPoints, setHeatMapPoints] = useState([]);
@@ -27,7 +28,8 @@ export default function CollectedMap({ navigation }) {
     const [isLocating, setIsLocating] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const [location, setLocation] = useState(null);
-    const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    // const [flowerIcons, setFlowerIcons] = useState(flowerIconsArr);
+    const [plantIcons, setplantIcons] = useState(plantIconsArr);
     const [plantsArr, setPlantsArr] = useState([]);
 
     useEffect(() => {
@@ -98,12 +100,19 @@ export default function CollectedMap({ navigation }) {
                             longitude: parseGeoTagLongitude(plant),
                             latitude: parseGeoTagLatitude(plant),
                         }}
-                        image={
-                            flowerIcons[
-                                Math.floor(Math.random() * flowerIcons.length)
-                            ]
-                        }
                     >
+                        <Image
+                            source={
+                                plantIcons[
+                                    Math.floor(
+                                        Math.random() * plantIcons.length
+                                    )
+                                ]
+                            }
+                            style={{ width: 50, height: 50 }}
+                            resizeMode="center"
+                            resizeMethod="resize"
+                        />
                         <Callout
                             tooltip={true}
                             onPress={() => {
@@ -211,5 +220,9 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
+    },
+    icon: {
+        width: 25,
+        aspectRatio: 1,
     },
 });
