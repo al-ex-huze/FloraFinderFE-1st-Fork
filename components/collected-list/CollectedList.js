@@ -131,10 +131,8 @@ export default function CollectedList({ navigation }) {
             <View style={styles.overlay}></View>
             <View style={styles.container}>
                 <ScrollView style={styles.scrollView}>
-
                     <View style={styles.query_container}>
                         <View style={styles.query_button_container}>
-
                             <DropDownPicker
                                 style={styles.dropdown}
                                 open={openFilter}
@@ -164,7 +162,6 @@ export default function CollectedList({ navigation }) {
                                 setOpen={setOpenFilter}
                             />
                         </View>
-
                         <View style={styles.query_button_container}>
                             <DropDownPicker
                                 style={styles.dropdown}
@@ -194,7 +191,6 @@ export default function CollectedList({ navigation }) {
                                 setOpen={setOpenSort}
                             />
                         </View>
-
                         <View style={styles.query_button_container}>
                             <Pressable
                                 style={styles.reset_button}
@@ -204,9 +200,7 @@ export default function CollectedList({ navigation }) {
                                 <Text style={styles.button_text}>Reset</Text>
                             </Pressable>
                         </View>
-
                     </View>
-
                     {plantsArr.map((plant, index) => (
                         <Pressable
                             key={index}
@@ -252,16 +246,19 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(255, 255, 255, 0.8)",
     },
     query_container: {
+        zIndex: 2000,
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
         marginHorizontal: 10,
     },
     query_button_container: {
-      flex: 1,
-      margin: 1,
+        zIndex: 2000,
+        flex: 1,
+        margin: 1,
     },
     dropdown: {
+        zIndex: 2000,
         flex: 1,
         backgroundColor: "#006400",
         alignItems: "center",
@@ -270,6 +267,7 @@ const styles = StyleSheet.create({
         borderWidth: 0,
     },
     reset_button: {
+        zIndex: 2000,
         flex: 1,
         backgroundColor: "#006400",
         alignItems: "flex-start",
@@ -285,6 +283,6 @@ const styles = StyleSheet.create({
         backgroundColor: "green",
     },
     listItemLabelStyle: {
-        color: "white",        
+        color: "white",
     },
 });
