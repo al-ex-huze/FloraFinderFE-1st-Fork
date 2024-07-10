@@ -8,7 +8,7 @@ export const timeAgo = (utcStr) => {
     //     : (timeNow = new Date().getTime());
     const postedTime = new Date(utcStr).getTime();
 
-    const msecsAgo = timeNow - postedTime;
+    const msecsAgo = timeNow - postedTime - 3600000;
     const secsAgo = msecsAgo / 1000;
     const minsAgo = secsAgo / 60;
     const hoursAgo = minsAgo / 60;
