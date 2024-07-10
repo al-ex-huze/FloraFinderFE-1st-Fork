@@ -39,7 +39,7 @@ export default function LeagueTable() {
   const tableHead = ["Avatar", "Username", "Score", "Rank"];
 
   const handleUsernamePress = (username) => {
-    navigation.navigate("UserCard", { username });
+    navigation.navigate("User", { username });
   };
 
   if (isLoading) {

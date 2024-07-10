@@ -207,7 +207,7 @@ export default function CollectedList({ navigation }) {
                             style={styles.card}
                             title="CollectedSingleCard"
                             onPress={() => {
-                                navigation.navigate("CollectedSingleCard", {
+                                navigation.navigate("Single Plant", {
                                     plant: plant,
                                 });
                             }}

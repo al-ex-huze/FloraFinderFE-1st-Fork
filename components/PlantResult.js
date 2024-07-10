@@ -212,7 +212,7 @@ export default function PlantResult({ route, navigation }) {
                 <Pressable
                     style={styles.button}
                     title="Home Page"
-                    onPress={() => navigation.navigate("HomePage")}
+                    onPress={() => navigation.navigate("Home")}
                 >
                     <Text style={styles.button_text}>
                         Back To Home{" "}

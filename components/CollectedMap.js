@@ -116,7 +116,7 @@ export default function CollectedMap({ navigation }) {
                         <Callout
                             tooltip={true}
                             onPress={() => {
-                                navigation.navigate("CollectedSingleCard", {
+                                navigation.navigate("Single Plant", {
                                     plant: plant,
                                 });
                             }}

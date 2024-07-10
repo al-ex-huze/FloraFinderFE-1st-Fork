@@ -16,7 +16,7 @@ import { postLogin } from "../api/apiFunctions";
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 const logo = require("../assets/FloraFinderLogo.png");
 
-export default function Login({ navigation }) {
+export default function Login() {
   const { user, setUser } = useContext(UserContext);
   const {
     control,
@@ -110,10 +110,10 @@ export default function Login({ navigation }) {
 
         <Pressable
           style={styles.button}
-          title="Log In"
+          title="Login"
           onPress={handleSubmit(onSubmit)}
         >
-          <Text style={styles.buttonText}>Log In</Text>
+          <Text style={styles.buttonText}>Login</Text>
         </Pressable>
       </View>
     </ImageBackground>

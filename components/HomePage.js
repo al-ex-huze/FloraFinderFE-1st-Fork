@@ -21,31 +21,31 @@ export default function HomePage({ navigation }) {
         <Text style={styles.heading}>Home  <FontAwesomeIcon icon={faHome} color={"#006400"} size={35}/></Text>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("LeagueTable")}
+          onPress={() => navigation.navigate("League Table")}
         >
           <Text style={styles.buttonText}>League Table   <FontAwesomeIcon icon={faBars} color={"white"}/></Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("CollectedList")}
+          onPress={() => navigation.navigate("Collected Plants")}
         >
           <Text style={styles.buttonText}>Collected List   <FontAwesomeIcon icon={faLeaf} color={"white"}/></Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("CollectedMap")}
+          onPress={() => navigation.navigate("Collected Map")}
         >
           <Text style={styles.buttonText}>Collected Map  <FontAwesomeIcon icon={faMapMarker} color={"white"}/></Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("CollectNow")}
+          onPress={() => navigation.navigate("Collect Now")}
         >
           <Text style={styles.buttonText}>Collect Now   <FontAwesomeIcon icon={faCamera} color={"white"}/></Text>
         </Pressable>
         <Pressable
           style={styles.button}
-          onPress={() => navigation.navigate("ProfilePage")}
+          onPress={() => navigation.navigate("Profile")}
         >
           <Text style={styles.buttonText}>My Profile  <FontAwesomeIcon icon={faUser} color={"white"}/></Text>
         </Pressable>

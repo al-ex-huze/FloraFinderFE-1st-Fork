@@ -69,7 +69,7 @@ export default function CollectNow({ navigation }) {
         const firstMatch = await postPhotoToPlantNet(imageUri)
             .then((firstMatch) => {
                 if (firstMatch.species.commonNames[0] !== undefined) {
-                    navigation.navigate("PlantResult", { plant: firstMatch });
+                    navigation.navigate("Found Plant", { plant: firstMatch });
                     setImageUri("");
                     setIsLoading(false);
                 }
