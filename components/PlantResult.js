@@ -23,7 +23,7 @@ import {
 import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/Contexts";
 
-import { postNewPlantToCollection } from "../api";
+import { postNewPlantToCollection } from "../api/apiFunctions";
 import * as Location from "expo-location";
 
 import { formatName } from "../utils/formatName";

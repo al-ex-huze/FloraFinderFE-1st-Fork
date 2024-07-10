@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { useRef, useState } from "react";
 import { CameraView, useCameraPermissions } from "expo-camera";
-import { postPhotoToPlantNet } from "../api";
+import { postPhotoToPlantNet } from "../api/apiFunctions";
 import * as ImagePicker from "expo-image-picker";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {

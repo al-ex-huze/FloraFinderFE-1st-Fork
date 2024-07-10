@@ -11,7 +11,7 @@ import { WebView } from "react-native-webview";
 import * as Location from "expo-location";
 
 import { UserContext } from "../contexts/Contexts";
-import { getCollectedPlantsList } from "../api";
+import { getCollectedPlantsList } from "../api/apiFunctions.js";
 import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,

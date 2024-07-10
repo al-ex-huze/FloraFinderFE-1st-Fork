@@ -13,7 +13,7 @@ import { UserContext } from "../../contexts/Contexts";
 import DropDownPicker from "react-native-dropdown-picker";
 import CollectedListCard from "./CollectedListCard";
 
-import { getCollectedPlantsList } from "../../api";
+import { getCollectedPlantsList } from "../../api/apiFunctions";
 const backgroundLeaf = require("../../assets/backgroundtest.jpg");
 
 export default function CollectedList({ navigation }) {

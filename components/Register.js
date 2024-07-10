@@ -3,7 +3,7 @@ import * as React from 'react'
 import { TextInput, SafeAreaView, StyleSheet, Pressable, Text, View, Button, Alert, Image, ScrollView, ImageBackground} from "react-native";
 import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { postNewUser } from '../api';
+import { postNewUser } from '../api/apiFunctions';
 
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 const logo = require("../assets/FloraFinderLogo.png");

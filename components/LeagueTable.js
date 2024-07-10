@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getUsers } from "../api";
+import { getUsers } from "../api/apiFunctions";
 import {
   StyleSheet,
   View,
