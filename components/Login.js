@@ -12,7 +12,7 @@ import {
 import { useContext } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { UserContext } from "../contexts/Contexts";
-import { postLogin } from "../api";
+import { postLogin } from "../api/apiFunctions";
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 const logo = require("../assets/FloraFinderLogo.png");
 

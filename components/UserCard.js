@@ -7,7 +7,7 @@ import {
   Image,
   ImageBackground,
 } from "react-native";
-import { getUserByUsername, getUsers } from "../api";
+import { getUserByUsername, getUsers } from "../api/apiFunctions";
 
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
