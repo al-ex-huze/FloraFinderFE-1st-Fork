@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, Pressable, Text, View, ImageBackground } from "react-native";
+import { StyleSheet, Pressable, Text, View, ImageBackground, Image } from "react-native";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faLeaf, faBars, faMapMarker, faCamera, faCircleDot, faUser } from '@fortawesome/free-solid-svg-icons';
+const logo = require("../assets/FloraFinderLogo.png");
 
 const backgroundLeaf = require("../assets/backgroundtest.jpg");
 
@@ -14,6 +15,9 @@ export default function HomePage({ navigation }) {
     >
       <View style={styles.overlay}></View>
       <View style={styles.container}>
+      <View style={styles.logoContainer}>
+              <Image source={logo} style={styles.logo} />
+            </View>
         <Text style={styles.heading}>Home  <FontAwesomeIcon icon={faHome} color={"#006400"} size={35}/></Text>
         <Pressable
           style={styles.button}
@@ -89,9 +93,23 @@ const styles = StyleSheet.create({
   },
   heading: {
     color: "#006400",
-    marginBottom: 10,
+    marginTop: 10,
     fontFamily: 'Inter_900Black', 
     fontSize: 25,
     
+},
+logoContainer: {
+  position: 'absolute',
+  top: -75,
+  left: 0,
+  right: 0,
+  alignItems: 'center',
+  marginBottom: 0,
+  marginTop: 0,
+  
+},
+logo: {
+  height: 250,
+  resizeMode: 'contain',
 },
 });
