@@ -4,7 +4,7 @@ const FormData = require("form-data");
 const plantNetApi = axios.create({
   baseURL: "https://my-api.plantnet.org",
 });
-const { API_KEY } = require("../.plant_net.js");
+const API_KEY = "2b10TmBct7Bagi6rhgRXCuwX";
 
 const floraFinderApi = axios.create({
   baseURL: "http://16.170.228.135:3000/api",
