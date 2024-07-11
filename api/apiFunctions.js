@@ -117,3 +117,14 @@ export const deleteUser = (username) => {
       handleApiError(error, "deleteUser");
     });
 };
+
+export const getCollections = () => {
+  return floraFinderApi
+    .get("/collections")
+    .then((response) => {
+      return response.data.collections;
+    })
+    .catch((error) => {
+      handleApiError(error, "getCollections");
+    });
+}
