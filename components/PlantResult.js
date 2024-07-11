@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     text_score_bad: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "#006400",
+        color: "red",
         alignSelf: "flex-end",
     },
 });
