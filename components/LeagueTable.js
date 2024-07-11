@@ -81,60 +81,61 @@ export default function LeagueTable() {
     >
       <View style={styles.overlay} />
       <View style={styles.container}>
-        <Text style={styles.heading}>League Table</Text>
-        <View style={styles.tableContainer}>
-          <View style={styles.table}>
-            <View style={styles.tableHeader}>
-              {tableHead.map((header, index) => (
-                <View
-                  key={index}
-                  style={[styles.headerCell, styles[`column${header}`]]}
-                >
-                  <Text style={styles.headerText}>{header}</Text>
-                </View>
-              ))}
-            </View>
-            <ScrollView>
-              {users.map((user, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.tableRow,
-                    index % 2 === 0 ? styles.evenRow : styles.oddRow,
-                  ]}
-                >
-                  <View style={[styles.cell, styles.columnAvatar]}>
-                    <View style={styles.avatarContainer}>
-                      <Image
-                        source={{
-                          uri: user.avatar || "https://via.placeholder.com/100",
-                        }}
-                        style={styles.avatar}
-                      />
+        <ScrollView style={styles.scrollView}>
+          <Text style={styles.heading}>League Table</Text>
+          <View style={styles.tableContainer}>
+            <View style={styles.table}>
+              <View style={styles.tableHeader}>
+                {tableHead.map((header, index) => (
+                  <View
+                    key={index}
+                    style={[styles.headerCell, styles[`column${header}`]]}
+                  >
+                    <Text style={styles.headerText}>{header}</Text>
+                  </View>
+                ))}
+              </View>
+                {users.map((user, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.tableRow,
+                      index % 2 === 0 ? styles.evenRow : styles.oddRow,
+                    ]}
+                  >
+                    <View style={[styles.cell, styles.columnAvatar]}>
+                      <View style={styles.avatarContainer}>
+                        <Image
+                          source={{
+                            uri:
+                              user.avatar || "https://via.placeholder.com/100",
+                          }}
+                          style={styles.avatar}
+                        />
+                      </View>
+                    </View>
+                    <TouchableOpacity
+                      style={[styles.cell, styles.columnUsername]}
+                      onPress={() => handleUsernamePress(user.username)}
+                    >
+                      <Text
+                        style={[styles.cellText, styles.linkText]}
+                        numberOfLines={1}
+                      >
+                        {user.username}
+                      </Text>
+                    </TouchableOpacity>
+                    <View style={[styles.cell, styles.columnScore]}>
+                      <Text style={styles.cellText}>{user.total_score}</Text>
+                    </View>
+                    <View style={[styles.cell, styles.columnRank]}>
+                      <Text style={styles.cellText}>{index + 1}</Text>
                     </View>
                   </View>
-                  <TouchableOpacity
-                    style={[styles.cell, styles.columnUsername]}
-                    onPress={() => handleUsernamePress(user.username)}
-                  >
-                    <Text
-                      style={[styles.cellText, styles.linkText]}
-                      numberOfLines={1}
-                    >
-                      {user.username}
-                    </Text>
-                  </TouchableOpacity>
-                  <View style={[styles.cell, styles.columnScore]}>
-                    <Text style={styles.cellText}>{user.total_score}</Text>
-                  </View>
-                  <View style={[styles.cell, styles.columnRank]}>
-                    <Text style={styles.cellText}>{index + 1}</Text>
-                  </View>
-                </View>
-              ))}
-            </ScrollView>
+                ))}
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </ImageBackground>
   );
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 30,
   },
+  
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
