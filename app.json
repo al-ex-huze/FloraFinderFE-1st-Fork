@@ -18,7 +18,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/FloraFinderLogo.png",
         "backgroundColor": "white"
-      }
+      },
+      "package": "com.alexhuze.FloraFinderDevB2"
     },
     "web": {
       "favicon": "./assets/flowerIcon7.png"
@@ -26,6 +27,14 @@
     "plugins": [
       "expo-router",
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "400848b7-3253-428b-ad08-5cd05a6d3292"
+      }
+    }
   }
 }

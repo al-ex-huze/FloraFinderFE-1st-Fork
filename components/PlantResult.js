@@ -100,7 +100,7 @@ export default function PlantResult({ route, navigation }) {
                 <View style={styles.heading_container}>
                     <Text style={styles.heading_1}>{user.username}, you've found a</Text>
                     <Text style={styles.heading_2}>
-                        "{formatName(plant.species.commonNames[0])}"!
+                        {formatName(plant.species.commonNames[0])}!
                     </Text>
                 </View>
                 <View style={styles.result_card}>
@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
         color: "#006400",
         textAlign: "center",
         fontFamily: 'Inter_900Black',
-        fontSize: 25,
+        fontSize: 36,
     },
     result_card: {
         backgroundColor: "white",
