@@ -27,24 +27,43 @@ export default function CollectedList({ navigation }) {
   const [orderBy, setOrderBy] = useState("");
   const username = user.username;
 
+  // Fetch all species families on component mount
   useEffect(() => {
-    getCollectedPlantsList(username, {
-      speciesFamily: selectedSpeciesFamily,
-      sortBy,
-      orderBy,
-    })
-      .then((fetchedPlants) => {
-        setIsLoading(false);
-        setPlants(fetchedPlants);
+    const fetchAllSpeciesFamilies = async () => {
+      try {
+        const fetchedPlants = await getCollectedPlantsList(username, {});
         const uniqueSpeciesFamilies = [
           ...new Set(fetchedPlants.map((plant) => plant.speciesFamily)),
         ];
         setSpeciesFamilies(uniqueSpeciesFamilies);
-      })
-      .catch((err) => {
+        setIsLoading(false);
+      } catch (err) {
         setIsLoading(false);
         console.error(err);
-      });
+      }
+    };
+    fetchAllSpeciesFamilies();
+  }, [username]);
+
+  // Fetch plants based on filter criteria
+  useEffect(() => {
+    console.log("USE EFFECT LOG");
+    setIsLoading(true);
+    const fetchPlants = async () => {
+      try {
+        const fetchedPlants = await getCollectedPlantsList(username, {
+          speciesFamily: selectedSpeciesFamily,
+          sortBy,
+          orderBy,
+        });
+        setPlants(fetchedPlants);
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
+        console.error(err);
+      }
+    };
+    fetchPlants();
   }, [username, selectedSpeciesFamily, sortBy, orderBy]);
 
   const handleReset = () => {
@@ -55,14 +74,17 @@ export default function CollectedList({ navigation }) {
 
   if (isLoading) {
     return (
-      <View style={styles.activityIndicatorBackground}>
-        <ActivityIndicator
-          style={styles.loadPage}
-          size="large"
-          color="#006400"
-        />
-        <Text>Fetching list data...</Text>
-      </View>
+      <ImageBackground
+        source={backgroundLeaf}
+        style={styles.imageBackground}
+        resizeMode="cover"
+      >
+        <View style={styles.overlay} />
+        <View style={styles.activity_indicator_background}>
+          <ActivityIndicator size="large" color="#006400" />
+          <Text>Fetching plants...</Text>
+        </View>
+      </ImageBackground>
     );
   }
 
@@ -76,29 +98,32 @@ export default function CollectedList({ navigation }) {
       <View style={styles.container}>
         <ScrollView style={styles.scrollView}>
           <View style={styles.query_container}>
-            <View style={styles.query_button_container}>
-              <RNPickerSelect
-                onValueChange={(value) => setSelectedSpeciesFamily(value)}
-                items={speciesFamilies.map((family) => ({
-                  label: family,
-                  value: family,
-                }))}
-                placeholder={{ label: "Filter", value: null }}
-                style={pickerSelectStyles}
-              ></RNPickerSelect>
+            <View style={styles.query_row}>
+              <View style={styles.query_button_container}>
+                <RNPickerSelect
+                  onValueChange={(value) => setSelectedSpeciesFamily(value)}
+                  items={speciesFamilies.map((family) => ({
+                    label: family,
+                    value: family,
+                  }))}
+                  placeholder={{ label: "Family", value: null }}
+                  style={pickerSelectStyles}
+                ></RNPickerSelect>
+              </View>
+              <View style={styles.query_button_container}>
+                <RNPickerSelect
+                  onValueChange={(value) => setSortBy(value)}
+                  items={[
+                    { label: "Date", value: "dateCollected" },
+                    { label: "Score", value: "matchScore" },
+                    { label: "Name", value: "speciesName" },
+                  ]}
+                  placeholder={{ label: "Sort", value: null }}
+                  style={pickerSelectStyles}
+                ></RNPickerSelect>
+              </View>
             </View>
-            <View style={styles.query_button_container}>
-              <RNPickerSelect
-                onValueChange={(value) => setSortBy(value)}
-                items={[
-                  { label: "Date Collected", value: "dateCollected" },
-                  { label: "Match Score", value: "matchScore" },
-                  { label: "Species Name", value: "speciesName" },
-                ]}
-                placeholder={{ label: "Sort", value: null }}
-                style={pickerSelectStyles}
-              ></RNPickerSelect>
-            </View>
+
             <View style={styles.query_button_container}>
               <Pressable
                 style={styles.icon_button}
@@ -136,110 +161,100 @@ export default function CollectedList({ navigation }) {
     </ImageBackground>
   );
 }
-
 const styles = StyleSheet.create({
-  scrollView: {},
-  container: {
+  imageBackground: {
     flex: 1,
-    flexDirection: "row",
-    alignItems: "center",
     justifyContent: "center",
-  },
-  card: {
-    margin: 10,
+    alignItems: "center",
   },
   background: {
-    flexGrow: 1,
-  },
-  backgroundImage: {
-    flexGrow: 1,
-    width: "100%",
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1,
   },
   overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  activity_indicator_background: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  container: {
+    flex: 1,
+    padding: 20,
+  },
+  scrollView: {
+    flex: 1,
   },
   query_container: {
-    zIndex: 2000,
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginHorizontal: 10,
+    justifyContent: "space-between",
+    marginBottom: 10,
   },
   query_button_container: {
-    zIndex: 2000,
     flex: 1,
-    margin: 1,
+    margin: 5,
   },
-
-  reset_button: {
-    zIndex: 2000,
-    flex: 1,
-    backgroundColor: "#006400",
-    alignItems: "flex-start",
+  icon_button: {
+    marginTop: 20,
     justifyContent: "center",
-    paddingHorizontal: 10,
-    borderRadius: 10,
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#006400",
+    borderRadius: 5,
+  },
+  reset_button: {
+    marginTop: 20,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#8B0000",
+    borderRadius: 5,
   },
   button_text: {
     color: "white",
     fontWeight: "bold",
   },
-  dropDownContainerStyle: {
-    backgroundColor: "green",
-  },
-  listItemLabelStyle: {
-    color: "white",
-  },
-  icon_button: {
-    padding: 15,
-    width: 60,
-    alignItems: "center",
-    backgroundColor: "#006400",
+  card: {
+    marginBottom: 10,
+    padding: 20,
+    backgroundColor: "white",
     borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 1,
   },
 });
-const pickerSelectStyles = {
+
+const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
-    zIndex: 2000,
-    flex: 1,
-    backgroundColor: "#006400",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    borderWidth: 0,
     fontSize: 16,
+    width: 150,
     paddingVertical: 12,
     paddingHorizontal: 10,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 4,
     color: "black",
-    paddingRight: 30,
-    backgroundColor: "#006400",
+    paddingRight: 30, // to ensure the text is never behind the icon
+    backgroundColor: "white",
   },
   inputAndroid: {
-    zIndex: 2000,
-    flex: 1,
-    backgroundColor: "#006400",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    borderWidth: 0,
     fontSize: 16,
+    width: 150,
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderWidth: 0.5,
-    borderColor: "gray",
+    borderColor: "purple",
     borderRadius: 8,
     color: "black",
-    paddingRight: 30,
-    backgroundColor: "#006400",
+    paddingRight: 30, // to ensure the text is never behind the icon
+    backgroundColor: "white",
   },
-  placeholder: {
-    color: "white",
-    fontWeight: "bold",
-  },
-};
+});
