@@ -113,7 +113,7 @@ export default function CollectNow({ navigation }) {
                     size="large"
                     color="#006400"
                 />
-                <Text>Fetching plant data...</Text>
+                <Text>Analysing plant data...</Text>
             </View>
             </ImageBackground>
         )
