@@ -18,7 +18,7 @@ import { WebView } from "react-native-webview";
 import * as Location from "expo-location";
 
 import { UserContext } from "../contexts/Contexts";
-import { getCollectedPlantsList } from "../api/apiFunctions.js";
+import { getCollectedPlantsList, getCollections } from "../api/apiFunctions.js";
 import {
     parseGeoTagLatitude,
     parseGeoTagLongitude,
@@ -44,8 +44,8 @@ export default function CollectedMap({ navigation }) {
     useEffect(() => {
         console.log("USE EFFECT in COLLECTED MAP");
         setIsLoading(true);
-        getCollectedPlantsList(user.username).then((usersPlants) => {
-            setPlantsArr(usersPlants);
+        getCollections().then((plants) => {
+            setPlantsArr(plants);
 
             // adds coords to heat map
             /*usersPlants.map((plant) => {

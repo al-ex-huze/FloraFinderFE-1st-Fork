@@ -70,13 +70,24 @@ export const getUserByUsername = (username) => {
     });
 };
 
-export const getCollectedPlantsList = (username) => {
+export const getCollectedPlantsList = (username, options) => {
   console.log("getPlantList API");
+  const { speciesFamily, sortBy, orderBy } = options;
+
+  let url = `/users/${username}/collections`;
+
+  const queryParams = [];
+  if (speciesFamily) queryParams.push(`speciesFamily=${speciesFamily}`);
+  if (sortBy) queryParams.push(`sortBy=${sortBy}`);
+  if (orderBy) queryParams.push(`orderBy=${orderBy}`);
+
+  if (queryParams.length > 0) {
+    url += `?${queryParams.join("&")}`;
+  }
+  console.log(url);
   return floraFinderApi
-    .get(`/users/${username}/collections`)
-    .then((response) => {
-      return response.data.collections;
-    })
+    .get(url)
+    .then((response) => response.data.collections)
     .catch((error) => {
       handleApiError(error, "getCollectedPlantsList");
     });
@@ -115,5 +126,16 @@ export const deleteUser = (username) => {
     })
     .catch((error) => {
       handleApiError(error, "deleteUser");
+    });
+};
+
+export const getCollections = () => {
+  return floraFinderApi
+    .get("/collections")
+    .then((response) => {
+      return response.data.collections;
+    })
+    .catch((error) => {
+      handleApiError(error, "getCollections");
     });
 };

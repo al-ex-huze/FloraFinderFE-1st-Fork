@@ -259,7 +259,7 @@ const styles = StyleSheet.create({
         color: "#006400",
         textAlign: "center",
         fontFamily: 'Inter_900Black',
-        fontSize: 36,
+        fontSize: 25,
     },
     result_card: {
         backgroundColor: "white",
@@ -353,7 +353,7 @@ const styles = StyleSheet.create({
     text_score_bad: {
         fontSize: 22,
         fontWeight: "bold",
-        color: "#006400",
+        color: "red",
         alignSelf: "flex-end",
     },
 });

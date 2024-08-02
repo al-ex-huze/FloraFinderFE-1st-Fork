@@ -22,10 +22,6 @@ FloraFinder is an expo mobile app designed to enable users the quick identificat
 
 2) Install the required packages using the command in your terminal: **npm install**
 
-3) Create a new file in the root of the repository:  **.plant_net.js** 
-
-4) Save the following in the file:  **export const API_KEY  = "2b10TmBct7Bagi6rhgRXCuwX"**
-
 
 
  ## Usage:
